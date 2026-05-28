@@ -10,7 +10,6 @@ coverage/
 .next/
 *.tsbuildinfo
 
-# Hugging Face workspace: keep large model artifacts out of normal GitHub pushes.
 /huggingface/models/**
 !/huggingface/models/.gitkeep
 /huggingface/artifacts/**
@@ -27,7 +26,6 @@ coverage/
 /huggingface/**/*.pth
 /huggingface/**/*.safetensors
 
-# AI agent tooling: keep the public repo human (these travel by folder-copy, not git)
 /.claude/
 /.codex/
 /.cursor/
