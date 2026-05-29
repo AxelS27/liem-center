@@ -1,9 +1,12 @@
 /*
  * Theme tokens: the single source of truth for color.
  *
- * To retheme or rebrand, edit the values in this file. Nothing else.
- * Light theme lives in :root, dark theme in .dark. Same token names,
- * different values, so switching themes never touches a component.
+ * Ship ONE theme first. The active theme lives in :root below (light by
+ * default). A dark theme (.dark) is provided commented out at the bottom;
+ * enable it only when the product actually needs dark mode, then wire
+ * next-themes (see docs/FRONTEND.md). Do not ship both on day one.
+ *
+ * To retheme or rebrand, edit the values in :root. Nothing else.
  *
  * Values are HSL channels ("H S% L%"), consumed as hsl(var(--token)).
  * Components must reference tokens (bg-background, text-foreground, ...),
@@ -51,33 +54,38 @@
     --radius: 0.625rem;
   }
 
-  .dark {
-    --brand: 0 0% 98%;
-    --brand-foreground: 240 6% 10%;
-
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 6%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 6%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 6% 10%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 240 5% 84%;
-  }
+  /*
+   * Optional dark theme. Ship one theme first; uncomment this block only
+   * when the product needs dark mode, then wire next-themes per docs/FRONTEND.md.
+   *
+   * .dark {
+   *   --brand: 0 0% 98%;
+   *   --brand-foreground: 240 6% 10%;
+   *
+   *   --background: 240 10% 4%;
+   *   --foreground: 0 0% 98%;
+   *   --card: 240 10% 6%;
+   *   --card-foreground: 0 0% 98%;
+   *   --popover: 240 10% 6%;
+   *   --popover-foreground: 0 0% 98%;
+   *
+   *   --primary: 0 0% 98%;
+   *   --primary-foreground: 240 6% 10%;
+   *   --secondary: 240 4% 16%;
+   *   --secondary-foreground: 0 0% 98%;
+   *   --accent: 240 4% 16%;
+   *   --accent-foreground: 0 0% 98%;
+   *   --muted: 240 4% 16%;
+   *   --muted-foreground: 240 5% 65%;
+   *
+   *   --destructive: 0 62% 45%;
+   *   --destructive-foreground: 0 0% 98%;
+   *
+   *   --border: 240 4% 16%;
+   *   --input: 240 4% 16%;
+   *   --ring: 240 5% 84%;
+   * }
+   */
 }
 
 /* Base resets, valid with or without Tailwind wired up. */

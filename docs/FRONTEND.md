@@ -48,12 +48,28 @@ Do not use:
 - Test mobile and desktop for stable spacing, readable line lengths, and no awkward empty zones.
 - Prefer real product references and mature design systems over AI-generated landing page patterns.
 
+## App Structure & Page Flow
+
+A first-time visitor lands on a real **landing page**, not a login wall. This is the single most common AI mistake: given a PRD, agents wire `/` straight to `/signin`. Don't.
+
+- **`/` is a public landing page.** It explains the product and links to sign in / get started. Never auto-redirect an unauthenticated visitor from `/` to the auth pages.
+- **Auth pages** (`/signin`, `/signup`) are reachable *from* the landing page, not forced before it.
+- **The app itself** (dashboard, account, anything user-specific) lives behind auth. **Only these protected routes** redirect to sign in when the visitor is signed out.
+
+Every page ships with navigation chrome. There are two layouts:
+
+- **Public layout** wraps the landing page and other marketing/public routes: a **navbar** (logo, primary links, sign in / get started) and a **footer** (product links, legal, copyright) on every page.
+- **App layout** wraps signed-in routes: a persistent shell (top bar or sidebar) with the user menu and primary app navigation.
+
+**Do not ship a page with no navigation.** A bare screen with no navbar and no footer is the AI tell that there was no real information architecture behind it.
+
 ## Theming & Color
 
 All color lives in **one file**: `apps/web/src/styles/globals.css`. It is the single source of truth, so retheming or adding a brand is a one file change.
 
 - Colors are **semantic CSS custom properties** (`--background`, `--primary`, `--muted`, ...), not raw values scattered through components.
-- **Light theme** is defined in `:root`, **dark theme** in `.dark`. Same token names, different values, so switching themes never touches a component.
+- **Ship one theme first.** The active theme is defined in `:root` (light by default). A dark theme (`.dark`) is provided commented out in `globals.css`; enable it only when the product actually needs dark mode. Do not generate both on day one.
+- Because every theme uses the **same token names** with different values, adding a second theme later never touches a component.
 - Components reference **tokens only** (`bg-background`, `text-foreground`, `border-border`). Never hardcode hex, and never use raw palette classes like `bg-zinc-900`.
 - One `--radius` knob controls roundness across the UI.
 
@@ -81,9 +97,9 @@ Wiring (done once, when the app is scaffolded):
    }
    ```
 
-3. Toggle by adding or removing `class="dark"` on `<html>`. Use `next-themes` (`<ThemeProvider attribute="class">`) for system plus manual switching.
+3. **Only when you add a second theme:** uncomment the `.dark` block in `globals.css`, then toggle by adding or removing `class="dark"` on `<html>`. Use `next-themes` (`<ThemeProvider attribute="class">`) for system plus manual switching. A single-theme app skips this step entirely, do not add `next-themes` for one theme.
 
-To rebrand: edit the token values in `globals.css`. That is the only file you touch.
+To rebrand: edit the token values in `:root` in `globals.css`. That is the only file you touch.
 
 ## Content & Copy
 
@@ -97,26 +113,33 @@ To rebrand: edit the token values in `globals.css`. That is the only file you to
 
 ## Internationalization (i18n)
 
-User-facing text is centralized, never hardcoded in components. This keeps copy consistent and makes adding a language a one-file job.
+**Ship one language first: English.** Don't generate `en` + `id` (or any second language) on day one. But still centralize text from the start, so adding a language later is a one-file job instead of a rewrite.
 
-- Text lives in `apps/web/src/i18n/locales/<locale>.json`, one file per language (`en.json`, `id.json`, ...).
-- **English (`en`) is the default and the source of truth.** To add a language, copy `en.json`, translate the values, and keep the keys identical.
-- Locales and the default are declared in `apps/web/src/i18n/config.ts`. Add the language there, then add its loader in `dictionaries.ts`.
-- Components read text through the dictionary, which is typed from `en.json`, so a missing or renamed key becomes a type error:
+- Text lives in `apps/web/src/i18n/locales/<locale>.json`, one file per language. Day one, that is just `en.json`.
+- **English (`en`) is the default and the source of truth.** No hardcoded strings in components, even in a single-language app.
+- Components read text through the dictionary, typed from `en.json`, so a missing or renamed key becomes a type error. With one locale you pass `defaultLocale` directly, no `[lang]` route needed:
 
   ```tsx
   import { getDictionary } from '@/i18n/dictionaries';
-  import type { Locale } from '@/i18n/config';
+  import { defaultLocale } from '@/i18n/config';
 
-  export default async function Page({ params }: { params: { lang: Locale } }) {
-    const t = await getDictionary(params.lang);
+  export default async function Page() {
+    const t = await getDictionary(defaultLocale);
     return <h1>{t.app.tagline}</h1>;
   }
   ```
 
-- **Routing:** the active locale lives in the URL under `app/[lang]/...`. A small middleware redirects `/` to the default locale and can honor the visitor's `Accept-Language`.
-- **Switcher:** the language selector links to the current path under another locale, so changing language keeps the user on the same page.
+- **Format, don't concatenate.** Numbers, currency, and dates come from `Intl`, never string building. IDR has no decimal places, so `Rp 1.294,5` is a bug: `new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(1294.5)` gives the correct `Rp 1.295`. Same for dates via `Intl.DateTimeFormat`.
 - Keep each full phrase as one key. Do not build sentences by concatenating translated fragments, since other languages order words differently.
+
+**Adding a language later** (only when you actually need it):
+
+1. Copy `en.json` to the new locale (e.g. `id.json`), translate the values, keep the keys identical.
+2. Register it in `config.ts` (`locales`, `localeNames`) and add its loader in `dictionaries.ts`.
+3. Move pages under `app/[lang]/...` and read the locale from `params.lang`.
+4. Add a small middleware (redirect `/` to the default locale, optionally honor `Accept-Language`) and a switcher that links to the current path under the other locale.
+
+A single-locale app needs none of step 3 or 4.
 
 ## Rendering Strategy
 
@@ -146,11 +169,25 @@ Avoid: unnecessary client state, deeply nested providers, excessive re-renders, 
 - Use `next/image` for anything non-trivial; lazy-load below-the-fold media.
 - Compress assets, no oversized files, and set dimensions to avoid layout shift.
 
-## States & Responsiveness
+## States, Errors & Responsiveness
 
-- Always design **loading, empty, and error** states - not just the happy path.
-- Transitions subtle and fast.
-- Responsive at every breakpoint (test mobile → desktop).
+Design every state, not just the happy path. A screen that only handles "data loaded successfully" is half-built.
+
+**Empty states.** When there is no data yet (no transactions, no budgets, no reports, empty search results), show a calm screen with a one-line explanation of what goes here and a clear action button to add the first item. Never a blank area or a raw "no data" string.
+
+**Error states.** Handle failed network requests, invalid form input, missing data, server errors, and empty filter/search results. Rules:
+- Plain language, no stack traces, codes, or jargon. Say what happened and what to do next.
+- Give a way forward: a retry button, a link back, or a fix-the-input hint.
+- Validate forms **inline**, next to the field, as the user goes. Don't dump every error at the top after submit.
+
+**Loading states.** Use `loading.tsx` with designed **skeletons** that mirror the real layout, not bare spinners. Transitions stay subtle and fast.
+
+**Responsive behavior: adapt, don't shrink.** Layout should change behavior across breakpoints, not just scale down.
+- Sidebar collapses to a drawer or bottom nav on mobile; the navbar becomes a menu.
+- Multi-column card grids stack to one column; tables become cards or scroll deliberately, never overflow the viewport.
+- Charts re-flow to fit; touch targets stay at least ~44px.
+- Avoid the tells: a squeezed desktop layout, tiny tap targets, and tables that overflow the screen.
+- Test every breakpoint mobile to desktop.
 
 ## Production Mindset
 

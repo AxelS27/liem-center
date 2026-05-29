@@ -62,3 +62,10 @@ Authorization: Bearer <token>
 - Never return raw arrays at the top level (wrap in `data`).
 - Error `code` is SCREAMING_SNAKE_CASE and stable (clients may switch on it).
 - New endpoint → add its Zod schema to `packages/types` first, then implement the route against it.
+
+---
+
+## Payments & Auth (when used)
+
+- **Auth flows** (sign up, sign in, OAuth with Google/GitHub, password reset, avatar upload) run through the **Supabase SDK** from `apps/web`, not custom API endpoints. Add a server endpoint only for trusted operations that need the service-role key.
+- **Payment webhook** (e.g. `POST /api/v1/payments/notification`) is the one route that is **not** Bearer-authenticated: Midtrans calls it server-to-server, so verify the **signature hash** instead (SHA512 of `order_id + status_code + gross_amount + server_key`). Still validate the body with Zod like any other route, and treat it as the source of truth for order status. See ADR-012.

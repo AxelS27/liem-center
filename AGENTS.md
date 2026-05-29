@@ -39,6 +39,7 @@ Rationale lives in `docs/DECISIONS.md`. Don't introduce an alternative to any of
 | Database | Supabase - PostgreSQL |
 | Auth | Supabase Auth |
 | Storage | Supabase Storage |
+| Payments | Midtrans - **only** when the project takes payments |
 | Deploy | See `docs/DECISIONS.md` ADR-007 |
 | Large AI models | Hugging Face - **only** when the project involves large models |
 
@@ -47,6 +48,8 @@ Stack rules:
 - Supabase: the anon key is public (`NEXT_PUBLIC_*`); the **service-role key is server-only** - never import it into `apps/web`.
 - Large AI models are **never bundled** into the app - call Hugging Face (Inference API / Endpoints) from `apps/server`.
 - Custom model handoff lives in root `huggingface/`. Put model weights/checkpoints under `huggingface/models/` or exported artifacts under `huggingface/artifacts/`; those files are ignored for normal GitHub pushes.
+- Payments: integrate **Midtrans** from `apps/server`. The **server key is server-only**; the browser uses the public `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` for Snap. The webhook is verified by **signature hash**, never Bearer auth. See ADR-012.
+- Auth extras are **Supabase-native**: OAuth (Google, GitHub) and password reset run through the Supabase SDK with providers and redirect URLs configured in the dashboard; profile pictures go to a Supabase **Storage** bucket with RLS. See ADR-013.
 
 ## Workflow
 
@@ -115,6 +118,8 @@ Keep the public repo looking human-authored.
 - ✅ Update the relevant doc when you change its domain
 - ✅ Ask before introducing a new top-level folder
 - ✅ If `docs/PRD.md` is still a blank template, ask the user for scope before building features - don't invent it
+- ✅ Start the app at a real landing page with a navbar and footer; only protected routes redirect to sign in (see `docs/FRONTEND.md`)
+- ✅ Ship one theme and one language (English) first; add a second theme or locale only when the product needs it
 
 ## DON'T
 

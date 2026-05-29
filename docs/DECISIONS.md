@@ -94,3 +94,17 @@
 - Rejected:   `apps/model` (implies a deployable app inside the pnpm workspace); `packages/model` (packages are shared TypeScript code); committing model files to the main GitHub repo (large and inappropriate without a Hugging Face/Git LFS flow).
 - Status:     Accepted
 - Date:       2026-05-29
+
+## ADR-012: Payments via Midtrans
+- Decision:   When a project takes payments, integrate Midtrans (Snap) from `apps/server`. The server creates the transaction with the Midtrans **server key** and returns a Snap token; the browser opens Snap with the public **client key**. Payment status is confirmed by a server **webhook (HTTP notification)** that is verified by signature hash, not the Bearer token.
+- Reason:     Midtrans is a standard Indonesian gateway (cards, bank transfer, e-wallets, QRIS) with a hosted Snap UI, so no card data touches our servers. Server-side token creation keeps the secret key off the client; the signature check makes the callback trustworthy and the source of truth for order status.
+- Rejected:   Stripe (weak local payment-method coverage for Indonesia); client-side-only charging (exposes the secret key, no reliable confirmation); building our own gateway (PCI scope, not worth it).
+- Status:     Accepted (applies only to projects that take payments)
+- Date:       2026-05-29
+
+## ADR-013: Auth surface - Supabase email/password + OAuth (Google, GitHub) + password reset + avatars in Storage
+- Decision:   Build the standard auth surface on Supabase Auth (see ADR-005): email/password with email **password reset**, plus **OAuth** sign-in with **Google and GitHub**. Profile pictures upload to a Supabase **Storage** bucket (e.g. `avatars`) under a per-user path with RLS; the resulting public URL is stored on the user's profile row.
+- Reason:     These are baseline expectations for a real product and Supabase covers all of them natively, so no extra auth service or storage provider is needed. Providers, secrets, and redirect URLs are configured in the Supabase dashboard; the app just calls the Supabase SDK.
+- Rejected:   A separate auth provider such as Auth0/Clerk (more moving parts; ADR-005 already chose Supabase); storing avatars as base64 in Postgres or on a third-party CDN (Storage already exists and supports RLS).
+- Status:     Accepted
+- Date:       2026-05-29

@@ -88,6 +88,22 @@ Request/response shapes are **Zod schemas in `packages/types`**; both apps impor
 - **Server** (`apps/server/src/lib`): client with the **service-role key** for trusted operations. Never expose this key to the browser or any `NEXT_PUBLIC_*` var.
 - Enable **RLS on every table**. The anon key being public is safe *only* because RLS is on.
 
+## Auth & Profiles
+
+Auth is Supabase Auth (ADR-005, ADR-013). Keep the flows standard, no custom auth service:
+
+- **Email/password** with **password reset** via `resetPasswordForEmail`, using `NEXT_PUBLIC_SITE_URL` as the `redirectTo`.
+- **OAuth** sign-in with **Google** and **GitHub** via `signInWithOAuth`. Providers, client IDs/secrets, and redirect URLs are configured in the Supabase dashboard, not in app code.
+- **Profile pictures** upload to a Supabase Storage bucket (e.g. `avatars`) under a per-user path, protected by RLS. Store the resulting public URL on the user's profile row, not the file bytes.
+
+## Payments
+
+Only relevant when a project takes payments. Decision: ADR-012.
+
+- Integration lives in `apps/server/src/services`. The web app calls the server; the **server** creates the Midtrans transaction with the **server key** and returns a Snap token. The browser opens Snap with the public client key (`NEXT_PUBLIC_MIDTRANS_CLIENT_KEY`).
+- Confirmation comes from Midtrans's **HTTP notification (webhook)** to a server route. That route is public but **verified by signature hash** (SHA512 of `order_id + status_code + gross_amount + server_key`), not the Bearer token. Treat the webhook as the source of truth for order status, never the browser redirect.
+- The Midtrans **server key is server-only**; never expose it to `apps/web` or any `NEXT_PUBLIC_*` var.
+
 ## Large AI Models
 
 Only relevant when a project actually uses large models.
