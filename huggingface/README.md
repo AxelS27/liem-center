@@ -21,6 +21,6 @@ huggingface/
 
 ## Upload Notes
 
-Keep large files in `models/` or `artifacts/`. The template ignore rules in `#.gitignore` exclude those paths once the file is renamed to `.gitignore` in a product repo.
+Keep large files in `models/` or `artifacts/`. Those paths are git-ignored in every repo (see `.gitignore`); use Git LFS or the Hugging Face CLI to ship weights.
 
 When a model is ready, upload it through the Hugging Face CLI, Git LFS, or the Hugging Face web UI from this folder.

@@ -1,0 +1,2 @@
+-- Seed data for local Supabase development.
+-- Keep this deterministic and safe to run after `supabase db reset`.

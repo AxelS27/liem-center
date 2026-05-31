@@ -24,6 +24,16 @@ Internal packages are consumed **as TypeScript source** (their `exports` point a
 
 Frontend rendering, data-fetching, performance, and design-craft rules live in **`docs/FRONTEND.md`** - open it for any `apps/web` work.
 
+Domain implementation rules are split by concern so agents do not need to read every doc
+for every task:
+
+- **`docs/FRONTEND.md`** - universal frontend/UI rules.
+- **`docs/UI_UX.md`** - product-specific UI/UX direction.
+- **`docs/BACKEND.md`** - backend route/service/auth/test rules.
+- **`docs/DATABASE.md`** - Supabase/Postgres/RLS/Storage rules.
+- **`docs/PAYMENTS.md`** - checkout, webhook, refund, settlement, payout, and marketplace
+  money-flow rules.
+
 ## Frontend / Backend Separation
 
 - `apps/web` and `apps/server` are fully independent deployables.
@@ -32,12 +42,12 @@ Frontend rendering, data-fetching, performance, and design-craft rules live in *
 
 ## Package Responsibilities
 
-| Package | Owns | Rule |
-|---------|------|------|
-| `packages/ui` | shadcn/ui components, design tokens | No business logic |
-| `packages/types` | Zod schemas + inferred contracts | Schemas + types only, no app logic |
-| `packages/utils` | Pure functions | No framework / no side effects |
-| `packages/config` | tsconfig / eslint / prettier bases | Extended, not edited per-app |
+| Package           | Owns                                | Rule                               |
+| ----------------- | ----------------------------------- | ---------------------------------- |
+| `packages/ui`     | shadcn/ui components, design tokens | No business logic                  |
+| `packages/types`  | Zod schemas + inferred contracts    | Schemas + types only, no app logic |
+| `packages/utils`  | Pure functions                      | No framework / no side effects     |
+| `packages/config` | tsconfig / eslint / prettier bases  | Extended, not edited per-app       |
 
 ## Feature-Based Architecture
 
@@ -63,13 +73,13 @@ A feature exposes only what's in its `index.ts`. Internals stay private.
 
 ## Naming Conventions
 
-| Thing | Convention | Example |
-|-------|-----------|---------|
-| Files/folders | kebab-case | `user-profile.ts` |
-| Components | PascalCase | `UserProfile` |
-| Functions/vars | camelCase | `getUser` |
-| Constants | SCREAMING_SNAKE_CASE | `MAX_RETRIES` |
-| Types/Interfaces | PascalCase | `UserDto` |
+| Thing            | Convention           | Example           |
+| ---------------- | -------------------- | ----------------- |
+| Files/folders    | kebab-case           | `user-profile.ts` |
+| Components       | PascalCase           | `UserProfile`     |
+| Functions/vars   | camelCase            | `getUser`         |
+| Constants        | SCREAMING_SNAKE_CASE | `MAX_RETRIES`     |
+| Types/Interfaces | PascalCase           | `UserDto`         |
 
 ## Data Flow
 
@@ -86,7 +96,7 @@ Request/response shapes are **Zod schemas in `packages/types`**; both apps impor
 
 - **Web** (`apps/web/src/lib`): browser/SSR client built with `@supabase/ssr` using the **anon key** only. Subject to Row Level Security.
 - **Server** (`apps/server/src/lib`): client with the **service-role key** for trusted operations. Never expose this key to the browser or any `NEXT_PUBLIC_*` var.
-- Enable **RLS on every table**. The anon key being public is safe *only* because RLS is on.
+- Enable **RLS on every table**. The anon key being public is safe _only_ because RLS is on.
 
 ## Auth & Profiles
 

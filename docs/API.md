@@ -7,51 +7,60 @@
 - Auth: `Authorization: Bearer <token>` (Supabase Auth session token).
 - Content-Type: `application/json`
 - Request/response contracts are **Zod schemas in `packages/types`**, imported by both apps. The server validates with the schema; the client infers its types from it.
+- Backend implementation rules live in `docs/BACKEND.md`. Payment-specific endpoints and
+  webhooks must also follow `docs/PAYMENTS.md`.
 
 ## Success Envelope
+
 ```json
-{ "data": { } }
+{ "data": {} }
 ```
 
 ## Error Envelope
+
 ```json
 { "error": { "code": "RESOURCE_NOT_FOUND", "message": "Human readable message" } }
 ```
 
 ## Standard Status Codes
-| Code | Meaning |
-|------|---------|
-| 200 | OK |
-| 201 | Created |
-| 400 | Validation error |
-| 401 | Unauthenticated |
-| 403 | Unauthorized |
-| 404 | Not found |
-| 409 | Conflict |
-| 500 | Server error |
+
+| Code | Meaning          |
+| ---- | ---------------- |
+| 200  | OK               |
+| 201  | Created          |
+| 400  | Validation error |
+| 401  | Unauthenticated  |
+| 403  | Unauthorized     |
+| 404  | Not found        |
+| 409  | Conflict         |
+| 500  | Server error     |
 
 ---
 
 ## Example Endpoint
 
-### `GET /api/v1/users/:id`
-Fetch a single user.
+### `GET /api/v1/health`
+
+Check that the API is running.
 
 **Request**
+
 ```
-GET /api/v1/users/123
-Authorization: Bearer <token>
+GET /api/v1/health
 ```
 
 **Response - 200**
+
 ```json
-{ "data": { "id": "123", "name": "Ada", "email": "ada@example.com" } }
+{ "data": { "status": "ok" } }
 ```
 
-**Response - 404**
-```json
-{ "error": { "code": "USER_NOT_FOUND", "message": "No user with id 123" } }
-```
+Contract: `healthResponseSchema` in `packages/types`.
+
+This endpoint is for infrastructure checks and internal verification. Do not surface it as
+a public website widget, footer badge, or marketing-page status panel. Product UI should
+not reveal provider names, API latency, uptime diagnostics, build hashes, or environment
+details unless the user explicitly asks for a developer/status product.
 
 ---
 

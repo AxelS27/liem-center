@@ -1,0 +1,54 @@
+# Dependencies and build output - never commit these, in any repo.
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+*.log
+*.tsbuildinfo
+.DS_Store
+
+# Secrets - commit .env.example, never .env.
+.env
+.env.local
+
+# Local agent settings (machine-specific); the rest of .claude is the starter kit.
+.claude/settings.local.json
+
+# Hugging Face model weights and exported artifacts are too large for Git;
+# keep them out of every repo. Use Git LFS or the Hugging Face CLI instead.
+/huggingface/models/**
+!/huggingface/models/.gitkeep
+/huggingface/artifacts/**
+!/huggingface/artifacts/.gitkeep
+/huggingface/**/*.bin
+/huggingface/**/*.ckpt
+/huggingface/**/*.gguf
+/huggingface/**/*.h5
+/huggingface/**/*.joblib
+/huggingface/**/*.keras
+/huggingface/**/*.onnx
+/huggingface/**/*.pkl
+/huggingface/**/*.pt
+/huggingface/**/*.pth
+/huggingface/**/*.safetensors
+
+# -- Product-repo cleanup (commented on purpose) ------------------------------
+# This is a TEMPLATE, so the agent tooling and internal docs below stay tracked
+# here - that IS the starter kit. When you copy this into a real product repo and
+# want it to read as a normal, human-made project, uncomment the lines below so
+# the agent folders and internal docs stop being tracked. They are already
+# tracked, so also run once:
+#   git rm -r --cached .claude .codex .cursor .windsurf AGENTS.md CLAUDE.md \
+#     .cursorrules .windsurfrules HOW_TO_USE_THIS_TEMPLATE.md docs
+#
+# /.claude/
+# /.codex/
+# /.cursor/
+# /.windsurf/
+# /.cursorrules
+# /.windsurfrules
+# /AGENTS.md
+# /CLAUDE.md
+# /HOW_TO_USE_THIS_TEMPLATE.md
+# /docs/

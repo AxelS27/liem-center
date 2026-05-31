@@ -19,7 +19,12 @@
 
 @layer base {
   :root {
-    /* Brand: set your primary brand color here. Neutral by default. */
+    /*
+     * Brand: this is a NEUTRAL PLACEHOLDER, not a finished palette. Shipping it
+     * untouched is the most common generic-AI tell. Before building UI, commit to a
+     * real palette for this product (no default violet/indigo) and replace these
+     * values. The shadcn-ui skill walks the steps; see docs/FRONTEND.md.
+     */
     --brand: 240 6% 10%;
     --brand-foreground: 0 0% 98%;
 
