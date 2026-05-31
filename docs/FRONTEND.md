@@ -65,7 +65,11 @@ Do not use:
 - **Compose against real viewport heights.** Design every major section and section transition as a complete viewport experience at common desktop heights, especially 720px, 768px, 900px, and 1080px. A page that looks fine in code but leaves hard section dividers or half-empty bands across visible scroll positions is not done.
 - **Give short flows a complete screen.** Auth, onboarding, empty states, confirmation pages, and other short views need enough meaningful content, layout structure, or a dedicated auth shell so the footer does not appear without scrolling on desktop. Do not add filler; use helpful context, trust notes, preview panels, or remove the marketing footer for that route type if the app structure calls for it.
 - **Use asymmetry intentionally.** Avoid centering every section. A page can feel balanced while using offset columns, editorial rhythm, and varied section density.
-- **Earn every effect.** Subtle, fast motion that supports usability. No heavy animation libs for a hover, no cinematic transitions. Users should notice smoothness, not the animation.
+- **Use motion with taste.** Motion is encouraged when it improves clarity, feedback, or
+  polish. Keep it subtle, fast, and purposeful: small hover responses, menu open/close,
+  tab/content transitions, loading skeletons, toasts, and state changes. Avoid decorative,
+  cinematic, scroll-hijacking, or repeated page-wide animations. Users should notice
+  smoothness, not the animation.
 - **Respect hierarchy and whitespace.** One clear focal point per screen, intentional alignment, generous spacing. Polish over decoration.
 - **Accessibility is craft.** Real focus states, sufficient contrast, keyboard paths. Pros do this, and it reads as human.
 
@@ -330,6 +334,12 @@ Design every state, not just the happy path. A screen that only handles "data lo
 - Validate forms **inline**, next to the field, as the user goes. Don't dump every error at the top after submit.
 
 **Loading states.** Use `loading.tsx` with designed **skeletons** that mirror the real layout, not bare spinners. Transitions stay subtle and fast.
+
+**Motion.** The rule is not "no motion." The rule is no noisy motion. Add motion when it
+communicates state, confirms interaction, or makes a transition feel polished. Prefer CSS
+transitions and tiny client components before reaching for animation libraries. Keep
+durations short, easing natural, and every animated surface useful. Always respect
+`prefers-reduced-motion`.
 
 **Responsive behavior: adapt, don't shrink.** Layout should change behavior across breakpoints, not just scale down.
 
