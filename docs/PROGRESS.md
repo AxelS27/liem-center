@@ -58,7 +58,8 @@ Use this quick pass whenever a new product starts or the scope changes:
 2. Convert `docs/FEATURES.md` modules into route/area work below. Keep the feature names
    and phases from FEATURES.md so the checklist stays traceable.
 3. Pull product-specific design direction from `docs/UI_UX.md`: references, navigation
-   model, page UX map, visual system, copy tone, and product-specific layout choices.
+   model, page UX map, visual system, copy tone, and product-specific layout choices. Do
+   not copy the starter UI's composition unless UI_UX.md explicitly chooses that pattern.
 4. Pull structure and boundaries from `docs/ARCHITECTURE.md`: which work belongs in
    `apps/web`, `apps/server`, or `packages/*`.
 5. Pull endpoint and schema tasks from `docs/API.md` and implementation rules from
@@ -83,14 +84,32 @@ Good task examples:
 
 - `[ ]` Navbar - primary links navigate to real routes/pages, not same-page section jumps.
   (UI_UX.md "Navigation Model", FRONTEND.md "App Structure & Page Flow")
-- `[ ]` Hero - product-specific headline, primary CTA, and substantial product visual;
-  avoid centered filler layout. (UI_UX.md "Page UX Map", FRONTEND.md "Design Craft")
-- `[ ]` Page shell - wide layout with small desktop gutters, with narrow columns only where
-  the content type needs them. (UI_UX.md "Layout Principles", FRONTEND.md "Layout Checks")
+- `[ ]` Navigation surface - navbar/sidebar/bottom nav has a visible background or surface
+  treatment on every route; it is not invisible floating text. (UI_UX.md "Navigation
+  surface", FRONTEND.md)
+- `[ ]` Active navigation - route-aware active state for desktop and mobile nav with
+  `aria-current="page"`. (FRONTEND.md "Primary and In-page Navigation")
+- `[ ]` Route graph - public, auth, and app contexts link to each other; app pages include
+  a clear route back to landing/product home. (UI_UX.md "Route connectivity",
+  FRONTEND.md)
+- `[ ]` Footer/endcap - present on public, app, and auth routes with context-specific
+  content. (UI_UX.md "Footer model", FRONTEND.md "App Structure & Page Flow")
+- `[ ]` Hero - product-specific headline, primary CTA, and composition from UI_UX.md.
+  (UI_UX.md "Page UX Map", FRONTEND.md "Design Craft")
+- `[ ]` Layout composition - follow the product-specific layout model in UI_UX.md, not a
+  generic template scaffold. (UI_UX.md "Layout Principles", FRONTEND.md)
+- `[ ]` Starter UI replacement - product screens are designed from UI_UX.md and references,
+  not copied from the starter sample. (FRONTEND.md, UI_UX.md)
+- `[ ]` Surface budget - use cards/panels only where they clarify grouping; avoid boxing
+  nav, filters, tables, forms, and every repeated item by default. (UI_UX.md "Cards and
+  surfaces", FRONTEND.md "Design Craft")
 - `[ ]` `GET /api/v1/projects` - list endpoint with Zod response contract in
   `packages/types`. (API.md)
 - `[ ]` Empty/loading/error states - designed for this route, not raw strings or spinners.
   (FRONTEND.md "States, Errors & Responsiveness")
+- `[ ]` Rich text/scannability - useful emphasis, inline links, helper text, captions,
+  metadata, lists, and callouts where they help the page scan. (FRONTEND.md "Rich Text And
+  Scannability", UI_UX.md)
 - `[ ]` Render review - inspect mobile plus 1366x768, 1440x900, and 1920x1080 before
   marking the page done. (FRONTEND.md "Self-review", QUALITY.md)
 
@@ -122,27 +141,46 @@ Public marketing page. Phase: P0. Spec: UI_UX.md "Page UX Map", FRONTEND.md "App
 
 - `[~]` Navbar - route links for top-level pages, mobile behavior, sign in, and get started.
   (FRONTEND.md "App Structure & Page Flow")
-- `[x]` Hero - headline, primary CTA, product visual; asymmetric, not a centered stack. (FEATURES: Foundation)
+- `[ ]` Navigation surface - visible public navbar treatment across public routes. (UI_UX.md,
+  FRONTEND.md)
+- `[ ]` Active public nav - current route highlighted on desktop and mobile. (FRONTEND.md)
+- `[ ]` Public route graph - links to sign in/sign up/app where appropriate; footer
+  reinforces key route paths. (FRONTEND.md)
+- `[x]` Hero - headline, primary CTA, and product-specific composition. (FEATURES:
+  Foundation)
 - `[ ]` Feature highlights - 3 anchored sections. (FEATURES: Foundation)
 - `[ ]` Pricing - plan cards linking to checkout. (FEATURES: Payments)
+- `[ ]` Surface budget - sections are not all boxed as cards; use product-specific layout
+  direction from UI_UX.md. (UI_UX.md, FRONTEND.md)
 - `[ ]` Landing states - responsive behavior and section transitions reviewed at required
   viewports. (FRONTEND.md "Self-review")
-- `[ ]` Footer - product/legal links, back-to-top.
+- `[ ]` Footer - product/legal links, contextual footer content, back-to-top if useful.
 
 **Connects to:** navbar links -> real routes/pages; "Get started" -> `/signup`; Pricing -> checkout flow; secondary footer links may use anchors; uses the shared public layout.
 
 ### Example: Projects (`/app/projects`) <!-- delete this example block too -->
 
-Signed-in list page. Phase: P0. Spec: FRONTEND.md "Consistent page layout"; contract in API.md.
+Signed-in list page. Phase: P0. Spec: UI_UX.md "Layout Principles", FRONTEND.md
+"Consistent Page Behavior"; contract in API.md.
 
-- `[ ]` Page scaffold - reuse the shared page header + container. (see FRONTEND.md "Consistent page layout")
+- `[ ]` Page composition - follow the product layout model in UI_UX.md while keeping list
+  behavior predictable. (FRONTEND.md "Consistent Page Behavior")
+- `[ ]` Active app nav - Projects highlighted for `/app/projects` and child routes,
+  including mobile app navigation. (FRONTEND.md)
+- `[ ]` App navigation surface - visible app nav shell on all signed-in pages, not just
+  landing/dashboard. (UI_UX.md, FRONTEND.md)
+- `[ ]` App route graph - app shell includes a clear link back to the public landing/product
+  home; users are not trapped in the dashboard/app context. (FRONTEND.md)
 - `[ ]` Project list - table or cards with empty, loading, and error states. (FEATURES: Projects)
+- `[ ]` App footer/endcap - contextual help/legal/status content appears after app content.
+  (FRONTEND.md)
 - `[ ]` `GET /api/v1/projects` - list endpoint, Zod contract in `packages/types`. (API.md)
 - `[ ]` Create project - dialog + `POST /api/v1/projects`. (FEATURES: Projects, API.md)
 - `[ ]` Data layer - typed fetch from `apps/web` to `apps/server`, no duplicated shape
   definitions. (ARCHITECTURE.md "Data Flow")
 
-**Connects to:** uses the app shell + shared scaffold; reads from `apps/server` via the typed data layer; a row -> `/app/projects/[id]`.
+**Connects to:** uses the app shell + shared behavior primitives; reads from `apps/server`
+via the typed data layer; a row -> `/app/projects/[id]`.
 
 ### <Area / route>
 
@@ -163,12 +201,21 @@ Signed-in list page. Phase: P0. Spec: FRONTEND.md "Consistent page layout"; cont
   service, starter page, baseline tests)
 - `[x]` Responsive starter landing baseline (mobile menu, adaptive hero, route CTAs,
   non-technical public copy; see `docs/FRONTEND.md`)
+- `[ ]` Replace starter UI composition for the real product; keep only wiring patterns that
+  fit `docs/UI_UX.md`
 - `[ ]` Design tokens and theme in `globals.css` (a real palette, not the neutral default)
 - `[ ]` Product UI/UX brief (`docs/UI_UX.md`) filled from the user's design direction
 - `[ ]` Public layout (navbar + footer) and app layout (signed-in shell)
+- `[ ]` Visible nav surfaces for public, app, auth, and mobile route contexts
+- `[ ]` Route-aware navigation active states for public, app, auth/mobile navigation
+- `[ ]` Connected route graph across public, auth, and app contexts
+- `[ ]` Contextual footer/endcap for public, signed-in app, and auth routes
+- `[ ]` Rich text/scannability patterns from `docs/UI_UX.md`
+- `[ ]` Surface budget and card usage rules from `docs/UI_UX.md`
 - `[ ]` Metadata and browser icons (short page titles, default icons replaced only when
   product branding exists)
-- `[ ]` Shared page scaffold (page header, wide container, small desktop gutters, spacing rhythm)
+- `[ ]` Shared page behavior primitives (route-aware nav links, page actions, filters,
+  empty states, footer/endcaps, spacing rhythm)
 - `[ ]` Auth wiring (Supabase) and the protected-route redirect
 - `[ ]` Data layer (typed fetch to `apps/server`, shared types from `packages/types`)
 - `[ ]` API contract layer (Zod schemas in `packages/types`, Hono routes in `apps/server`)

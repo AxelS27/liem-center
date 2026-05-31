@@ -64,7 +64,7 @@ Stack rules:
 - Payments: integrate **Midtrans** from `apps/server`. The **server key is server-only**; the browser uses the public `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` for Snap. The webhook is verified by **signature hash**, never Bearer auth. See ADR-012.
 - Marketplace payments are not assumed to be solved by normal Midtrans checkout. For multi-seller, split settlement, seller payout, or platform-as-merchant-of-record flows, read `docs/PAYMENTS.md` first.
 - Auth extras are **Supabase-native**: OAuth (Google, GitHub) and password reset run through the Supabase SDK with providers and redirect URLs configured in the dashboard; profile pictures go to a Supabase **Storage** bucket with RLS. See ADR-013.
-- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/FRONTEND.md`.
+- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. The starter page is only a wiring/responsive example, not a design template to copy. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/FRONTEND.md`.
 
 ## Workflow
 
@@ -140,8 +140,10 @@ Keep the public repo looking human-authored.
 - ✅ Update the relevant doc when you change its domain
 - ✅ Ask before introducing a new top-level folder
 - ✅ If `docs/PRD.md` is still a blank template, ask the user for scope before building features - don't invent it
-- ✅ For product UI work, fill or update `docs/UI_UX.md` from the user's design direction before generating implementation tasks
+- ✅ For product UI work, fill or update `docs/UI_UX.md` from the user's design direction before generating implementation tasks. Treat the starter UI as a disposable example, not the visual/layout source of truth.
 - ✅ Start the app at a real landing page with a navbar and footer; only protected routes redirect to sign in (see `docs/FRONTEND.md`)
+- ✅ Keep public, auth, app, and mobile navigation visible, route-aware, and connected: nav has a surface/background, active links use `aria-current="page"`, app routes can get back to public/product home, and every route has a context-aware footer/endcap.
+- ✅ Use rich text with restraint where it improves scanning: useful emphasis, inline links, captions, metadata, helper text, short lists, and callouts. Do not make pages flat plaintext or decorative markdown clutter.
 - ✅ Ship one theme and one language (English) first; add a second theme or locale only when the product needs it
 
 ## DON'T

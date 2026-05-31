@@ -10,6 +10,12 @@ For stack decisions and rationale, read `docs/DECISIONS.md`. For folder boundari
 
 All docs are living documents. Start with the templates, then keep them synchronized as the product changes. Do not treat the initial version as final.
 
+The starter UI in `apps/web` is intentionally only a small example that proves the stack is
+wired: routing, metadata, icons, responsive basics, and shared UI imports. It is not a
+design direction. For a real product, replace its layout and visual style with the user's
+brief in `docs/UI_UX.md` and the selected references. The template should constrain only
+the common AI tells and production-quality failures, not the agent's creativity.
+
 ## Start a new project
 
 1. Copy this folder to the new project location, or create a new repo from the GitHub template.
@@ -34,7 +40,10 @@ The agent keeps `docs/PROGRESS.md` as the live build map and task checklist: wha
 
 `PROGRESS.md` is a synthesis layer, not a second spec. It should include granular tasks such as navbar, hero, page shell, forms, empty states, Zod contracts, server routes, data fetching, and verification, but each task should point back to the source doc for durable detail. For example, write "Navbar - primary route links (UI_UX.md, FRONTEND.md)" and "Page shell - wide layout with small desktop gutters (UI_UX.md, FRONTEND.md)" instead of copying all navbar behavior, spacing, and margin rules into the checklist.
 
-`UI_UX.md` is the product design brief. Use it for brand feel, references, navigation model, page-level UX intent, copy tone, and product-specific layout choices. It must follow `FRONTEND.md`; if they conflict, fix `UI_UX.md` instead of weakening the template rules.
+`UI_UX.md` is the product design brief. Use it for brand feel, references, navigation model, route connectivity, page-level UX intent, copy tone, rich-text/scannability patterns, surface/card budget, footer model, active-nav treatment, and product-specific layout choices. `FRONTEND.md` gives guardrails; `UI_UX.md` chooses the actual product composition. If they conflict, fix `UI_UX.md` instead of weakening the template rules.
+
+Do not derive product layout from the starter page. The starter page is disposable sample
+code. Use it as proof of wiring only, then design from the product brief.
 
 During implementation, update `PROGRESS.md` before starting work, while items are in progress, and when they are done. A feature is not done just because the code exists: the checklist should also cover tests, lint/typecheck, API contract checks, doc updates, and rendered UI review when `apps/web` changes.
 
@@ -112,7 +121,22 @@ short via Next metadata, using a compact pattern like `Dashboard | AppName` or
 The frontend is wired to fight generic-AI output (see `docs/FRONTEND.md` and the `shadcn-ui` skill), but taste is still yours to drive:
 
 - Generate a few variations in parallel (different models or prompts), then take the best pieces from each. Don't ship the first output.
+- Replace the starter UI's composition for real products. Do not treat its layout, card
+  pattern, spacing, or copy as a house style.
 - Mock the layout before wiring data, so the design isn't locked by the schema.
+- Treat cards as a limited surface budget, not the default wrapper. Use open lists,
+  tables, section rhythm, typography, and spacing when they communicate hierarchy better.
+- Make persistent nav route-aware from the start. Public, app, auth, and mobile nav all
+  need a visible surface/background treatment, a visible active state, and
+  `aria-current="page"`.
+- Connect route contexts both ways. From the app/dashboard, users need a clear route back
+  to landing/product home; from public/auth, they need clear routes into sign in, sign up,
+  or the app. Do not rely on the browser back button as navigation.
+- Add a context-aware footer or footer-equivalent endcap to every route: public, app, and
+  auth. The content can change by context, but the route should not end bare.
+- Use rich text with restraint. Add emphasis, inline links, captions, metadata, helper
+  text, short lists, or callouts where they improve scanning; avoid random bolding or
+  decorative markdown clutter.
 - A weekend with _Refactoring UI_ (Adam Wathan) pays off fast: hierarchy from spacing, restraint with borders, one focal point per screen.
 
 ## Before publishing a product repo

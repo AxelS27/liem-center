@@ -30,7 +30,22 @@ The docs are synchronized when:
 ## UI Consistency
 
 - Frontend rendering, performance & design-craft rules: see `docs/FRONTEND.md`. Product-specific visual identity and UX direction: see `docs/UI_UX.md`. The bar is "professionally designed, human-made" - never AI-generic. Render and self-review UI work against both docs before calling it done.
-- Use shared UI primitives and design tokens before creating one-off styles.
+- Use shared UI primitives and design tokens before creating one-off styles, but do not
+  force every product into the same layout. Product-specific composition belongs in
+  `docs/UI_UX.md`; `docs/FRONTEND.md` is the guardrail.
+- Persistent navigation exists on every route and highlights the active route on desktop
+  and mobile with `aria-current="page"`.
+- Navigation has a visible background/surface treatment on every route. It is not invisible
+  floating text, and it stays readable across scroll positions and breakpoints.
+- Major route contexts are connected. Public, auth, and app shells link to each other where
+  appropriate; users are never trapped in a dashboard/app route with no clear way back to
+  the public/product home.
+- Every route has a context-appropriate footer or footer-equivalent endcap. Public, app,
+  and auth footers may differ, but none are omitted.
+- Pages use rich text and scannability patterns with restraint: useful emphasis, inline
+  links, captions, metadata, helper text, lists, and callouts where they clarify content.
+- UI work is checked for "card soup": cards/panels are not used as the default wrapper for
+  every shell, nav, filter bar, table/list, form, metric, and repeated item.
 - Test responsive behavior at mobile and desktop widths. For public/landing pages, inspect every major section and section transition at 1366x768, 1440x900, and 1920x1080 so hard mid-screen dividers, stacked page slices, half-empty sections, and prematurely visible footers cannot slip through.
 - Public-facing UI does not expose implementation details. No visible Supabase/Midtrans/Hono
   stack labels, API health badges, response-time numbers, build IDs, environment names,
@@ -61,6 +76,18 @@ A task is done when:
 - [ ] `pnpm verify` passes
 - [ ] `pnpm docs:check` passes when docs changed or project docs were initialized
 - [ ] UI work: rendered and self-reviewed against `docs/FRONTEND.md` and `docs/UI_UX.md` at the required viewports, with anything that missed fixed
+- [ ] Route navigation is present and the current page/section is visibly active in
+      desktop and mobile nav (`aria-current="page"`)
+- [ ] Navbar/sidebar/bottom nav has a visible surface/background treatment on every route,
+      including public, app, auth, and mobile contexts
+- [ ] Public, auth, and app route contexts are connected; app/dashboard routes include a
+      clear path back to landing/product home
+- [ ] Footer/endcap is present on every public, app, and auth route with content suited to
+      that route context
+- [ ] Rich text/scannability was reviewed: useful emphasis, inline links, captions,
+      metadata, helper text, lists, or callouts exist where they improve comprehension
+- [ ] Card/surface usage was reviewed against `docs/UI_UX.md`; the page is not card-heavy
+      by default
 - [ ] Public UI reviewed for implementation leaks: no provider names, health-check widgets,
       latency metrics, build/environment labels, or debug diagnostics visible to real users
 - [ ] Matches naming & folder conventions (ARCHITECTURE.md)

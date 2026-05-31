@@ -8,6 +8,8 @@
 
   Fill this after PRD.md and FEATURES.md, before generating PROGRESS.md.
   Use the user's design brief, product scope, and selected REFERENCES.md examples.
+  Do not inherit the starter UI's layout or visual style by default. It is only a wiring
+  example, not a product design direction.
   Do not copy long rules from FRONTEND.md. Point to them when needed.
 -->
 
@@ -27,6 +29,8 @@
 - **User direction:**
 - **Closest vertical from REFERENCES.md:**
 - **Reference products/sites:**
+- **Starter UI influence:** None by default. Note any specific starter pattern to keep only
+  if the user explicitly likes it.
 - **Things the user explicitly likes:**
 - **Things the user explicitly dislikes:**
 
@@ -40,14 +44,28 @@
 ## Layout Principles
 
 <!--
-  Product-specific layout rules. These must not conflict with FRONTEND.md.
-  Keep this concrete enough to guide pages, but not so detailed that it becomes CSS.
+  Product-specific layout rules. FRONTEND.md gives guardrails; this section chooses the
+  product's actual layout direction. Keep it concrete enough to guide pages, but not so
+  detailed that it becomes CSS.
 -->
 
-- Use wide page shells with small desktop gutters unless the route is a focused reading or form page.
-- Primary navbar links navigate to real routes/pages, not same-page section jumps.
-- <Product-specific layout rule>
-- <Product-specific layout rule>
+- **Primary layout model:** <top navbar / sidebar / hybrid / editorial / dashboard / other>
+- **Page composition:** <how landing, list, detail, form, and dashboard pages should feel>
+- **Surface budget:** <where cards/panels are allowed, and where open lists, sections,
+  tables, or typography should carry hierarchy instead>
+- **Navigation placement:** Primary nav links navigate to real routes/pages, not same-page
+  section jumps. Define whether public/app nav uses a top navbar, sidebar, bottom nav, or
+  drawer at each breakpoint.
+- **Navigation surface:** Define the visible nav treatment: background band, sidebar rail,
+  border, blur, solid token surface, or another product-appropriate surface. Nav must not
+  be invisible floating text.
+- **Route connectivity:** Define how users move between public, auth, and app contexts.
+  App pages need a clear route back to the public landing/product home; public/auth pages
+  need clear routes into sign in, sign up, or the app.
+- **Footer model:** Every route has a footer or footer-equivalent endcap. Define what
+  public, app, and auth footers contain for this product.
+- **Desktop gutters:** Use wide page shells with small desktop gutters unless the route is
+  a focused reading or form page.
 
 ## Visual System
 
@@ -63,7 +81,11 @@
 - **Color direction:**
 - **Typography direction:**
 - **Density and spacing:**
+- **Rich text/scannability:** Where should emphasis, inline links, captions, metadata,
+  lists, helper text, or callouts be used to make content easier to scan?
 - **Radius and borders:**
+- **Cards and surfaces:** Where should cards be used, and where should hierarchy come from
+  spacing, typography, open lists, tables, or section bands instead?
 - **Imagery/product visuals:**
 - **Icon style:**
 - **Motion:**
@@ -88,10 +110,10 @@
   implementation status. Implementation status lives in PROGRESS.md.
 -->
 
-| Route / Area | User goal | Primary action | Layout notes                       | States needed                     |
-| ------------ | --------- | -------------- | ---------------------------------- | --------------------------------- |
-| `/`          | <goal>    | <action>       | <wide/asymmetric/content-led/etc.> | <empty/loading/error if relevant> |
-| `<route>`    | <goal>    | <action>       | <notes>                            | <states>                          |
+| Route / Area | User goal | Primary action | Layout notes                   | States needed                     |
+| ------------ | --------- | -------------- | ------------------------------ | --------------------------------- |
+| `/`          | <goal>    | <action>       | <product-specific composition> | <empty/loading/error if relevant> |
+| `<route>`    | <goal>    | <action>       | <notes>                        | <states>                          |
 
 ## Components And Patterns
 
@@ -101,7 +123,12 @@
 -->
 
 - **Buttons and CTAs:**
-- **Cards/lists/tables:**
+- **Navigation active states:** How active navbar/sidebar/bottom-nav links look, including
+  mobile.
+- **Route links:** How public, app, and auth shells link to each other so no context becomes
+  a dead end.
+- **Footer/endcap:** Contextual footer content for public, app, and auth routes.
+- **Cards/lists/tables:** Include a surface budget so the UI does not become card-heavy.
 - **Forms:**
 - **Empty states:**
 - **Error states:**
