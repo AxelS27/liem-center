@@ -21,9 +21,12 @@
   :root {
     /*
      * Brand: this is a NEUTRAL PLACEHOLDER, not a finished palette. Shipping it
-     * untouched is the most common generic-AI tell. Before building UI, commit to a
-     * real palette for this product (no default violet/indigo) and replace these
-     * values. The shadcn-ui skill walks the steps; see docs/FRONTEND.md.
+     * untouched is the most common generic-AI tell - but so is reaching for whatever
+     * palette every AI demo currently defaults to. Avoid not just violet/indigo, but
+     * the other tired "AI starter" looks: emerald/forest green + cream/beige editorial,
+     * muted sage, the dark-purple "SaaS" gradient. Commit to a deliberate, product
+     * specific palette with a real accent and neutrals that carry a slight temperature,
+     * then replace these values. The shadcn-ui skill walks the steps; see docs/FRONTEND.md.
      */
     --brand: 240 6% 10%;
     --brand-foreground: 0 0% 98%;
@@ -101,5 +104,12 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    /*
+     * Bind the real typeface (set as --font-sans by next/font in the root layout)
+     * here too, so text never falls back to the browser default serif even before
+     * Tailwind utilities apply. Never ship the default font.
+     */
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }

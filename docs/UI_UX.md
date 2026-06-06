@@ -61,7 +61,10 @@
   drawer at each breakpoint.
 - **Navigation surface:** Define the visible nav treatment: background band, sidebar rail,
   border, blur, solid token surface, or another product-appropriate surface. Nav must not
-  be invisible floating text.
+  be invisible floating text. Primary nav should normally be anchored (sticky) on scroll.
+- **First viewport:** The landing hero (headline, supporting copy, primary CTA, and for
+  commerce the search/shop entry) must fit the first screen without scrolling at ~720-768px
+  desktop height and on mobile. Note any product-specific above-the-fold priorities.
 - **Route connectivity:** Define how users move between public, auth, and app contexts.
   App pages need a clear route back to the public landing/product home; public/auth pages
   need clear routes into sign in, sign up, or the app.
@@ -82,8 +85,10 @@
 - **Icon/brand asset direction:** Use the template default icon/mark or a clean wordmark
   unless the user provides product-specific branding. Do not invent placeholder initials,
   random logo tiles, or generic marks that pretend to be a real brand.
-- **Color direction:**
-- **Typography direction:**
+- **Color direction:** Commit to a deliberate product palette. Avoid the tired AI-starter
+  defaults (violet/indigo, emerald/forest + cream editorial, muted sage, dark-purple SaaS).
+- **Typography direction:** Name the actual typeface(s). A modern family wired via `next/font`
+  to `--font-sans`, never the browser default serif/system font.
 - **Density and spacing:**
 - **Rich text/scannability:** Where should emphasis, inline links, captions, metadata,
   lists, helper text, or callouts be used to make content easier to scan?

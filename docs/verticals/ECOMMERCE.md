@@ -60,12 +60,21 @@ The first viewport should contain real shopping affordances:
 The first viewport should answer: what can I buy here, how do I find it, and what is worth
 checking right now?
 
+This must actually fit the first screen. The brand/nav, search, and the first shopping module
+should be visible without scrolling at common desktop heights (~720-768px) and on mobile. If a
+user has to scroll just to reach the hero or the search bar, the fold is being wasted, usually
+by an oversized headline band or too much top padding. Tighten spacing instead of stacking a
+tall atmospheric hero above the real storefront.
+
 ## Navigation And Search
 
 Ecommerce navigation is a product control surface.
 
 - Give the nav a deliberate background or surface. It should not be invisible text floating
   over a plain page.
+- Anchor the header (sticky) so search, cart, and account stay reachable while the user
+  scrolls a long storefront. A header that scrolls away forces users back to the top to
+  search or check the cart.
 - Make search easy to find on desktop and mobile. On desktop, a wide search input in the
   header is usually better than a small search button. On mobile, use a prominent search
   field or search row near the top.
@@ -301,7 +310,10 @@ The goal is "busy store, clear aisles", not chaos.
 
 Ecommerce color can be more expressive than SaaS UI, especially for deals and categories.
 
-- Pick one primary brand color.
+- Pick one primary brand color, and make it a deliberate product choice. Do not reach for
+  whatever palette is currently in heavy AI rotation (forest-green + cream, muted sage, and
+  the like are examples, not the only ones); a safe trendy default reads as a template, not
+  a store. Commit to a palette that fits the actual catalog and audience.
 - Add a small set of semantic commerce accents, such as promo, discount, warning, delivery,
   success, and muted surfaces.
 - Keep colors in `globals.css` tokens. Do not scatter raw Tailwind palette classes or hex
@@ -374,6 +386,10 @@ Avoid:
 - Text-only category cards where users expect visual shortcuts.
 - A small search link hidden in nav.
 - Too much whitespace above the first real product or category module.
+- A hero so tall the user must scroll before reaching search or the first shopping module.
+- A header that scrolls away instead of staying anchored for search, cart, and account.
+- Any safe trendy default palette (forest-green + cream, muted sage, and the like) standing
+  in for a real brand identity.
 - Promo modules that look like generic cards instead of campaigns.
 - Icons used randomly or on every button without meaning.
 - A single muted brand color used for everything, making deals and actions feel lifeless.

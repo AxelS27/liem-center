@@ -24,6 +24,14 @@ The default failure mode of AI-built UIs is "generic." Don't ship that. The goal
 
 **Two tests to keep applying:** if a screen could be any AI demo, it is not done. If an element exists only to look "cool", it should not exist. Every visual element needs a reason.
 
+**Clean is the constant, whatever the product is.** This template builds every kind of site:
+ecommerce, SaaS, dashboards, marketing, editorial, internal tools. The final result must be
+clean in all of them: uncluttered, restrained, intentional, easy to scan, with a clear focal
+point and real whitespace. "Clean" is not the same as "sparse" or "empty" - a dense
+marketplace can be clean if its density is organized. The opposite of clean is clutter:
+competing focal points, decoration with no purpose, surfaces stacked on surfaces, and noise.
+No product type is an excuse to ship a busy, messy page.
+
 **Target vibe:** a real product company website designed by experienced frontend engineers and product designers. It should feel structured, editorial, balanced, calm, professional, trustworthy, scalable, and production-ready.
 
 **Further reading:** the fastest way to build this judgment is _Refactoring UI_ (Adam Wathan and Steve Schoger). Its tactical rules - hierarchy through spacing and weight, restraint with borders, one clear focal point per screen - are exactly what separates a human-made UI from AI slop. Before designing for a specific product type, study the real references in `docs/REFERENCES.md`, then record the chosen direction in `docs/UI_UX.md`.
@@ -33,12 +41,21 @@ The default failure mode of AI-built UIs is "generic." Don't ship that. The goal
 Do not use:
 
 - Default violet/indigo gradients, glassmorphism, glow, or blur as decoration.
+- Any palette that reads as a template default, not just violet/indigo. Whatever look is in
+  heavy AI rotation is a tell: violet/indigo, emerald/forest + cream editorial, muted sage,
+  the dark-purple "SaaS gradient", teal-on-near-black, flat beige minimalism, and whatever
+  comes next. These are examples, not a blocklist. The specific colors keep changing; the
+  failure is reaching for a safe trendy default instead of a deliberate, product-specific
+  palette with a real accent.
 - Random horizontal dividers or decorative separators with no functional purpose.
 - Emoji as UI/section markers, or excessive uppercase micro-labels.
 - Cinematic or floating decorative text; fake futuristic styling.
 - Decorative dual-colored headlines, split-color phrases, or mixed heading colors without a system.
 - Decorative numbering like [01], [02].
 - Random serif-italic fonts dropped in "for contrast".
+- Shipping the browser default font. If no typeface is wired through `next/font` and bound to
+  `--font-sans`, text falls back to Times/serif or a bland system stack. That "weird, wrong"
+  default font is an instant tell. Wire a deliberate modern typeface (see Typography below).
 - Untouched shadcn defaults (looks like every other demo).
 - Fake placeholder logo marks, such as an invented initials tile, random badge, or generic
   icon standing in for a real brand asset. Use the product's real mark, the template icon,
@@ -88,7 +105,12 @@ Do not use:
   to fill the navbar. Use the provided product logo/icon, the template icon if no brand
   exists yet, or a disciplined text wordmark. Replace visible brand marks only when the
   user provides or approves product-specific branding.
-- **Keep typography stable.** One or two font families at most. No random font mixing, no decorative or serif-italic-for-aesthetics switches. Build hierarchy with spacing, weight, and size.
+- **Wire a real, modern typeface.** Never rely on the browser/system default. Load a
+  deliberate modern sans through `next/font` in the root layout and bind it to the
+  `--font-sans` token (the template ships this wired with a modern variable font; swap the
+  family for a product-appropriate one, keep the token). Pick something that reads as a
+  designed choice, not a framework default. One or two families at most, no decorative or
+  serif-italic-for-aesthetics switches. Build hierarchy with spacing, weight, and size.
 - **Use rich text with restraint.** Pages should not feel like raw plaintext. Use emphasis,
   inline links, short lists, metadata rows, captions, helper text, keyboard hints, and
   occasional callouts where they improve scanning or comprehension. Keep it purposeful:
@@ -98,11 +120,31 @@ Do not use:
   direction: top nav vs sidebar, editorial vs dashboard, table vs list, dense vs spacious.
   This file should not force every product into the same page shape. Follow UI_UX.md, then
   apply the quality checks here.
-- **Keep desktop gutters small.** Use wide containers for page shells, galleries, dashboards,
-  and landing sections. At desktop sizes, the page should feel closer to the viewport edges
-  like a real product surface, not trapped in a narrow centered column. Narrow columns are
-  fine only for prose, forms, or focused reading areas inside a wider layout.
+- **Match container width to content density.** Pick the width the content actually fills,
+  do not default everything to the widest container. Dense surfaces (dashboards, catalogs,
+  galleries, product grids, data tables) go wide with small gutters and sit close to the
+  viewport edges like a real product. Sparse content (a marketing hero, a short landing
+  section, an auth card) needs a contained measure (~1100-1280px centered) so it reads as a
+  composed page. Both extremes fail: a dense page trapped in a narrow centered column, and
+  sparse content flung across an extra-wide container so the navbar and hero end up with
+  empty middles and dead side gutters. A too-wide shell for thin content is just as much an
+  AI tell as a too-narrow one. Narrow reading columns (prose, forms) live inside a wider
+  layout.
 - **Compose against real viewport heights.** Design every major section and section transition as a complete viewport experience at common desktop heights, especially 720px, 768px, 900px, and 1080px. A page that looks fine in code but leaves hard section dividers or half-empty bands across visible scroll positions is not done.
+- **Make the hero land in the first viewport.** On a landing/home page, the headline, its
+  supporting copy, and the primary CTA must be visible without scrolling at common desktop
+  heights (~720-768px) and on mobile. The user
+  should never have to scroll just to see the hero. The navbar must not eat the fold, and
+  oversized top padding or a too-tall nav that pushes the headline below the fold is a fail.
+  Achieve this by restraining vertical spacing and content volume, not by forcing a section
+  to `min-h-screen`/`100vh` (that is forbidden and lint-blocked). A full-height flex page
+  shell with a centered hero and a bottom-anchored footer is the right pattern.
+- **Anchor the primary navbar.** Public and app primary navigation should stay pinned while
+  the user scrolls (`sticky top-0` with a real surface: token background, subtle bottom
+  border, and/or backdrop blur so it stays readable over content). A nav that scrolls away
+  makes a long page feel unfinished. Keep it from covering anchor targets with
+  `scroll-margin-top`. Reserve non-sticky nav for focused reading/auth layouts where a
+  persistent bar would distract.
 - **Give short flows a complete screen.** Auth, onboarding, empty states, confirmation pages, and other short views need enough meaningful content, layout structure, or a dedicated auth shell so the footer does not appear without scrolling on desktop. Do not add filler; use helpful context, trust notes, preview panels, or remove the marketing footer for that route type if the app structure calls for it.
 - **Use motion with taste.** Motion is encouraged when it improves clarity, feedback, or
   polish. Keep it subtle, fast, and purposeful: small hover responses, menu open/close,
@@ -236,12 +278,15 @@ The review must be based on actual rendered viewports, not only code inspection.
 **Layout (the failures that make a page read as AI-built):**
 
 - [ ] At a wide desktop width (~1440px) the page does not leave large dead side gutters. Content aligns to a defined container; background bands may run full-bleed, but content is never stranded in a narrow centered column with empty sides.
+- [ ] Container width matches content density. Sparse content (hero, short landing, auth) is contained to a composed measure, not flung across an extra-wide shell that leaves the navbar and hero with empty middles. Dense pages (dashboards, catalogs, grids) go wide. Neither extreme is present.
 - [ ] At 1366px, 1440px, and 1920px widths, the main page shell uses small, intentional
       side gutters. It does not look like a 1280px site floating in the middle of a large
       monitor.
 - [ ] At 1366x768, 1440x900, and 1920x1080, no hard full-width section divider cuts across any viewport near the middle of the screen. If the next section is visible, it reads as an intentional continuation, not a page break.
 - [ ] Scrolling through the page does not reveal "stacked slices" where each section is separated by a border and large blank vertical padding. Section transitions have rhythm, overlap, continuous background, or enough adjacent content density to feel natural.
 - [ ] On short routes such as sign in, sign up, onboarding, empty states, and confirmations, the footer is not visible on initial desktop load unless the content above it forms a complete, dense page. A sparse form plus visible footer is a fail.
+- [ ] On the landing/home page, the hero headline, supporting copy, and primary CTA are visible without scrolling at ~720-768px desktop height and on mobile. The navbar does not push the hero below the fold.
+- [ ] The primary navbar is anchored (sticky) on scroll with a real surface, and does not scroll away or sit on the page as invisible floating text.
 - [ ] Spacing rhythm is consistent and deliberate, not random vertical gaps.
 - [ ] Cards, borders, and dividers are load-bearing: removing one would lose real grouping or meaning. Nothing is boxed or ruled off when spacing already separates it.
 - [ ] The page is not "cardy": shell, nav, filters, data table/list, forms, metrics, and
@@ -255,10 +300,10 @@ The review must be based on actual rendered viewports, not only code inspection.
 **Content & identity:**
 
 - [ ] Every card, badge, stat, and panel carries real information or a real action. Nothing exists only to fill a grid.
-- [ ] Color comes from the tokens in `globals.css`. No default-shadcn look, no violet/indigo gradient, no glassmorphism/glow/blur as decoration.
+- [ ] Color comes from the tokens in `globals.css` and reads as a deliberate product palette, not whatever look is currently in heavy AI rotation (violet/indigo, forest + cream, muted sage, dark-purple SaaS gradient, and the like). No default-shadcn look, no glassmorphism/glow/blur as decoration.
 - [ ] Visible brand/logo treatment uses a real approved asset, the template icon, or a
       clean wordmark. It does not use an invented initials tile or generic placeholder mark.
-- [ ] One or two font families; hierarchy is built from size, weight, and spacing. No decorative serif-italic, no mixed heading colors.
+- [ ] A deliberate modern typeface is wired through `next/font` / `--font-sans`; text is not the browser default serif or a bland system stack. One or two font families; hierarchy is built from size, weight, and spacing. No decorative serif-italic, no mixed heading colors.
 - [ ] Copy is plain and specific. No AI-marketing filler, no em dash, no decorative emoji, no `[01]`-style numbering.
 - [ ] Rich text is used where it helps scanning: useful emphasis, inline links, lists,
       metadata, captions, helper text, and callouts. The page is neither flat plaintext nor
@@ -293,6 +338,9 @@ The review must be based on actual rendered viewports, not only code inspection.
       Public pages use product/legal/footer links; app pages use compact app/legal/help
       context; auth pages use a quiet footer. The footer adapts to context, but it is not
       omitted.
+- [ ] The footer has a visible treatment (top border or surface band, brand, links,
+      copyright) and reads as a deliberate endcap, not two faint muted lines floating at the
+      bottom of the page.
 - [ ] Auth pages use an intentional auth layout. The footer must be present, but the main
       auth content should still feel complete enough that the footer reads as a natural
       end, not as filler exposed by sparse content.
@@ -347,10 +395,17 @@ Every page ships with navigation chrome and a footer/endcap. There are three rou
 persistent navigation and no contextual end is the AI tell that there was no real
 information architecture behind it.
 
+The footer needs a visible treatment, the same way navigation does. A real footer reads as a
+deliberate endcap: a top border or surface band, the brand/wordmark, route or legal links,
+and a copyright line. Two faint lines of muted text floating at the bottom of the page do not
+read as a footer even though the markup is technically there. Give it structure.
+
 Navigation must be visibly present, not merely technically present in the DOM. Give public,
 app, and auth nav a deliberate surface/background treatment that fits the product: a full
 width bar, sidebar rail, bottom nav, subtle border band, solid/blurred token surface, or
 another clear visual home. Avoid nav links that float invisibly over the page background.
+Primary navigation should normally stay anchored (sticky) while scrolling so it remains a
+persistent control, with a surface that keeps it readable over any content behind it.
 
 Major route contexts must cross-link:
 
@@ -418,6 +473,11 @@ Rules:
 - The template ships default icons in `apps/web/src/app/favicon.ico` and
   `apps/web/src/app/icon.png`. Replace them only when the user provides product-specific
   branding.
+- Render a real logo mark in the navbar, do not invent a placeholder tile or drop a generic
+  lucide icon in a colored square as the brand. The starter shows the pattern: it imports
+  `app/icon.png` and renders it with `next/image` next to the wordmark. Reuse the product's
+  real logo when it exists, otherwise the template `icon.png` plus a clean wordmark. A
+  generic lucide icon dropped in a colored tile standing in for a brand is a fail.
 
 ### Consistent Page Behavior
 
@@ -449,6 +509,11 @@ All color lives in **one file**: `apps/web/src/styles/globals.css`. It is the si
 - Because every theme uses the **same token names** with different values, adding a second theme later never touches a component.
 - Components reference **tokens only** (`bg-background`, `text-foreground`, `border-border`). Never hardcode hex, and never use raw palette classes like `bg-zinc-900`.
 - One `--radius` knob controls roundness across the UI.
+
+Typography is wired the same way: a `next/font` family in the root layout sets the
+`--font-sans` token, which `tailwind.config.ts` maps to `font-sans` and `globals.css` applies
+to `body`. To change the product's typeface, swap the font family in the root layout and keep
+the token. Never leave it unset, that falls back to the default serif/system font.
 
 Wiring (done once, when the app is scaffolded):
 

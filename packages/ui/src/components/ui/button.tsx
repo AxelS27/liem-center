@@ -21,6 +21,12 @@ const buttonVariants = cva(
           'border border-border bg-background hover:bg-secondary hover:text-secondary-foreground',
         ghost: 'hover:bg-secondary hover:text-secondary-foreground',
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        // For use on a dark/foreground-colored band (e.g. a closing CTA), where the normal
+        // primary/outline variants would not contrast. Ring offset flips to the dark surface.
+        inverse:
+          'bg-background text-foreground hover:bg-background/90 focus-visible:ring-background focus-visible:ring-offset-foreground',
+        inverseOutline:
+          'border border-background/30 text-background hover:bg-background/10 focus-visible:ring-background focus-visible:ring-offset-foreground',
       },
       size: {
         sm: 'h-9 px-3',
