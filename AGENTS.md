@@ -31,6 +31,7 @@ Never override a higher source with a lower one without flagging it.
 | docs/ARCHITECTURE.md | Adding folders, cross-package imports, new module                                      |
 | docs/FRONTEND.md     | Any apps/web UI work - rendering, data fetching, performance, design/UX                |
 | docs/UI_UX.md        | Product-specific visual identity, UX direction, navigation model, page UX map          |
+| docs/verticals/*.md  | Starting a product in a known vertical (ecommerce, SaaS, fintech, marketplace, etc.)   |
 | docs/BACKEND.md      | Any apps/server work - routes, middleware, services, validation, backend tests         |
 | docs/DATABASE.md     | Supabase/Postgres schema, RLS, Storage, indexes, migrations, data lifecycle            |
 | docs/PAYMENTS.md     | Payments, checkout, refunds, settlement, payouts, marketplace money flow               |
@@ -141,6 +142,7 @@ Keep the public repo looking human-authored.
 - ✅ Ask before introducing a new top-level folder
 - ✅ If `docs/PRD.md` is still a blank template, ask the user for scope before building features - don't invent it
 - ✅ For product UI work, fill or update `docs/UI_UX.md` from the user's design direction before generating implementation tasks. Treat the starter UI as a disposable example, not the visual/layout source of truth.
+- ✅ For a known product vertical, read the matching `docs/verticals/*.md` playbook first and use it to fill `docs/UI_UX.md`. The playbook informs the product brief; it does not override `docs/FRONTEND.md`.
 - ✅ Start the app at a real landing page with a navbar and footer; only protected routes redirect to sign in (see `docs/FRONTEND.md`)
 - ✅ Keep public, auth, app, and mobile navigation visible, route-aware, and connected: nav has a surface/background, active links use `aria-current="page"`, app routes can get back to public/product home, and every route has a context-aware footer/endcap.
 - ✅ Use rich text with restraint where it improves scanning: useful emphasis, inline links, captions, metadata, helper text, short lists, and callouts. Do not make pages flat plaintext or decorative markdown clutter.

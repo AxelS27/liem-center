@@ -13,6 +13,10 @@
 > card usage, copy, or visual style as the default for real products. Build the actual UI
 > from the user's brief, `docs/UI_UX.md`, and selected references, while obeying the
 > guardrails in this file.
+>
+> For products in a known vertical, read the matching `docs/verticals/*.md` playbook before
+> finalizing `docs/UI_UX.md`. The playbook gives genre-specific instincts, while this file
+> remains the universal frontend guardrail.
 
 ## Design Craft (read first)
 
@@ -36,6 +40,9 @@ Do not use:
 - Decorative numbering like [01], [02].
 - Random serif-italic fonts dropped in "for contrast".
 - Untouched shadcn defaults (looks like every other demo).
+- Fake placeholder logo marks, such as an invented initials tile, random badge, or generic
+  icon standing in for a real brand asset. Use the product's real mark, the template icon,
+  or a clean wordmark until branding exists.
 - Narrow centered site shells that leave huge dead gutters on desktop. Public pages and
   dense app pages should feel wide and edge-aware, with small side gutters and content
   that uses the available viewport intentionally.
@@ -51,8 +58,15 @@ Do not use:
   content block in separate bordered cards. Cards are one grouping tool, not the default
   layout language. Mature products build most hierarchy from spacing, alignment, type,
   density, and section rhythm.
+- A paper prototype look: too many pale bordered rectangles, weak one-note neutrals, low
+  contrast product images, tiny quiet controls, and large empty bands that make the page
+  feel printed instead of usable.
 - Cards or borders used to separate content that spacing, type scale, and weight already separate. A box must earn its place; if removing it loses no clarity, remove it. Mature products (Linear, Stripe, Notion) build hierarchy from spacing, not by wrapping everything in a card or ruling it off with a divider.
 - Every action pushed to the top level to look "feature-rich". Don't line up every icon and button inline, or add columns and stats a page doesn't need. Use progressive disclosure: secondary actions belong in a row's context menu or a clickable item; supporting data belongs on its own view.
+- Audience-mismatched metrics or operational data shown to look "serious." Public and
+  customer-facing pages should not show internal KPIs, admin counters, workflow coverage,
+  revenue summaries, stock alert counts, sample order values, checkout targets, or other
+  dashboard-like data unless that information directly helps the user's current decision.
 - Subheadings that merely restate the page. A visitor who navigated to "API Keys" does not need "Manage your API keys" under the heading. Drop the explanatory subtitle unless it carries real, non-obvious information.
 - shadcn inset / segmented ("pill") tabs used for primary, page-level navigation. Those are for supplemental, in-context switching (e.g. Preview / Code). Top-level navigation uses a sidebar or underlined tabs.
 - Public UI that exposes implementation details: database/provider names, API health checks,
@@ -70,6 +84,10 @@ Do not use:
   responsive/navigation wiring only. The first real product screen should feel designed
   for that product, not like a reskin of the template sample.
 - **Customize components.** shadcn/ui is a starting point, not the look. Tune radius, weight, density, and color so it does not read as "default shadcn."
+- **Use honest brand assets.** Do not invent a fake initials logo or placeholder mark just
+  to fill the navbar. Use the provided product logo/icon, the template icon if no brand
+  exists yet, or a disciplined text wordmark. Replace visible brand marks only when the
+  user provides or approves product-specific branding.
 - **Keep typography stable.** One or two font families at most. No random font mixing, no decorative or serif-italic-for-aesthetics switches. Build hierarchy with spacing, weight, and size.
 - **Use rich text with restraint.** Pages should not feel like raw plaintext. Use emphasis,
   inline links, short lists, metadata rows, captions, helper text, keyboard hints, and
@@ -95,12 +113,102 @@ Do not use:
   if the border/background were removed. Prefer open lists, section bands, table rows,
   inline controls, typography, and whitespace when they communicate the structure more
   cleanly.
+- **Make pages feel alive through useful interaction and hierarchy.** A page can feel warm
+  and active without being noisy: clear clickable affordances, responsive controls,
+  meaningful icons, product imagery, focused color accents, and well-structured density do
+  more than full-page animation or decorative clutter.
 - **Give navigation a real surface.** A navbar/sidebar/bottom nav needs a deliberate visual
   home: background band, token surface, subtle border, sidebar rail, backdrop treatment, or
   another product-appropriate container. It does not need to be a card, but it must be
   visible on every route and stay readable over any content behind it.
+- **Use icons where they speed recognition.** Commerce, marketplace, dashboard, and tool
+  interfaces often need familiar icon + label controls so users can scan actions quickly.
+  Use icons to clarify common actions, not as decoration.
+- **Make clickable things look clickable.** Links, buttons, rows, cards, and text actions
+  must communicate interactivity before hover. If normal body text is clickable, give it a
+  visible affordance such as underline, stronger color, icon, button treatment, or a clear
+  adjacent action cue.
+- **Show information for this audience and task.** A public buyer page, a seller dashboard,
+  an admin console, and a finance report need different data. Keep operational metrics,
+  internal counters, and dashboard stats out of customer-facing pages unless they answer a
+  real customer question.
 - **Respect hierarchy and whitespace.** One clear focal point per screen, intentional alignment, generous spacing. Polish over decoration.
 - **Accessibility is craft.** Real focus states, sufficient contrast, keyboard paths. Pros do this, and it reads as human.
+
+### Icons In Buttons And Controls
+
+Icons can make a product feel more alive and easier to scan, especially in ecommerce and
+marketplace UIs where users expect quick visual entry points. Use them intentionally:
+
+- Prefer `lucide-react` icons, already available through `packages/ui`, before adding a new
+  icon dependency.
+- Add icons to controls when the symbol is familiar and improves recognition: search,
+  cart, checkout, shop, store/seller, category grid, filter, sort, voucher, discount, flash
+  sale, location, delivery, user/account, notifications, menu, and directional arrows.
+- Do not add icons to every button by default. Text-only buttons are often better for
+  secondary copy-heavy actions, legal/help links, destructive confirmations, or flows where
+  the icon adds no new meaning.
+- Primary CTAs should usually keep a text label. Add a leading or trailing icon only when it
+  reinforces the action, such as "Shop products" with a shopping bag, "Start selling" with
+  a store, or "View all categories" with an arrow or grid.
+- Icon-only buttons are for compact controls with universal meaning, such as search, cart,
+  menu, close, or more actions. They need an accessible `aria-label` and a clear focus
+  state.
+- Icon + label controls are the best default for scan-heavy navigation, category shortcuts,
+  and utility actions when there is enough room. Icon-only controls are appropriate only
+  when the symbol is universally recognized or the layout is compact.
+- Text + optional icon is the safer default for major CTAs, because the wording carries the
+  action and the icon reinforces it.
+- Keep icon size and stroke weight consistent with the component density. Most text buttons
+  should use 16px or 18px icons aligned with `gap-2`; oversized icons make controls feel
+  childish.
+- Category, deal, and marketplace entry points should often use icon + label patterns
+  because they create useful visual rhythm and make dense commerce pages easier to scan.
+  The icons must map to real product categories or actions, not generic decoration.
+
+### Click Affordance
+
+Users should not have to guess what can be clicked.
+
+- Text links need a visible link treatment before hover: underline, token color, icon,
+  button/ghost button styling, or a clear arrow/action cue. Do not rely on cursor changes
+  or hover-only styling to reveal that text is clickable.
+- Section-level actions such as "View all", "Browse product list", "Manage settings", or
+  "See details" should read as actions. Prefer an arrow icon, underline, or ghost button
+  treatment instead of plain body text.
+- Clickable cards or rows need an affordance beyond being inside a card: title link
+  styling, hover/focus surface change, trailing arrow, visible row action, or a clear
+  "Open" / "View details" control.
+- Hover states should confirm interactivity, not be the first sign of it. Use hover for
+  reinforcement: color shift, underline, icon movement, background shift, or subtle shadow.
+- Focus states must be visible for keyboard users. Any link or button with custom styling
+  still needs a clear focus-visible ring or equivalent treatment.
+- Do not style non-clickable labels like links. If text is colored, underlined, or paired
+  with a directional icon, users will assume it does something.
+
+### Audience-Appropriate Information
+
+Do not show data just because it exists.
+
+Every visible number, stat, badge, panel, and data row should pass this test: does this help
+the current user make the next decision on this route? If not, remove it or move it to the
+right context.
+
+- Customer-facing public pages should focus on product value, browsing, pricing, trust,
+  availability, delivery, social proof, and the next action. They should not show internal
+  operations, admin stats, revenue, workflow coverage, stock alert counts, sample order
+  values, or performance targets.
+- Operational dashboards may show KPIs, queues, revenue, alerts, and workflow metrics, but
+  only to the role that can act on them.
+- Marketing proof points must be meaningful to the audience. "100K+ products" can help a
+  marketplace feel stocked; "seller workflow coverage P0" or "checkout target < 3 min" is
+  internal planning language and should not appear in user-facing UI.
+- Avoid fake dashboard panels on public pages. They often read as filler and make the
+  product feel less trustworthy.
+- If a number is shown, label it in plain user language and place it near the decision it
+  supports. Do not group unrelated metrics into stat strips just to fill space.
+- Keep internal implementation, roadmap, and operational language in docs, admin routes, or
+  seller/admin dashboards, not public buyer pages.
 
 ### Layout Checks
 
@@ -139,12 +247,17 @@ The review must be based on actual rendered viewports, not only code inspection.
 - [ ] The page is not "cardy": shell, nav, filters, data table/list, forms, metrics, and
       side panels are not all boxed independently. At least some hierarchy comes from
       typography, alignment, spacing, section rhythm, or open list/table structure.
+- [ ] The page does not feel like a paper prototype: pale bordered rectangles, weak
+      one-note neutrals, faded imagery, quiet controls, and empty bands are not carrying
+      the design.
 - [ ] Primary navigation uses a sidebar or underlined tabs, not inset/segmented ("pill") tabs; inset tabs appear only for supplemental in-context switching.
 
 **Content & identity:**
 
 - [ ] Every card, badge, stat, and panel carries real information or a real action. Nothing exists only to fill a grid.
 - [ ] Color comes from the tokens in `globals.css`. No default-shadcn look, no violet/indigo gradient, no glassmorphism/glow/blur as decoration.
+- [ ] Visible brand/logo treatment uses a real approved asset, the template icon, or a
+      clean wordmark. It does not use an invented initials tile or generic placeholder mark.
 - [ ] One or two font families; hierarchy is built from size, weight, and spacing. No decorative serif-italic, no mixed heading colors.
 - [ ] Copy is plain and specific. No AI-marketing filler, no em dash, no decorative emoji, no `[01]`-style numbering.
 - [ ] Rich text is used where it helps scanning: useful emphasis, inline links, lists,
@@ -152,10 +265,17 @@ The review must be based on actual rendered viewports, not only code inspection.
       over-styled decoration.
 - [ ] No subheading merely restates its page or section title; every heading earns its place.
 - [ ] The screen isn't overloaded: secondary actions live in menus, and no column, stat, or panel is present that the page doesn't need.
+- [ ] Public/customer-facing pages do not show audience-mismatched metrics, internal KPIs,
+      admin counters, workflow coverage, revenue summaries, stock alert counts, sample order
+      values, or performance targets unless they directly support the user's task.
 - [ ] Public UI does not leak implementation details: no provider names such as Supabase,
       Midtrans, Hono, or Hugging Face unless the product is explicitly developer-facing and
       the user asked to show them; no API latency numbers, health-check status, internal
       route names, commit hashes, environment names, build IDs, or debug diagnostics.
+- [ ] Icons in buttons and controls are used where they improve scanning, not everywhere by
+      default. Icon-only controls have accessible labels and visible focus states.
+- [ ] Clickable text, cards, and rows are visibly interactive before hover. Plain body text
+      is not used as the only affordance for a link or action.
 
 **Structure & states:**
 

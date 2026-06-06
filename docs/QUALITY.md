@@ -46,11 +46,20 @@ The docs are synchronized when:
   links, captions, metadata, helper text, lists, and callouts where they clarify content.
 - UI work is checked for "card soup": cards/panels are not used as the default wrapper for
   every shell, nav, filter bar, table/list, form, metric, and repeated item.
+- UI work is checked for a paper-prototype feel: repeated pale bordered rectangles, weak
+  one-note neutrals, faded imagery, quiet controls, and empty bands should not carry the
+  design.
+- Visible brand/logo treatment uses a real approved asset, the template icon, or a clean
+  wordmark. Do not ship invented initials tiles or generic placeholder marks as if they
+  were product branding.
 - Test responsive behavior at mobile and desktop widths. For public/landing pages, inspect every major section and section transition at 1366x768, 1440x900, and 1920x1080 so hard mid-screen dividers, stacked page slices, half-empty sections, and prematurely visible footers cannot slip through.
 - Public-facing UI does not expose implementation details. No visible Supabase/Midtrans/Hono
   stack labels, API health badges, response-time numbers, build IDs, environment names,
   internal route names, or debug diagnostics unless the product itself is a developer/status
   tool and the user explicitly asked for that surface.
+- Public/customer-facing UI does not show internal KPIs, admin counters, workflow coverage,
+  revenue summaries, stock alert counts, sample order values, performance targets, or other
+  operational data unless it directly helps that user's current task.
 
 ## Performance Basics
 
@@ -88,8 +97,15 @@ A task is done when:
       metadata, helper text, lists, or callouts exist where they improve comprehension
 - [ ] Card/surface usage was reviewed against `docs/UI_UX.md`; the page is not card-heavy
       by default
+- [ ] Paper-prototype feel was reviewed: the page is not carried by pale bordered boxes,
+      weak one-note neutrals, faded imagery, quiet controls, or empty bands
+- [ ] Visible brand/logo treatment uses a real approved asset, the template icon, or a
+      clean wordmark, not an invented initials tile or generic placeholder mark
 - [ ] Public UI reviewed for implementation leaks: no provider names, health-check widgets,
       latency metrics, build/environment labels, or debug diagnostics visible to real users
+- [ ] Public/customer-facing UI reviewed for audience-mismatched metrics: no internal KPIs,
+      admin counters, operational dashboards, seller workflow stats, revenue summaries, or
+      other data the user cannot act on
 - [ ] Matches naming & folder conventions (ARCHITECTURE.md)
 - [ ] API matches `docs/API.md` (if applicable)
 - [ ] Backend/database/payment work matches the relevant domain doc (`BACKEND.md`,

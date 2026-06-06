@@ -24,6 +24,9 @@ This beats inventing a layout from scratch, which is where the generic-AI look c
 
 ## Ecommerce & retail
 
+- [Tokopedia](https://www.tokopedia.com) - Indonesian marketplace reference: search-led header, category shortcuts, utility actions, delivery context, and organized shopping modules.
+- [Shopee Indonesia](https://shopee.co.id) - high-density local marketplace reference: promo energy, icon-led shortcuts, cart/search/account controls, and campaign-heavy landing modules.
+- [Shopee Pilih Lokal](https://shopee.co.id/m/shopee-pilih-lokal) - local-brand campaign reference: bold banner art, voucher modules, icon navigation, and dense ecommerce momentum.
 - [Aesop](https://aesop.com) - editorial, typographic, the opposite of a generic store template.
 - [Apple](https://apple.com) - product pages built on spacing and a single focal point per section.
 - [Allbirds](https://allbirds.com) - calm product storytelling, restrained color.

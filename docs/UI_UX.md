@@ -8,6 +8,8 @@
 
   Fill this after PRD.md and FEATURES.md, before generating PROGRESS.md.
   Use the user's design brief, product scope, and selected REFERENCES.md examples.
+  When the product matches a known vertical, read the matching docs/verticals/*.md playbook
+  and capture the relevant choices here.
   Do not inherit the starter UI's layout or visual style by default. It is only a wiring
   example, not a product design direction.
   Do not copy long rules from FRONTEND.md. Point to them when needed.
@@ -27,6 +29,7 @@
 -->
 
 - **User direction:**
+- **Vertical playbook:** <docs/verticals/ECOMMERCE.md / none / other>
 - **Closest vertical from REFERENCES.md:**
 - **Reference products/sites:**
 - **Starter UI influence:** None by default. Note any specific starter pattern to keep only
@@ -76,18 +79,27 @@
 
 - **App name for metadata:**
 - **Browser title pattern:** `<Page> | <AppName>`
-- **Icon/brand asset direction:** Use the template default icon unless the user provides
-  product-specific branding.
+- **Icon/brand asset direction:** Use the template default icon/mark or a clean wordmark
+  unless the user provides product-specific branding. Do not invent placeholder initials,
+  random logo tiles, or generic marks that pretend to be a real brand.
 - **Color direction:**
 - **Typography direction:**
 - **Density and spacing:**
 - **Rich text/scannability:** Where should emphasis, inline links, captions, metadata,
   lists, helper text, or callouts be used to make content easier to scan?
+- **Audience-appropriate data:** Which metrics, counts, badges, and operational data are
+  useful for each route context? Public/customer pages should not show internal KPIs or
+  admin/seller operational data unless the user can act on it.
 - **Radius and borders:**
 - **Cards and surfaces:** Where should cards be used, and where should hierarchy come from
-  spacing, typography, open lists, tables, or section bands instead?
+  spacing, typography, open lists, tables, or section bands instead? Define how the product
+  avoids card soup and a paper-prototype feel while still feeling clear and balanced.
 - **Imagery/product visuals:**
-- **Icon style:**
+- **Icon style:** Define where icons help users scan controls and entry points. Prefer
+  familiar `lucide-react` icons for actions such as search, cart, category, filter, deal,
+  store/seller, checkout, account, delivery, and arrows; avoid decorative or mismatched
+  icons. Specify which controls are icon-only, icon + label, text + optional icon, or
+  text-only.
 - **Motion:**
 
 ## Navigation Model
@@ -122,13 +134,26 @@
   Put shared implementation tasks in PROGRESS.md.
 -->
 
-- **Buttons and CTAs:**
+- **Buttons and CTAs:** Define which primary and secondary actions use icon + label,
+  text-only, or icon-only controls. Do not put icons on every button by default; use icons
+  where they clarify the action or make dense navigation/category/deal surfaces easier to
+  scan. For compact universal controls, icon-only is allowed with accessible labels; for
+  major CTAs, keep the text label primary.
 - **Navigation active states:** How active navbar/sidebar/bottom-nav links look, including
   mobile.
 - **Route links:** How public, app, and auth shells link to each other so no context becomes
   a dead end.
+- **Click affordance:** Define how text links, section actions, clickable cards, and rows
+  look interactive before hover. Plain body text should not be the only clue that something
+  is clickable.
 - **Footer/endcap:** Contextual footer content for public, app, and auth routes.
 - **Cards/lists/tables:** Include a surface budget so the UI does not become card-heavy.
+- **Product/list metadata:** For commerce or catalog products, define how names, prices,
+  discounts, ratings, sold counts, stock, delivery, seller/location, category badges, and
+  actions are visually distinguished.
+- **Metrics and stats:** Define which stats are shown to public users, signed-in users,
+  sellers, admins, or finance users. Avoid generic stat strips and internal planning data
+  on customer-facing pages.
 - **Forms:**
 - **Empty states:**
 - **Error states:**

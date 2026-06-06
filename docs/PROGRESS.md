@@ -28,8 +28,9 @@
   `docs/UI_UX.md` (product-specific design direction), `docs/ARCHITECTURE.md`
   (structure), `docs/API.md` (contracts), and `docs/QUALITY.md` (Definition of Done).
   Then read only the domain docs that apply: `docs/FRONTEND.md`, `docs/BACKEND.md`,
-  `docs/DATABASE.md`, `docs/PAYMENTS.md`, and `docs/REFERENCES.md`. This file is where
-  you synthesize those docs into one working checklist.
+  `docs/DATABASE.md`, `docs/PAYMENTS.md`, `docs/REFERENCES.md`, and any matching
+  `docs/verticals/*.md` playbook. This file is where you synthesize those docs into one
+  working checklist.
 - **Break features into concrete tasks.** Each feature becomes the real pieces of work:
   the UI parts (navbar, hero, form, table, empty state, ...) and the API / data they need.
   Granular enough to check off, ordered roughly by build phase.
@@ -70,8 +71,9 @@ Use this quick pass whenever a new product starts or the scope changes:
 7. Pull payment tasks from `docs/PAYMENTS.md` when the feature touches checkout, refunds,
    settlement, payouts, subscriptions, or marketplace money flow.
 8. Pull universal UI tasks from `docs/FRONTEND.md` and visual reference context from
-   `docs/REFERENCES.md`: nav, layout, spacing rhythm, states, responsiveness, and rendered
-   review belong in the checklist, but the detailed rules stay in those docs.
+   `docs/REFERENCES.md`. If the product matches a vertical playbook, pull those
+   genre-specific tasks too: nav, layout, spacing rhythm, states, responsiveness, and
+   rendered review belong in the checklist, but the detailed rules stay in those docs.
 9. Pull final verification from `docs/QUALITY.md`: lint, typecheck, tests, UI render
    review, and any doc updates needed by the change.
 
