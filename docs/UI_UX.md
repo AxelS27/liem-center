@@ -10,8 +10,9 @@
   Use the user's design brief, product scope, and selected REFERENCES.md examples.
   When the product matches a known vertical, read the matching docs/verticals/*.md playbook
   and capture the relevant choices here.
-  Do not inherit the starter UI's layout or visual style by default. It is only a wiring
-  example, not a product design direction.
+  Do not inherit the starter UI's layout by default. Use it as taste calibration only:
+  clean, open, restrained, non-boxy, and mature. The product's actual structure, density,
+  palette, imagery, and route composition must come from this brief.
   Do not copy long rules from FRONTEND.md. Point to them when needed.
 -->
 
@@ -32,8 +33,8 @@
 - **Vertical playbook:** <docs/verticals/ECOMMERCE.md / none / other>
 - **Closest vertical from REFERENCES.md:**
 - **Reference products/sites:**
-- **Starter UI influence:** None by default. Note any specific starter pattern to keep only
-  if the user explicitly likes it.
+- **Starter design DNA to keep:** <clean/open/non-boxy/restraint/nav-footer polish/motion/media/none>
+- **Starter UI patterns not to copy:** <exact layout/section order/placeholder copy/starter brand/other>
 - **Things the user explicitly likes:**
 - **Things the user explicitly dislikes:**
 
@@ -56,6 +57,9 @@
 - **Page composition:** <how landing, list, detail, form, and dashboard pages should feel>
 - **Surface budget:** <where cards/panels are allowed, and where open lists, sections,
   tables, or typography should carry hierarchy instead>
+- **Open composition:** Define how the product should avoid a boxy or paper-prototype feel:
+  which areas stay open, which sections can use bands, and which content truly earns a
+  framed card/panel.
 - **Navigation placement:** Primary nav links navigate to real routes/pages, not same-page
   section jumps. Define whether public/app nav uses a top navbar, sidebar, bottom nav, or
   drawer at each breakpoint.
@@ -90,6 +94,8 @@
 - **Typography direction:** Name the actual typeface(s). A modern family wired via `next/font`
   to `--font-sans`, never the browser default serif/system font.
 - **Density and spacing:**
+- **Non-boxy hierarchy:** How should spacing, type weight, alignment, section rhythm,
+  imagery, and inline metadata carry hierarchy before adding borders or cards?
 - **Rich text/scannability:** Where should emphasis, inline links, captions, metadata,
   lists, helper text, or callouts be used to make content easier to scan?
 - **Audience-appropriate data:** Which metrics, counts, badges, and operational data are

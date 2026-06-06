@@ -102,6 +102,9 @@ Good task examples:
   generic template scaffold. (UI_UX.md "Layout Principles", FRONTEND.md)
 - `[ ]` Starter UI replacement - product screens are designed from UI_UX.md and references,
   not copied from the starter sample. (FRONTEND.md, UI_UX.md)
+- `[ ]` Starter design DNA - keep the clean, open, non-boxy, restrained feel where it fits,
+  while replacing starter layout, copy, brand, palette, and route composition with the
+  product-specific direction. (FRONTEND.md "Starter design DNA", UI_UX.md)
 - `[ ]` Surface budget - use cards/panels only where they clarify grouping; avoid boxing
   nav, filters, tables, forms, and every repeated item by default. (UI_UX.md "Cards and
   surfaces", FRONTEND.md "Design Craft")
@@ -203,8 +206,8 @@ via the typed data layer; a row -> `/app/projects/[id]`.
   service, starter page, baseline tests)
 - `[x]` Responsive starter landing baseline (mobile menu, adaptive hero, route CTAs,
   non-technical public copy; see `docs/FRONTEND.md`)
-- `[ ]` Replace starter UI composition for the real product; keep only wiring patterns that
-  fit `docs/UI_UX.md`
+- `[ ]` Replace starter UI composition for the real product; keep only the clean,
+  non-boxy design DNA and wiring patterns that fit `docs/UI_UX.md`
 - `[ ]` Design tokens and theme in `globals.css` (a real palette, not the neutral default)
 - `[ ]` Product UI/UX brief (`docs/UI_UX.md`) filled from the user's design direction
 - `[ ]` Public layout (navbar + footer) and app layout (signed-in shell)

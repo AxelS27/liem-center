@@ -8,11 +8,13 @@
 > navigation model, page UX, layout choices, and copy tone live in `docs/UI_UX.md`.
 > `docs/UI_UX.md` must follow this file, not override it.
 >
-> The starter UI in `apps/web` is only an implementation example for wiring, responsive
-> behavior, metadata, icons, and route navigation. Do not copy its layout, spacing,
-> card usage, copy, or visual style as the default for real products. Build the actual UI
-> from the user's brief, `docs/UI_UX.md`, and selected references, while obeying the
-> guardrails in this file.
+> The starter UI in `apps/web` is a design-quality reference and wiring example, not a
+> layout template. Preserve its discipline: clean composition, restrained surfaces,
+> non-boxy hierarchy, real navigation and footer treatment, deliberate typography, and
+> small purposeful interactions. Do not copy its exact layout, section order, spacing
+> values, copy, or starter brand as the default for real products. Build the actual UI from
+> the user's brief, `docs/UI_UX.md`, and selected references, while obeying the guardrails
+> in this file.
 >
 > For products in a known vertical, read the matching `docs/verticals/*.md` playbook before
 > finalizing `docs/UI_UX.md`. The playbook gives genre-specific instincts, while this file
@@ -33,6 +35,14 @@ competing focal points, decoration with no purpose, surfaces stacked on surfaces
 No product type is an excuse to ship a busy, messy page.
 
 **Target vibe:** a real product company website designed by experienced frontend engineers and product designers. It should feel structured, editorial, balanced, calm, professional, trustworthy, scalable, and production-ready.
+
+**Starter design DNA:** the default `apps/web` screen shows the intended level of taste,
+not the required page structure. Carry forward the feel: open sections instead of card soup,
+hierarchy from spacing and type before borders, a sticky navbar with a real surface,
+route-aware links, a complete footer endcap, one strong visual/media moment when useful,
+and a restrained closing CTA. Replace the product content, routes, palette, layout model,
+and density for each project. The starter is successful when it teaches "clean, mature,
+not AI-generic", not when every product looks like the starter.
 
 **Further reading:** the fastest way to build this judgment is _Refactoring UI_ (Adam Wathan and Steve Schoger). Its tactical rules - hierarchy through spacing and weight, restraint with borders, one clear focal point per screen - are exactly what separates a human-made UI from AI slop. Before designing for a specific product type, study the real references in `docs/REFERENCES.md`, then record the chosen direction in `docs/UI_UX.md`.
 
@@ -97,9 +107,9 @@ Do not use:
 ### Do instead
 
 - **Have an identity.** Commit to a real palette, a deliberate type scale, and a consistent spacing rhythm as design tokens, not Tailwind defaults sprinkled ad-hoc.
-- **Do not clone the starter UI.** Use it to understand the configured stack and minimum
-  responsive/navigation wiring only. The first real product screen should feel designed
-  for that product, not like a reskin of the template sample.
+- **Use the starter as taste calibration, not a layout source.** Keep its maturity: clean,
+  airy, non-boxy, restrained, and structured. Then design the actual product screen from
+  `docs/UI_UX.md` and references so it does not read as a reskin of the template sample.
 - **Customize components.** shadcn/ui is a starting point, not the look. Tune radius, weight, density, and color so it does not read as "default shadcn."
 - **Use honest brand assets.** Do not invent a fake initials logo or placeholder mark just
   to fill the navbar. Use the provided product logo/icon, the template icon if no brand
@@ -116,6 +126,10 @@ Do not use:
   occasional callouts where they improve scanning or comprehension. Keep it purposeful:
   no rainbow text, random bolding, decorative italics, or markdown-looking clutter.
 - **Lay out with structure.** Use a proper responsive grid, strong alignment, and clear section flow. Whitespace should create hierarchy; it should not become dead empty space.
+- **Prefer open composition before boxes.** The starter intentionally uses open grids,
+  bands, typography, and one earned media frame instead of wrapping every idea in a card.
+  Follow that instinct unless the product domain needs denser framed modules, like product
+  cards, tables, dialogs, or repeated list items.
 - **Let the product choose the layout.** `docs/UI_UX.md` owns the product's actual layout
   direction: top nav vs sidebar, editorial vs dashboard, table vs list, dense vs spacious.
   This file should not force every product into the same page shape. Follow UI_UX.md, then
