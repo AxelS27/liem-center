@@ -51,7 +51,8 @@ Never override a higher source with a lower one without flagging it.
 
 - **Build on `apps/web/` — don't regenerate from scratch.** Extend the existing code.
 - **Background stays white.** Only change the accent/brand color (`--primary`, `--ring`). Never warm the background to cream/beige.
-- **Hero is never wrapped in a card.** Open band, centered content, fits first viewport (~720px) without scrolling.
+- **Hero is never wrapped in a card.** Open band, fits first viewport (~720px) without scrolling.
+- **One focal point in the first viewport** — the headline + primary action. No heavy `bg-foreground`/near-black panel in the hero; it steals the eye. Dark/inverted surfaces are for late-page CTA bands and the footer. In a split hero, the side panel must be lighter than the headline column (`bg-secondary`/`bg-muted`, not solid black).
 - **Sections = open bands by default.** Cards only for product listings, data panels, dialogs. Not as a default wrapper for every section.
 - **Sticky nav** — `sticky top-0 bg-background border-b border-border backdrop-blur-sm` — with `aria-current="page"` on the active link.
 - **Font must be wired** — `next/font` → `--font-sans` in layout.tsx. Unset = browser serif fallback = instant AI tell.

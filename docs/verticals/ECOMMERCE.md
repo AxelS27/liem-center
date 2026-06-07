@@ -70,6 +70,26 @@ tall atmospheric hero above the real storefront.
 
 Ecommerce navigation is a product control surface.
 
+**Search is the dominant element, not one item among many.** The single most common
+marketplace-navbar mistake is cramming everything into one row: logo, a small search box,
+several text nav links (Categories, Deals, Seller Center), utility icons, and auth buttons
+all fighting for the same line. The search box ends up squeezed and the whole bar feels
+unbalanced. Look at Tokopedia and Shopee: search takes the dominant central width, and
+everything else is minimal around it.
+
+- **Give the search bar the most horizontal space in the header.** It should visibly be the
+  primary action, wide and central, not a narrow input wedged between text links.
+- **Budget the top row.** A marketplace header should not carry logo + search + 3-4 marketing
+  text links + utility icons + 2 auth buttons in one line. Keep the main row to: logo,
+  dominant search, and a compact cluster of utility/account/cart controls.
+- **Prefer a two-tier header when there is a lot to show.** Shopee's pattern: a thin top
+  utility strip (seller center, help, notifications, language, account) above a main row
+  that is logo + big search + cart. This keeps the primary row calm and lets search dominate.
+  A category entry point (menu button, "Categories" with a chevron mega-menu, or a chip rail)
+  can sit just below the search row rather than competing inside it.
+- Do not treat the navbar as a marketing navbar with a search box bolted on. Categories and
+  Deals are browse surfaces (mega-menu, chip rail, category page), not text links crowding
+  the search.
 - Give the nav a deliberate background or surface. It should not be invisible text floating
   over a plain page.
 - Anchor the header (sticky) so search, cart, and account stay reachable while the user
@@ -385,6 +405,11 @@ Avoid:
   desirable.
 - Text-only category cards where users expect visual shortcuts.
 - A small search link hidden in nav.
+- A crammed single-row header where logo, a squeezed search box, several marketing text
+  links, utility icons, and auth buttons all compete on one line. Let search dominate; move
+  the overflow into a two-tier header, a category mega-menu, or a chip rail.
+- A heavy near-black (`bg-foreground`) promo panel in the hero's first viewport that
+  out-weighs the headline and steals the focal point. Use a soft surface for hero-side promos.
 - Too much whitespace above the first real product or category module.
 - A hero so tall the user must scroll before reaching search or the first shopping module.
 - A header that scrolls away instead of staying anchored for search, cart, and account.

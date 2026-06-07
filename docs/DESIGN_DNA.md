@@ -68,6 +68,18 @@ The starter uses **open sections as the default**. Cards earn their place.
 - Every section boxed in `bg-card border border-border rounded-lg` = card soup = fail
 - Pale bordered rectangles are not a design system
 
+## Focal point & surface weight
+
+- **One focal point per screen.** The hero headline + primary action is the focal point of
+  the first viewport. Nothing else in that viewport should compete with it for attention.
+- **Heavy/dark/inverted surfaces are for intentional late-page moments** — a closing CTA
+  band, the footer. Do **not** drop a large `bg-foreground` (near-black) or other heavy
+  inverted panel in the hero/first viewport: it becomes a second focal point and steals the
+  eye from the headline. The starter keeps the first viewport light and lets the headline win.
+- **In a split/two-column hero, the side panel must be lighter than the headline column**,
+  not heavier. A promo panel beside the hero is fine (Tokopedia does it) — but use a soft
+  surface (`bg-secondary`, `bg-muted`, a subtle border), not a solid near-black block.
+
 ## Navigation
 
 - `sticky top-0` with visible surface: `bg-background border-b border-border backdrop-blur`
