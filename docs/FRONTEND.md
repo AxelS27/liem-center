@@ -103,13 +103,22 @@ Do not use:
 - Invisible navigation: nav text floating directly on the page with no deliberate surface,
   background, border, blur, band, sidebar rail, or other visual treatment. Navigation must
   read as a persistent product control, not as loose text that disappears into the content.
+- Animations longer than 800ms on any user interaction. Slow animations feel laggy and break the "instant" contract.
+- CSS transitions on layout properties: `width`, `height`, `top`, `left`, `margin`, `padding`. These cause layout reflow and drop frames. Animate `transform` and `opacity` only.
+- Multiple competing animations playing simultaneously in the same viewport area.
+- Looping animations on static content. Only intentional loading states (shimmer, spinner) should loop.
+- More than three font weights in a single product (`400`, `500/600`, `700` is the maximum).
+- Arbitrary spacing values outside the 4px grid (`10px`, `14px`, `18px`, `22px`, `36px`).
+- Generic stat strips, fake dashboard panels, or internal KPI counters dropped onto public pages just to look "data-driven".
 
 ### Do instead
 
 - **Have an identity.** Commit to a real palette, a deliberate type scale, and a consistent spacing rhythm as design tokens, not Tailwind defaults sprinkled ad-hoc.
-- **Use the starter as taste calibration, not a layout source.** Keep its maturity: clean,
-  airy, non-boxy, restrained, and structured. Then design the actual product screen from
-  `docs/UI_UX.md` and references so it does not read as a reskin of the template sample.
+- **Build on the starter — do not generate a fresh layout from scratch.** The starter ships
+  with the right foundation: open-band composition, white surface, sticky nav, real font
+  wiring, and a structured footer. Keep that. Change the accent palette, content, copy, and
+  routes per product. Record layout deviations in `docs/UI_UX.md` only when the product
+  genuinely needs a different structure (e.g. sidebar dashboard vs. marketing page).
 - **Customize components.** shadcn/ui is a starting point, not the look. Tune radius, weight, density, and color so it does not read as "default shadcn."
 - **Use honest brand assets.** Do not invent a fake initials logo or placeholder mark just
   to fill the navbar. Use the provided product logo/icon, the template icon if no brand
@@ -659,11 +668,61 @@ Design every state, not just the happy path. A screen that only handles "data lo
 
 **Loading states.** Use `loading.tsx` with designed **skeletons** that mirror the real layout, not bare spinners. Transitions stay subtle and fast.
 
+Skeleton rules:
+- The skeleton must match the **exact shape** of the loaded content — same height, same proportions, same grid. A generic rectangle where a product card goes is not a skeleton.
+- Use a **shimmer animation** (background gradient sweeping left-to-right) rather than opacity pulse. The motion direction matches reading direction.
+- Skeletons must appear within **100ms** of navigation. A blank white flash before the skeleton is a fail.
+- Skeleton → content transition: the skeleton fades out while the real content fades in. No layout shift. No position jump.
+
 **Motion.** The rule is not "no motion." The rule is no noisy motion. Add motion when it
 communicates state, confirms interaction, or makes a transition feel polished. Prefer CSS
 transitions and tiny client components before reaching for animation libraries. Keep
 durations short, easing natural, and every animated surface useful. Always respect
 `prefers-reduced-motion`.
+
+**Animation timing — use only these durations, never invent new ones:**
+
+| Token | Duration | Use for |
+| ----- | -------- | ------- |
+| instant | 80ms | Button press, checkbox, micro feedback |
+| fast | 150ms | Hover states, small element transitions |
+| normal | 250ms | Standard UI transitions, dropdowns |
+| slow | 400ms | Modals, drawers, page content fade |
+| slower | 600ms | Charts, counters, complex reveals |
+
+Never exceed 800ms on any interaction — it breaks the "instant" contract and feels laggy.
+
+**GPU-only rule.** Only animate `transform` and `opacity`. Never put CSS transitions on
+`width`, `height`, `top`, `left`, `margin`, or `padding` — those trigger layout and drop
+frames. Use `transform: translate()` instead of `top`/`left`. Use the CSS grid trick
+(`grid-template-rows: 0fr → 1fr`) instead of animating height for accordion/collapse.
+
+**Easing guide:**
+- Elements entering the screen → ease-decelerate `cubic-bezier(0, 0, 0.2, 1)` (starts fast, slows to rest)
+- Elements leaving → ease-accelerate `cubic-bezier(0.4, 0, 1, 1)` (ends quickly)
+- Toggles, notifications, likes → spring `cubic-bezier(0.34, 1.56, 0.64, 1)` (bouncy, tactile)
+- Most UI transitions → ease-standard `cubic-bezier(0.4, 0, 0.2, 1)` (balanced)
+
+**Scroll animations** use `IntersectionObserver`, never scroll event listeners. Trigger at 80% element visible. Play once only — do not repeat on re-scroll.
+
+**Interactive component states.** Every interactive component must implement all of these states before it is considered done:
+
+| State | Requirement |
+| ----- | ----------- |
+| Default | How the element looks at rest |
+| Hover | Visible color/shadow/border shift within 150ms |
+| Focus | `focus-visible` ring: 2px accent ring + 2px offset. Never `outline: none` without a replacement |
+| Active/Pressed | `scale(0.98)` + background darkens within 80ms — tactile press feel |
+| Loading | Spinner replaces text; element width locked to prevent layout shift; `aria-busy="true"` |
+| Disabled | `opacity: 50%`; `cursor: not-allowed`; no hover or click response |
+| Error | Red border + error message below field; shake animation on submit; `role="alert"` |
+| Empty | Icon + title + description + CTA. Never just blank space or "No data" |
+
+Do not ship a component missing any state that its domain needs. A button without a loading state, a form without inline errors, or a table without an empty state is half-built.
+
+**Spacing discipline.** Use a 4px base grid. Only these values: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128px. Never use arbitrary values like 10px, 14px, 18px, 22px, 36px. In Tailwind: `p-1` (4px), `p-2` (8px), `p-4` (16px), `p-6` (24px), `p-8` (32px), `p-12` (48px), `p-16` (64px). Arbitrary `p-[10px]` is a violation.
+
+**Typography discipline.** Max three font weights per product: `400` (body), `500` or `600` (medium), `700` (bold). Never use `300` (too light at small sizes), `800`/`900` (too heavy for UI text). Font sizes must come from the defined scale — avoid intermediate sizes like `13px`, `15px`, `17px`, `18px`, `22px`. Max line length for body text: 65–75 characters. Use `max-w-prose` or `max-w-[65ch]` for reading columns.
 
 **Responsive behavior: adapt, don't shrink.** Layout should change behavior across breakpoints, not just scale down.
 

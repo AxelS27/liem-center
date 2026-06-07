@@ -10,9 +10,11 @@
   Use the user's design brief, product scope, and selected REFERENCES.md examples.
   When the product matches a known vertical, read the matching docs/verticals/*.md playbook
   and capture the relevant choices here.
-  Do not inherit the starter UI's layout by default. Use it as taste calibration only:
-  clean, open, restrained, non-boxy, and mature. The product's actual structure, density,
-  palette, imagery, and route composition must come from this brief.
+  The starter UI (`apps/web/`) is the design foundation — build on it, not from scratch.
+  Keep its open-band composition, white surface, sticky nav, font wiring, and footer shell.
+  This brief records what changes per product: accent palette, content direction, layout
+  deviations (only when the product genuinely needs a different structure), and routes.
+  Read `docs/DESIGN_DNA.md` before filling this file.
   Do not copy long rules from FRONTEND.md. Point to them when needed.
 -->
 

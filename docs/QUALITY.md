@@ -106,6 +106,13 @@ A task is done when:
 - [ ] Public/customer-facing UI reviewed for audience-mismatched metrics: no internal KPIs,
       admin counters, operational dashboards, seller workflow stats, revenue summaries, or
       other data the user cannot act on
+- [ ] Every interactive component (button, input, card, link, toggle) has all required states: default, hover, focus, active/pressed, loading, disabled, error, and empty — each visibly distinct
+- [ ] Focus states use `focus-visible` rings (2px accent + 2px offset). No `outline: none` without a replacement
+- [ ] Animations only use GPU-composited properties (`transform`, `opacity`). No transitions on `width`, `height`, `top`, `left`, `margin`, or `padding`
+- [ ] All animation durations ≤ 800ms. A global `prefers-reduced-motion` rule exists in `globals.css` and is respected by every animated component
+- [ ] Loading skeletons match the exact shape of the real content (same height, same grid, shimmer animation, appear within 100ms of navigation)
+- [ ] Spacing follows the 4px grid. No arbitrary values like `10px`, `14px`, `18px`, `22px` in Tailwind classes or CSS
+- [ ] Typography uses max 3 font weights (`400`, `500/600`, `700`). Font sizes come from the defined scale; no intermediate sizes like `13px`, `15px`, `17px`, `18px`, `22px`
 - [ ] Matches naming & folder conventions (ARCHITECTURE.md)
 - [ ] API matches `docs/API.md` (if applicable)
 - [ ] Backend/database/payment work matches the relevant domain doc (`BACKEND.md`,

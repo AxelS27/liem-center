@@ -29,7 +29,8 @@ Never override a higher source with a lower one without flagging it.
 | docs/FEATURES.md     | Building or scoping a specific feature module                                          |
 | docs/PROGRESS.md     | Building product features; tracking what's done, in progress, and how features connect |
 | docs/ARCHITECTURE.md | Adding folders, cross-package imports, new module                                      |
-| docs/FRONTEND.md     | Any apps/web UI work - rendering, data fetching, performance, design/UX                |
+| docs/DESIGN_DNA.md   | **Any apps/web UI work — read this first.** Short rules: palette, composition, nav, spacing |
+| docs/FRONTEND.md     | Detailed UI rules — open only when DESIGN_DNA.md doesn't cover the specific question   |
 | docs/UI_UX.md        | Product-specific visual identity, UX direction, navigation model, page UX map          |
 | docs/verticals/*.md  | Starting a product in a known vertical (ecommerce, SaaS, fintech, marketplace, etc.)   |
 | docs/BACKEND.md      | Any apps/server work - routes, middleware, services, validation, backend tests         |
@@ -39,6 +40,26 @@ Never override a higher source with a lower one without flagging it.
 | docs/DECISIONS.md    | Choosing a lib, DB, pattern (check if already decided)                                 |
 | docs/API.md          | Any endpoint work                                                                      |
 | docs/QUALITY.md      | Before marking a task done                                                             |
+| docs/checklists/new-product.md | Initializing a new product from this template — fill docs and setup env first |
+| docs/checklists/code-review.md | Before approving a PR or calling a task done — multi-axis quality check       |
+| docs/checklists/launch-readiness.md | Before going live — functionality, perf, security, UI, a11y, deployment  |
+
+## UI Critical Rules
+
+> Inline so you don't need to open any doc for simple UI tasks.
+> For more detail: `docs/DESIGN_DNA.md`. For full rules: `docs/FRONTEND.md`.
+
+- **Build on `apps/web/` — don't regenerate from scratch.** Extend the existing code.
+- **Background stays white.** Only change the accent/brand color (`--primary`, `--ring`). Never warm the background to cream/beige.
+- **Hero is never wrapped in a card.** Open band, centered content, fits first viewport (~720px) without scrolling.
+- **Sections = open bands by default.** Cards only for product listings, data panels, dialogs. Not as a default wrapper for every section.
+- **Sticky nav** — `sticky top-0 bg-background border-b border-border backdrop-blur-sm` — with `aria-current="page"` on the active link.
+- **Font must be wired** — `next/font` → `--font-sans` in layout.tsx. Unset = browser serif fallback = instant AI tell.
+- **Max 3 font weights**: 400 · 500/600 · 700. No 300, no 800/900.
+- **4px spacing grid** — valid: 4 8 12 16 20 24 32 40 48 64 80 96px. No `p-[10px]` or other arbitrary values.
+- **Animate `transform` and `opacity` only.** Never `width`, `height`, `top`, `left`. Max 800ms. Gate behind `prefers-reduced-motion`.
+- **Every interactive element** needs: hover (150ms) · focus ring (2px accent + 2px offset) · active (scale 0.98).
+- **Self-check before done**: render at 375px + 1366×768 + 1440×900 + 1920×1080. If it looks like any AI demo site, it's not done.
 
 ## Tech Stack (locked)
 
@@ -65,7 +86,7 @@ Stack rules:
 - Payments: integrate **Midtrans** from `apps/server`. The **server key is server-only**; the browser uses the public `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` for Snap. The webhook is verified by **signature hash**, never Bearer auth. See ADR-012.
 - Marketplace payments are not assumed to be solved by normal Midtrans checkout. For multi-seller, split settlement, seller payout, or platform-as-merchant-of-record flows, read `docs/PAYMENTS.md` first.
 - Auth extras are **Supabase-native**: OAuth (Google, GitHub) and password reset run through the Supabase SDK with providers and redirect URLs configured in the dashboard; profile pictures go to a Supabase **Storage** bucket with RLS. See ADR-013.
-- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. The starter page is only a wiring/responsive example, not a design template to copy. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/FRONTEND.md`.
+- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. The starter page (`apps/web/src/app/page.tsx`) is the **design foundation** — build on it, do not replace it with a fresh generation. Change the palette (accent only, keep background white), content, and routes per product; keep the open-band layout, nav shell, font wiring, and footer structure unless `docs/UI_UX.md` explicitly calls for something different. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/DESIGN_DNA.md` (short) and `docs/FRONTEND.md` (detailed).
 
 ## Workflow
 
@@ -94,7 +115,7 @@ Stack rules:
 | DB push     | `pnpm db:push`                                                   |
 | Format      | `pnpm format`                                                    |
 
-Before marking a task done, run `pnpm verify` and check the Definition of Done in `docs/QUALITY.md`. Run `pnpm docs:check` when docs changed or when initializing product docs. For `apps/web` UI work, also render the app and self-review it against `docs/FRONTEND.md` and the product direction in `docs/UI_UX.md` before calling it done. Green lint/typecheck does not catch an AI-generic layout.
+Before marking a task done, run `pnpm verify` and check the Definition of Done in `docs/QUALITY.md`. Run `pnpm docs:check` when docs changed or when initializing product docs. For `apps/web` UI work: read `docs/DESIGN_DNA.md` first (short), check the self-review checklist at the bottom of that file against the rendered page, then open `docs/FRONTEND.md` only if you need more detail. For a thorough multi-axis check, run the **`ui-audit` skill**. Green lint/typecheck does not catch an AI-generic layout — the render check is the real gate.
 
 ## Git & Tooling Hygiene
 
@@ -105,6 +126,20 @@ Keep the public repo looking human-authored.
 - **Git ignore strategy:** `.gitignore` is active from the first clone - universal entries (`node_modules`, `.env`, build output, model weights) are always ignored. The agent tooling and internal docs (`.claude/`, `AGENTS.md`, `docs/`, ...) are listed but **commented out**, so the full starter kit stays tracked in this template.
 - **Keep local tooling out of product repos.** In a real product repo, uncomment the "Product-repo cleanup" block at the bottom of `.gitignore`, then run `git rm -r --cached` on those paths once so the agent folders and internal docs stop being tracked.
 - **Python:** use **`uv`** for deps / venv / running scripts, never `pip` or raw `venv`.
+
+## Iron Laws
+
+These five rules are supreme. They override all other decisions. If anything conflicts with an Iron Law, the Iron Law wins.
+
+1. **One File = One Responsibility.** If you cannot describe a file's purpose in five words, split it. A file whose name contains "and" or "or" needs splitting.
+
+2. **UI Renders Data. It Never Creates It.** Components receive data as props or from hooks. Components never compute business logic, call APIs, or transform raw data inline. If a component is doing math or filtering, move it to `packages/utils/` or a custom hook.
+
+3. **Modules Are Islands. They Don't Talk.** A feature never imports directly from a sibling feature. Shared data goes through `packages/` or an app-level shared layer (context, shared hooks, `components/shared/`). Cross-feature imports create invisible coupling.
+
+4. **Show Something Instantly. Always.** The user must see content within 100ms of navigation. No blank white screens. No full-page spinners. Every loading state uses a skeleton that matches the exact shape of the real content.
+
+5. **Every Interaction Has a Response.** Every button click, hover, focus, and form submission must have visible feedback. Silent UI is broken UI. Every interactive element must respond visibly within 80ms.
 
 ## Architecture Discipline
 
@@ -141,7 +176,7 @@ Keep the public repo looking human-authored.
 - ✅ Update the relevant doc when you change its domain
 - ✅ Ask before introducing a new top-level folder
 - ✅ If `docs/PRD.md` is still a blank template, ask the user for scope before building features - don't invent it
-- ✅ For product UI work, fill or update `docs/UI_UX.md` from the user's design direction before generating implementation tasks. Treat the starter UI as a disposable example, not the visual/layout source of truth.
+- ✅ For product UI work, read `docs/DESIGN_DNA.md` first, then fill or update `docs/UI_UX.md` from the user's design direction. The starter UI (`apps/web/`) is the **design foundation** — build on it. Change the accent palette (keep background white), content, and routes per product. Only deviate from the open-band layout structure when `docs/UI_UX.md` explicitly calls for a different composition.
 - ✅ For a known product vertical, read the matching `docs/verticals/*.md` playbook first and use it to fill `docs/UI_UX.md`. The playbook informs the product brief; it does not override `docs/FRONTEND.md`.
 - ✅ Start the app at a real landing page with a navbar and footer; only protected routes redirect to sign in (see `docs/FRONTEND.md`)
 - ✅ Keep public, auth, app, and mobile navigation visible, route-aware, and connected: nav has a surface/background, active links use `aria-current="page"`, app routes can get back to public/product home, and every route has a context-aware footer/endcap.

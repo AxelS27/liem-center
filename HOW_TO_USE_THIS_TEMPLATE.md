@@ -10,11 +10,12 @@ For stack decisions and rationale, read `docs/DECISIONS.md`. For folder boundari
 
 All docs are living documents. Start with the templates, then keep them synchronized as the product changes. Do not treat the initial version as final.
 
-The starter UI in `apps/web` is intentionally only a small example that proves the stack is
-wired: routing, metadata, icons, responsive basics, and shared UI imports. It is not a
-design direction. For a real product, replace its layout and visual style with the user's
-brief in `docs/UI_UX.md` and the selected references. The template should constrain only
-the common AI tells and production-quality failures, not the agent's creativity.
+The starter UI in `apps/web` is the **design foundation** — build on it, do not replace it
+with a fresh generation. It ships with open-band composition, a clean white surface, sticky
+nav with active states, real font wiring, and a structured footer: these are the defaults
+to keep. Per product, change the accent palette (keep background white), content, copy,
+and routes. Only deviate from the layout structure when `docs/UI_UX.md` explicitly calls
+for a different composition. See `docs/DESIGN_DNA.md` for the short rules.
 
 ## Start a new project
 
@@ -23,7 +24,7 @@ the common AI tells and production-quality failures, not the agent's creativity.
 3. Copy `.env.example` to `.env` and fill in the values.
 4. Fill `docs/PRD.md` with the product scope: what this is, who it is for, goals, non-goals, and product principles.
 5. Fill `docs/FEATURES.md` with concrete modules and capabilities, tagged `P0`, `P1`, or `P2`.
-6. Give the agent your design direction, short or detailed, and ask it to fill `docs/UI_UX.md` from that brief plus `docs/FRONTEND.md` and `docs/REFERENCES.md`.
+6. Give the agent your design direction, short or detailed, and ask it to fill `docs/UI_UX.md` from that brief plus `docs/DESIGN_DNA.md` and `docs/REFERENCES.md`. The starter UI is the foundation — `UI_UX.md` records what changes per product (accent palette, layout deviations, content direction), not a full redesign from scratch.
 7. Ask the agent to initialize the domain docs that apply to the product. It should update `docs/API.md` for endpoints, `docs/BACKEND.md` for backend conventions that matter, `docs/DATABASE.md` for data/RLS/storage needs, and `docs/PAYMENTS.md` only if the product takes payments or has marketplace money flow.
 8. Ask the agent to generate `docs/PROGRESS.md` from the docs before building. It should read `PRD`, `FEATURES`, `UI_UX`, `ARCHITECTURE`, `API`, `QUALITY`, and only the domain docs that apply (`FRONTEND`, `BACKEND`, `DATABASE`, `PAYMENTS`, `REFERENCES`), then turn them into a route/area checklist.
 9. Run `pnpm docs:check` after the docs are initialized. Warnings are expected while this is still a blank template, but failures mean the doc system is broken.
@@ -42,8 +43,9 @@ The agent keeps `docs/PROGRESS.md` as the live build map and task checklist: wha
 
 `UI_UX.md` is the product design brief. Use it for brand feel, references, navigation model, route connectivity, page-level UX intent, copy tone, rich-text/scannability patterns, surface/card budget, footer model, active-nav treatment, and product-specific layout choices. `FRONTEND.md` gives guardrails; `UI_UX.md` chooses the actual product composition. If they conflict, fix `UI_UX.md` instead of weakening the template rules.
 
-Do not derive product layout from the starter page. The starter page is disposable sample
-code. Use it as proof of wiring only, then design from the product brief.
+The starter page is the design foundation. Build on it — change content, palette (accent
+only, keep background white), and routes per product. Open `docs/DESIGN_DNA.md` before
+any UI work; it is the short rules file that keeps every product on the same quality level.
 
 During implementation, update `PROGRESS.md` before starting work, while items are in progress, and when they are done. A feature is not done just because the code exists: the checklist should also cover tests, lint/typecheck, API contract checks, doc updates, and rendered UI review when `apps/web` changes.
 
@@ -57,7 +59,9 @@ After you fill the PRD or describe the product in chat, give the agent a prompt 
 Read HOW_TO_USE_THIS_TEMPLATE.md and AGENTS.md first.
 Initialize this product from my PRD/design brief:
 1. Fill or update docs/PRD.md and docs/FEATURES.md.
-2. Fill docs/UI_UX.md from my design direction, docs/FRONTEND.md, and docs/REFERENCES.md.
+2. Read docs/DESIGN_DNA.md. Then fill docs/UI_UX.md from my design direction and docs/REFERENCES.md.
+   Record what changes per product (accent color, content, routes, any layout deviations).
+   The starter UI in apps/web is the foundation — do not plan a full redesign from scratch.
 3. Initialize only the domain docs that apply: API, BACKEND, DATABASE, PAYMENTS.
 4. Generate docs/PROGRESS.md as the live build checklist. Keep it pointer-based, not a duplicate spec.
 5. Run pnpm docs:check and report warnings separately from failures.
@@ -74,8 +78,9 @@ Use the focused docs to keep context small and decisions synchronized:
 - `docs/ARCHITECTURE.md` - repo structure, app/package boundaries, and import rules.
 - `docs/DECISIONS.md` - append-only ADR log for locked technical/product decisions.
 - `docs/API.md` - API conventions, envelopes, status codes, and endpoint contracts.
-- `docs/FRONTEND.md` - universal UI, rendering, layout, responsiveness, and design-quality rules.
-- `docs/UI_UX.md` - product-specific design brief created from the user's design direction.
+- `docs/DESIGN_DNA.md` - short UI rules: read before any frontend work. Palette, composition, nav, spacing, self-check.
+- `docs/FRONTEND.md` - detailed UI rules — open when DESIGN_DNA doesn't cover the specific question.
+- `docs/UI_UX.md` - product-specific design brief: what changes per product (palette, layout deviations, content direction).
 - `docs/BACKEND.md` - server routes, services, validation, auth guards, integrations, and tests.
 - `docs/DATABASE.md` - living data model catalog: tables, columns, relationships, RLS, Storage, indexes, seed data, and data lifecycle.
 - `docs/PAYMENTS.md` - Midtrans, checkout, refunds, settlement, payouts, and marketplace money flow.
@@ -118,11 +123,13 @@ short via Next metadata, using a compact pattern like `Dashboard | AppName` or
 
 ## Designing without the AI look
 
-The frontend is wired to fight generic-AI output (see `docs/FRONTEND.md` and the `shadcn-ui` skill), but taste is still yours to drive:
+The frontend is wired to fight generic-AI output (see `docs/DESIGN_DNA.md` and the `shadcn-ui` skill), but taste is still yours to drive:
 
 - Generate a few variations in parallel (different models or prompts), then take the best pieces from each. Don't ship the first output.
-- Replace the starter UI's composition for real products. Do not treat its layout, card
-  pattern, spacing, or copy as a house style.
+- Build on the starter UI — keep its open-band composition, white surface, and nav/footer
+  shell. Change the accent palette, content, and routes per product. Only deviate from the
+  layout structure when the product genuinely needs a different composition (e.g. a sidebar
+  dashboard vs. a marketing page), and record that in `docs/UI_UX.md`.
 - Mock the layout before wiring data, so the design isn't locked by the schema.
 - Treat cards as a limited surface budget, not the default wrapper. Use open lists,
   tables, section rhythm, typography, and spacing when they communicate hierarchy better.
