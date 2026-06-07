@@ -122,11 +122,11 @@
 ## Docs Sync
 
 ```
-□ If a new API endpoint was added: docs/API.md updated
-□ If schema changed: docs/DATABASE.md data model updated + migration committed
-□ If a major architectural choice was made: docs/DECISIONS.md entry added
-□ If a feature shipped: docs/PROGRESS.md updated (feature marked done)
-□ If payment logic changed: docs/PAYMENTS.md updated
+□ If a new API endpoint was added: docs/engineering/API.md updated
+□ If schema changed: docs/engineering/DATABASE.md data model updated + migration committed
+□ If a major architectural choice was made: docs/engineering/DECISIONS.md entry added
+□ If a feature shipped: docs/engineering/PROGRESS.md updated (feature marked done)
+□ If payment logic changed: docs/engineering/PAYMENTS.md updated
 □ pnpm docs:check passes
 ```
 
@@ -136,7 +136,7 @@
 
 ```
 □ pnpm verify passes (lint + typecheck + tests)
-□ UI work self-reviewed via the code-based double-check in docs/DESIGN_DNA.md (Part A greps + Part B file reading) — no rendering required
+□ UI work self-reviewed via the code-based double-check in docs/engineering/DESIGN_DNA.md (Part A greps + Part B file reading) — no rendering required
 □ No route is a dead end — public ↔ auth ↔ app contexts all cross-link
-□ The Definition of Done in docs/QUALITY.md is satisfied
+□ The Definition of Done in docs/engineering/QUALITY.md is satisfied
 ```

@@ -12,7 +12,7 @@ export default function SignInPage() {
     <PlaceholderPage
       eyebrow="Account"
       title="Sign in"
-      description="Auth runs through Supabase Auth. Build the real sign-in form here. A product would also give auth routes a focused auth layout instead of the marketing shell (see docs/FRONTEND.md)."
+      description="Auth runs through Supabase Auth. Build the real sign-in form here. A product would also give auth routes a focused auth layout instead of the marketing shell (see docs/engineering/FRONTEND.md)."
       action={
         <a href="/signup" className={cn(buttonVariants())}>
           Create an account

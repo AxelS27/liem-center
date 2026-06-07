@@ -14,7 +14,7 @@
   Keep its open-band composition, white surface, sticky nav, font wiring, and footer shell.
   This brief records what changes per product: accent palette, content direction, layout
   deviations (only when the product genuinely needs a different structure), and routes.
-  Read `docs/DESIGN_DNA.md` before filling this file.
+  Read `docs/engineering/DESIGN_DNA.md` before filling this file.
   Do not copy long rules from FRONTEND.md. Point to them when needed.
 -->
 
@@ -216,9 +216,9 @@
 
 Before building or updating PROGRESS.md:
 
-- [ ] This brief matches `docs/PRD.md` goals and non-goals.
-- [ ] This brief covers all relevant `docs/FEATURES.md` modules.
-- [ ] This brief follows `docs/FRONTEND.md`; any conflict is resolved in favor of FRONTEND.md.
-- [ ] Selected references come from, or are added to, `docs/REFERENCES.md`.
-- [ ] Route/page intent here is reflected as tasks in `docs/PROGRESS.md`.
-- [ ] Any API/data needs implied by UX are reflected in `docs/API.md` and `packages/types`.
+- [ ] This brief matches `docs/product/PRD.md` goals and non-goals.
+- [ ] This brief covers all relevant `docs/product/FEATURES.md` modules.
+- [ ] This brief follows `docs/engineering/FRONTEND.md`; any conflict is resolved in favor of FRONTEND.md.
+- [ ] Selected references come from, or are added to, `docs/product/REFERENCES.md`.
+- [ ] Route/page intent here is reflected as tasks in `docs/engineering/PROGRESS.md`.
+- [ ] Any API/data needs implied by UX are reflected in `docs/engineering/API.md` and `packages/types`.

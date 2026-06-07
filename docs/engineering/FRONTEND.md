@@ -5,19 +5,19 @@
 
 > This file is the universal frontend rulebook. It sets guardrails and quality bars, not
 > the exact layout for every product. Product-specific visual identity, references,
-> navigation model, page UX, layout choices, and copy tone live in `docs/UI_UX.md`.
-> `docs/UI_UX.md` must follow this file, not override it.
+> navigation model, page UX, layout choices, and copy tone live in `docs/product/UI_UX.md`.
+> `docs/product/UI_UX.md` must follow this file, not override it.
 >
 > The starter UI in `apps/web` is a design-quality reference and wiring example, not a
 > layout template. Preserve its discipline: clean composition, restrained surfaces,
 > non-boxy hierarchy, real navigation and footer treatment, deliberate typography, and
 > small purposeful interactions. Do not copy its exact layout, section order, spacing
 > values, copy, or starter brand as the default for real products. Build the actual UI from
-> the user's brief, `docs/UI_UX.md`, and selected references, while obeying the guardrails
+> the user's brief, `docs/product/UI_UX.md`, and selected references, while obeying the guardrails
 > in this file.
 >
 > For products in a known vertical, read the matching `docs/verticals/*.md` playbook before
-> finalizing `docs/UI_UX.md`. The playbook gives genre-specific instincts, while this file
+> finalizing `docs/product/UI_UX.md`. The playbook gives genre-specific instincts, while this file
 > remains the universal frontend guardrail.
 
 ## Design Craft (read first)
@@ -44,7 +44,7 @@ and a restrained closing CTA. Replace the product content, routes, palette, layo
 and density for each project. The starter is successful when it teaches "clean, mature,
 not AI-generic", not when every product looks like the starter.
 
-**Further reading:** the fastest way to build this judgment is _Refactoring UI_ (Adam Wathan and Steve Schoger). Its tactical rules - hierarchy through spacing and weight, restraint with borders, one clear focal point per screen - are exactly what separates a human-made UI from AI slop. Before designing for a specific product type, study the real references in `docs/REFERENCES.md`, then record the chosen direction in `docs/UI_UX.md`.
+**Further reading:** the fastest way to build this judgment is _Refactoring UI_ (Adam Wathan and Steve Schoger). Its tactical rules - hierarchy through spacing and weight, restraint with borders, one clear focal point per screen - are exactly what separates a human-made UI from AI slop. Before designing for a specific product type, study the real references in `docs/product/REFERENCES.md`, then record the chosen direction in `docs/product/UI_UX.md`.
 
 ### Forbidden patterns (the AI tells)
 
@@ -117,7 +117,7 @@ Do not use:
 - **Build on the starter — do not generate a fresh layout from scratch.** The starter ships
   with the right foundation: open-band composition, white surface, sticky nav, real font
   wiring, and a structured footer. Keep that. Change the accent palette, content, copy, and
-  routes per product. Record layout deviations in `docs/UI_UX.md` only when the product
+  routes per product. Record layout deviations in `docs/product/UI_UX.md` only when the product
   genuinely needs a different structure (e.g. sidebar dashboard vs. marketing page).
 - **Customize components.** shadcn/ui is a starting point, not the look. Tune radius, weight, density, and color so it does not read as "default shadcn."
 - **Use honest brand assets.** Do not invent a fake initials logo or placeholder mark just
@@ -139,7 +139,7 @@ Do not use:
   bands, typography, and one earned media frame instead of wrapping every idea in a card.
   Follow that instinct unless the product domain needs denser framed modules, like product
   cards, tables, dialogs, or repeated list items.
-- **Let the product choose the layout.** `docs/UI_UX.md` owns the product's actual layout
+- **Let the product choose the layout.** `docs/product/UI_UX.md` owns the product's actual layout
   direction: top nav vs sidebar, editorial vs dashboard, table vs list, dense vs spacious.
   This file should not force every product into the same page shape. Follow UI_UX.md, then
   apply the quality checks here.
@@ -294,7 +294,7 @@ right context.
 
 ### Self-review (code-based, no rendering)
 
-Reading this file is not the same as applying it. The most common failure is an agent that read these rules and still shipped something that feels like a generic template instead of this product. So before you consider any `apps/web` UI finished, **do a self-review** by reading your own markup and running the mechanical greps in the `docs/DESIGN_DNA.md` double-check.
+Reading this file is not the same as applying it. The most common failure is an agent that read these rules and still shipped something that feels like a generic template instead of this product. So before you consider any `apps/web` UI finished, **do a self-review** by reading your own markup and running the mechanical greps in the `docs/engineering/DESIGN_DNA.md` double-check.
 
 This review is **code-based — do not render the page or take screenshots** (it burns tokens and the preview often isn't available). Judge the checks below from the markup: container widths, breakpoint classes (`sm:`/`md:`/`lg:`), section structure, surface usage, and the grep results. The one thing code cannot fully confirm is exact visual balance and fold height at a specific pixel size; treat that as residual risk and note it rather than rendering by default.
 
@@ -367,7 +367,7 @@ This review is **code-based — do not render the page or take screenshots** (it
 - [ ] Auth pages use an intentional auth layout. The footer must be present, but the main
       auth content should still feel complete enough that the footer reads as a natural
       end, not as filler exposed by sparse content.
-- [ ] The route/page matches `docs/UI_UX.md`: navigation model, page UX intent, visual system, copy tone, and product-specific layout direction.
+- [ ] The route/page matches `docs/product/UI_UX.md`: navigation model, page UX intent, visual system, copy tone, and product-specific layout direction.
 - [ ] Primary navbar links navigate to real routes/pages. They do not scroll to sections
       farther down the same landing page.
 - [ ] The route graph is connected. Users can move between public, auth, and app contexts
@@ -383,7 +383,7 @@ This review is **code-based — do not render the page or take screenshots** (it
 
 **Code-based evidence (no rendering):**
 
-- [ ] I ran the Part A greps from `docs/DESIGN_DNA.md` and pasted the output (overflow-x-hidden on sticky ancestors, raw hex/palette classes, bg-foreground in the hero, off-grid spacing, background token still neutral).
+- [ ] I ran the Part A greps from `docs/engineering/DESIGN_DNA.md` and pasted the output (overflow-x-hidden on sticky ancestors, raw hex/palette classes, bg-foreground in the hero, off-grid spacing, background token still neutral).
 - [ ] I read `app/page.tsx`, `app/layout.tsx`, and the site header and reasoned about section structure: open bands vs card soup, hero focal point, sticky ancestors, footer endcap, container widths.
 - [ ] I checked short public routes' markup (sign in, sign up, empty states) for enough content/structure that the footer is not exposed by a sparse panel.
 
@@ -407,7 +407,7 @@ Every page ships with navigation chrome and a footer/endcap. There are three rou
   (logo, primary route links, sign in / get started) and a **footer** (product links,
   legal, copyright) on every page.
 - **App layout** wraps signed-in routes: a persistent app navigation shell. The product may
-  choose a top navbar, sidebar, or hybrid in `docs/UI_UX.md`, but the nav must be present
+  choose a top navbar, sidebar, or hybrid in `docs/product/UI_UX.md`, but the nav must be present
   on every app page, stay consistent across routes, and clearly highlight the current page.
   App pages also need a compact footer/endcap with contextual links or status, not a bare
   dead end.
@@ -505,7 +505,7 @@ Rules:
 ### Consistent Page Behavior
 
 Pages of the same kind must behave consistently, but they do not all need the same visual
-layout. `docs/UI_UX.md` chooses the product's composition. This file only requires that
+layout. `docs/product/UI_UX.md` chooses the product's composition. This file only requires that
 similar pages keep predictable interaction patterns: navigation, active states, primary
 actions, filtering, empty/loading/error states, and responsive behavior.
 

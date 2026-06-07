@@ -4,7 +4,7 @@
  * Ship ONE theme first. The active theme lives in :root below (light by
  * default). A dark theme (.dark) is provided commented out at the bottom;
  * enable it only when the product actually needs dark mode, then wire
- * next-themes (see docs/FRONTEND.md). Do not ship both on day one.
+ * next-themes (see docs/engineering/FRONTEND.md). Do not ship both on day one.
  *
  * To retheme or rebrand, edit the values in :root. Nothing else.
  *
@@ -26,7 +26,7 @@
      * the other tired "AI starter" looks: emerald/forest green + cream/beige editorial,
      * muted sage, the dark-purple "SaaS" gradient. Commit to a deliberate, product
      * specific palette with a real accent and neutrals that carry a slight temperature,
-     * then replace these values. The shadcn-ui skill walks the steps; see docs/FRONTEND.md.
+     * then replace these values. The shadcn-ui skill walks the steps; see docs/engineering/FRONTEND.md.
      */
     --brand: 240 6% 10%;
     --brand-foreground: 0 0% 98%;
@@ -64,7 +64,7 @@
 
   /*
    * Optional dark theme. Ship one theme first; uncomment this block only
-   * when the product needs dark mode, then wire next-themes per docs/FRONTEND.md.
+   * when the product needs dark mode, then wire next-themes per docs/engineering/FRONTEND.md.
    *
    * .dark {
    *   --brand: 0 0% 98%;

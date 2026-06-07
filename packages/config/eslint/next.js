@@ -3,7 +3,7 @@ import globals from 'globals';
 import base, { noAppImports } from './base.js';
 
 // Generic-AI visual tells that lint can catch in class strings: patterns
-// docs/FRONTEND.md forbids, turned into lint errors so they cannot ship. Matched on
+// docs/engineering/FRONTEND.md forbids, turned into lint errors so they cannot ship. Matched on
 // string literals and template chunks, so className="...", cn('...'), and `...` class
 // strings are all covered. This is enforcement the FRONTEND.md self-review can't be:
 // a green build won't let these through.
@@ -12,7 +12,7 @@ const aiTellSyntax = [
     selector:
       'Literal[value=/\\b(min-h-screen|h-screen)\\b|\\b100[sdl]?vh\\b/], TemplateElement[value.raw=/\\b(min-h-screen|h-screen)\\b|\\b100[sdl]?vh\\b/]',
     message:
-      'Do not force a section to viewport height (min-h-screen / h-screen / 100vh). Height should come from real content and spacing, not a fixed viewport unit. See docs/FRONTEND.md.',
+      'Do not force a section to viewport height (min-h-screen / h-screen / 100vh). Height should come from real content and spacing, not a fixed viewport unit. See docs/engineering/FRONTEND.md.',
   },
   {
     selector:

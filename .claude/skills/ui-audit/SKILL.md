@@ -2,7 +2,7 @@
 
 **Trigger:** User says "audit the UI", "review the frontend", "check if this looks AI-generic", or similar.
 
-**What this skill does:** Runs a structured multi-axis audit of apps/web UI work against the rules in docs/FRONTEND.md. The goal is to catch AI-generic output, missing component states, animation violations, and accessibility gaps before they ship.
+**What this skill does:** Runs a structured multi-axis audit of apps/web UI work against the rules in docs/engineering/FRONTEND.md. The goal is to catch AI-generic output, missing component states, animation violations, and accessibility gaps before they ship.
 
 **Stack context:** Next.js App Router · Tailwind CSS · CSS custom property tokens in globals.css · shadcn/ui primitives in packages/ui · lucide-react icons.
 
@@ -179,7 +179,7 @@ run the greps. This is intentional: rendering burns tokens and the preview often
 available.
 
 ```
-□ I ran the Part A greps from docs/DESIGN_DNA.md and pasted the output:
+□ I ran the Part A greps from docs/engineering/DESIGN_DNA.md and pasted the output:
     □ overflow-x-hidden on sticky ancestors → none
     □ backdrop-blur element uses a transparent bg (/80), not /95 or solid
     □ no raw hex or raw palette classes

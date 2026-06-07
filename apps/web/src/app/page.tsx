@@ -12,7 +12,7 @@ export const metadata: Metadata = {
  * This landing page is a WIRING EXAMPLE, not a layout to clone. It exists to demonstrate the
  * configured stack: typography, tokens, anchored nav with active state, a client carousel
  * island, section rhythm, and a real footer. When building an actual product, design the page
- * from docs/UI_UX.md and the product brief - do not reskin this composition. See docs/FRONTEND.md.
+ * from docs/product/UI_UX.md and the product brief - do not reskin this composition. See docs/engineering/FRONTEND.md.
  */
 
 // Brand marks are official single-path logos (simple-icons), rendered monochrome so the row

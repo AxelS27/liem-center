@@ -212,12 +212,12 @@ auditability, legal retention, or payment/order history.
 
 ## Sync Checklist
 
-- [ ] Schema changes match `docs/FEATURES.md` and `docs/API.md`.
+- [ ] Schema changes match `docs/product/FEATURES.md` and `docs/engineering/API.md`.
 - [ ] Data Model Catalog is updated for new/changed tables, columns, relationships, RLS,
       indexes, storage buckets, and lifecycle rules.
 - [ ] API contracts in `packages/types` match persisted data shape where applicable.
 - [ ] RLS policies protect every user-facing table.
 - [ ] Storage buckets and policies are documented when used.
 - [ ] Performance-sensitive queries have indexes.
-- [ ] Data tasks are reflected in `docs/PROGRESS.md`.
-- [ ] Major data model choices are appended to `docs/DECISIONS.md`.
+- [ ] Data tasks are reflected in `docs/engineering/PROGRESS.md`.
+- [ ] Major data model choices are appended to `docs/engineering/DECISIONS.md`.

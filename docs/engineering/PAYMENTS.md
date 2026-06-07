@@ -178,9 +178,9 @@ Answer these before implementation starts:
 ## Sync Checklist
 
 - [ ] Payment model is classified using this decision tree.
-- [ ] `docs/API.md` includes payment endpoints and webhook contracts.
+- [ ] `docs/engineering/API.md` includes payment endpoints and webhook contracts.
 - [ ] `packages/types` includes Zod schemas for payment requests/webhooks.
-- [ ] `docs/DATABASE.md` covers orders, payments, ledger, payout, and refund tables as needed.
-- [ ] `docs/PROGRESS.md` includes payment UI, server, database, webhook, test, and reconciliation tasks.
-- [ ] `docs/DECISIONS.md` records any provider or marketplace-money-flow decision.
+- [ ] `docs/engineering/DATABASE.md` covers orders, payments, ledger, payout, and refund tables as needed.
+- [ ] `docs/engineering/PROGRESS.md` includes payment UI, server, database, webhook, test, and reconciliation tasks.
+- [ ] `docs/engineering/DECISIONS.md` records any provider or marketplace-money-flow decision.
 - [ ] Secrets stay server-only, except public client keys explicitly intended for the browser.

@@ -8,19 +8,19 @@
 ## Step 1 — Fill the Product Docs (in order)
 
 ```
-□ docs/PRD.md            — product scope, users, problem, non-goals
-□ docs/FEATURES.md       — feature modules and what each one does
-□ docs/ARCHITECTURE.md   — update module map if the product adds new domains
-□ docs/UI_UX.md          — fill from user's design brief and selected references
+□ docs/product/PRD.md            — product scope, users, problem, non-goals
+□ docs/product/FEATURES.md       — feature modules and what each one does
+□ docs/engineering/ARCHITECTURE.md   — update module map if the product adds new domains
+□ docs/product/UI_UX.md          — fill from user's design brief and selected references
                             (palette, typeface, layout model, nav model, routes)
-□ docs/REFERENCES.md     — add 2–5 real reference sites for the product vertical
+□ docs/product/REFERENCES.md     — add 2–5 real reference sites for the product vertical
 □ docs/verticals/*.md    — read the matching playbook if the product has a known vertical
                             (ECOMMERCE.md, etc.)
-□ docs/API.md            — define endpoints before building them
-□ docs/BACKEND.md        — update if the product adds custom backend rules
-□ docs/DATABASE.md       — define schema, RLS rules, storage buckets
-□ docs/PAYMENTS.md       — fill only if the product takes payments (Midtrans)
-□ docs/PROGRESS.md       — generate from FEATURES.md + UI_UX.md; this is the build map
+□ docs/engineering/API.md            — define endpoints before building them
+□ docs/engineering/BACKEND.md        — update if the product adds custom backend rules
+□ docs/engineering/DATABASE.md       — define schema, RLS rules, storage buckets
+□ docs/engineering/PAYMENTS.md       — fill only if the product takes payments (Midtrans)
+□ docs/engineering/PROGRESS.md       — generate from FEATURES.md + UI_UX.md; this is the build map
 ```
 
 ---
@@ -46,7 +46,7 @@
 □ Palette committed in apps/web/src/styles/globals.css
     □ :root block has all semantic tokens with deliberate product values
     □ Palette is NOT a default AI rotation (no violet/indigo, forest+cream, muted sage,
-      dark-purple SaaS, teal-on-near-black, flat beige). See docs/FRONTEND.md.
+      dark-purple SaaS, teal-on-near-black, flat beige). See docs/engineering/FRONTEND.md.
     □ One accent color. Semantic colors (success, warning, destructive) are separate.
 □ Typeface wired in apps/web/src/app/layout.tsx via next/font
     □ Font variable bound to --font-sans in the html className
@@ -77,7 +77,7 @@
     □ App nav → clear path back to public/product home
     □ Auth nav → back to landing, and sign in ↔ sign up
 □ 404 page exists and is designed (not a bare Next.js default)
-□ All primary routes listed in docs/UI_UX.md exist as pages
+□ All primary routes listed in docs/product/UI_UX.md exist as pages
 ```
 
 ---
@@ -105,12 +105,12 @@ Before building any feature, verify the shared primitives in packages/ui work fo
 ## Step 6 — Database & Backend Init (if applicable)
 
 ```
-□ Supabase project schema matches docs/DATABASE.md data model
+□ Supabase project schema matches docs/engineering/DATABASE.md data model
 □ Row Level Security enabled on every table
 □ Initial migration committed to supabase/migrations/
 □ packages/types/src/database.types.ts generated (pnpm db:types)
 □ apps/server health check route responds at GET /health
-□ All route prefixes and response shapes match docs/API.md
+□ All route prefixes and response shapes match docs/engineering/API.md
 □ Zod schemas in packages/types validate all inputs/outputs
 □ Service role key is never referenced in apps/web code
 ```
@@ -127,11 +127,11 @@ Before building any feature, verify the shared primitives in packages/ui work fo
 □ Landing page hero is not card-wrapped and has no min-h-screen/oversized top padding that would push it below the fold
 □ No hard mid-screen section dividers (read page.tsx: no border-t/border-b band with large blank padding sitting between sections)
 □ Footer has visible treatment (border-t, surface, brand, links, copyright)
-□ Every route listed in docs/UI_UX.md compiles and loads without error (pnpm build)
+□ Every route listed in docs/product/UI_UX.md compiles and loads without error (pnpm build)
 □ No page shows the starter "WIRING EXAMPLE" content
 □ pnpm verify passes
 ```
 
 ---
 
-**Only after all boxes above are checked: start building features from docs/PROGRESS.md.**
+**Only after all boxes above are checked: start building features from docs/engineering/PROGRESS.md.**

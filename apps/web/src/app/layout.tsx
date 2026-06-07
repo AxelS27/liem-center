@@ -15,7 +15,7 @@ import '../styles/globals.css';
  * This loads a deliberate modern sans and binds it to the `--font-sans` token that
  * tailwind.config.ts and globals.css already consume. To give a product its own type
  * identity, swap this one import for another next/font family (one or two families total, no
- * decorative serif-italic) and keep the `--font-sans` variable. See docs/FRONTEND.md
+ * decorative serif-italic) and keep the `--font-sans` variable. See docs/engineering/FRONTEND.md
  * (Typography) and the shadcn-ui skill.
  */
 const fontSans = Plus_Jakarta_Sans({
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
  * Persistent public shell. The header and footer live here so every route (including stubs
  * and the not-found page) shares the same navigation and endcap, and the shell stays mounted
  * while only the page content swaps. A product that adds signed-in or auth areas should split
- * these into route-group layouts (public / app / auth) per docs/FRONTEND.md.
+ * these into route-group layouts (public / app / auth) per docs/engineering/FRONTEND.md.
  */
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (

@@ -4,19 +4,19 @@ import { join } from 'node:path';
 const root = process.cwd();
 
 const coreDocs = [
-  'docs/PRD.md',
-  'docs/FEATURES.md',
-  'docs/PROGRESS.md',
-  'docs/ARCHITECTURE.md',
-  'docs/DECISIONS.md',
-  'docs/API.md',
-  'docs/FRONTEND.md',
-  'docs/UI_UX.md',
-  'docs/BACKEND.md',
-  'docs/DATABASE.md',
-  'docs/PAYMENTS.md',
-  'docs/REFERENCES.md',
-  'docs/QUALITY.md',
+  'docs/product/PRD.md',
+  'docs/product/FEATURES.md',
+  'docs/engineering/PROGRESS.md',
+  'docs/engineering/ARCHITECTURE.md',
+  'docs/engineering/DECISIONS.md',
+  'docs/engineering/API.md',
+  'docs/engineering/FRONTEND.md',
+  'docs/product/UI_UX.md',
+  'docs/engineering/BACKEND.md',
+  'docs/engineering/DATABASE.md',
+  'docs/engineering/PAYMENTS.md',
+  'docs/product/REFERENCES.md',
+  'docs/engineering/QUALITY.md',
 ];
 
 const rootDocs = ['AGENTS.md', 'README.md', 'CLAUDE.md'];
@@ -107,33 +107,33 @@ for (const doc of coreDocs) {
 
 let progress = '';
 try {
-  progress = read('docs/PROGRESS.md');
+  progress = read('docs/engineering/PROGRESS.md');
 } catch {
   // Missing file is already reported above.
 }
 
 for (const doc of [
-  'docs/PRD.md',
-  'docs/FEATURES.md',
-  'docs/UI_UX.md',
-  'docs/API.md',
-  'docs/FRONTEND.md',
-  'docs/BACKEND.md',
-  'docs/DATABASE.md',
-  'docs/PAYMENTS.md',
-  'docs/QUALITY.md',
+  'docs/product/PRD.md',
+  'docs/product/FEATURES.md',
+  'docs/product/UI_UX.md',
+  'docs/engineering/API.md',
+  'docs/engineering/FRONTEND.md',
+  'docs/engineering/BACKEND.md',
+  'docs/engineering/DATABASE.md',
+  'docs/engineering/PAYMENTS.md',
+  'docs/engineering/QUALITY.md',
 ]) {
   if (progress && !progress.includes(doc)) {
-    warnings.push(`docs/PROGRESS.md does not mention ${doc}; confirm this is intentional.`);
+    warnings.push(`docs/engineering/PROGRESS.md does not mention ${doc}; confirm this is intentional.`);
   }
 }
 
 const placeholderChecks = [
-  'docs/PRD.md',
-  'docs/FEATURES.md',
-  'docs/UI_UX.md',
-  'docs/DATABASE.md',
-  'docs/PROGRESS.md',
+  'docs/product/PRD.md',
+  'docs/product/FEATURES.md',
+  'docs/product/UI_UX.md',
+  'docs/engineering/DATABASE.md',
+  'docs/engineering/PROGRESS.md',
 ];
 
 for (const doc of placeholderChecks) {
@@ -161,7 +161,7 @@ for (const doc of requiredFiles) {
 
 let databaseDoc = '';
 try {
-  databaseDoc = read('docs/DATABASE.md');
+  databaseDoc = read('docs/engineering/DATABASE.md');
 } catch {
   // Missing file is already reported above.
 }
@@ -174,7 +174,7 @@ for (const requiredPhrase of [
   'pnpm db:push',
 ]) {
   if (databaseDoc && !databaseDoc.includes(requiredPhrase)) {
-    failures.push(`docs/DATABASE.md does not mention ${requiredPhrase}.`);
+    failures.push(`docs/engineering/DATABASE.md does not mention ${requiredPhrase}.`);
   }
 }
 
@@ -185,7 +185,7 @@ let webHealthService = '';
 let ciWorkflow = '';
 
 try {
-  apiDoc = read('docs/API.md');
+  apiDoc = read('docs/engineering/API.md');
   healthContract = read('packages/types/src/health.ts');
   serverApp = read('apps/server/src/app.ts');
   webHealthService = read('apps/web/src/services/health.ts');
@@ -195,7 +195,7 @@ try {
 }
 
 for (const [label, content] of [
-  ['docs/API.md', apiDoc],
+  ['docs/engineering/API.md', apiDoc],
   ['packages/types/src/health.ts', healthContract],
   ['apps/server/src/app.ts', serverApp],
   ['apps/web/src/services/health.ts', webHealthService],
@@ -213,14 +213,14 @@ for (const command of ['pnpm docs:check', 'pnpm format:check', 'pnpm verify']) {
 
 let paymentsDoc = '';
 try {
-  paymentsDoc = read('docs/PAYMENTS.md');
+  paymentsDoc = read('docs/engineering/PAYMENTS.md');
 } catch {
   // Missing file is already reported above.
 }
 
 for (const phrase of ['merchant of record', 'seller payout', 'webhook retries', 'refund']) {
   if (paymentsDoc && !paymentsDoc.toLowerCase().includes(phrase)) {
-    warnings.push(`docs/PAYMENTS.md may be missing payment readiness coverage for "${phrase}".`);
+    warnings.push(`docs/engineering/PAYMENTS.md may be missing payment readiness coverage for "${phrase}".`);
   }
 }
 

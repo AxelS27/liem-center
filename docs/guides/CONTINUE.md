@@ -13,19 +13,19 @@ old conversation; it lives in the repo docs. The agent gets context by reading t
 - Conventions, stack, and UI rules load automatically: Claude Code reads `CLAUDE.md`, which
   points to `AGENTS.md`. You do not need to paste those.
 - Project state (what is built, what is next, how features connect) lives in
-  `docs/PROGRESS.md`. The agent reads it on request.
+  `docs/engineering/PROGRESS.md`. The agent reads it on request.
 
 ## Kickoff prompt
 
 Paste this at the start of the new chat:
 
 ```text
-Read AGENTS.md and docs/PROGRESS.md first to load the project state.
+Read AGENTS.md and docs/engineering/PROGRESS.md first to load the project state.
 Then continue with: <your task, e.g. "build the checkout page">
 
 Open only the domain docs the task needs (UI_UX, API, DATABASE, PAYMENTS, etc.)
 per the table in AGENTS.md. Do not read every doc.
-For UI work, follow docs/DESIGN_DNA.md and run its code-based double-check before done.
+For UI work, follow docs/engineering/DESIGN_DNA.md and run its code-based double-check before done.
 ```
 
 That is enough. The agent reads PROGRESS for state and opens the right domain doc for the
@@ -37,9 +37,9 @@ reading everything wastes tokens.
 The next chat is only as accurate as the docs. Before you close this one, confirm the agent
 updated whatever changed:
 
-- `docs/PROGRESS.md` — mark what is now done and what is in progress
-- `docs/DECISIONS.md` — append any real technical or product decision
-- `docs/UI_UX.md` — record any product design change
+- `docs/engineering/PROGRESS.md` — mark what is now done and what is in progress
+- `docs/engineering/DECISIONS.md` — append any real technical or product decision
+- `docs/product/UI_UX.md` — record any product design change
 - Run `pnpm docs:check` if docs changed, and `pnpm verify` before calling work done
 
 If these are kept current, the next fresh chat reads PROGRESS and is immediately in sync.

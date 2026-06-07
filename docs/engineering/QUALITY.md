@@ -6,8 +6,8 @@
 - Lint + format must pass before commit (`turbo lint`).
 - One responsibility per file; functions do one thing.
 - No dead code, no commented-out blocks, no `console.log` in committed code.
-- Backend work follows `docs/BACKEND.md`; database work follows `docs/DATABASE.md` and keeps
-  the data model catalog current; payment work follows `docs/PAYMENTS.md`.
+- Backend work follows `docs/engineering/BACKEND.md`; database work follows `docs/engineering/DATABASE.md` and keeps
+  the data model catalog current; payment work follows `docs/engineering/PAYMENTS.md`.
 - Use `pnpm verify` as the default final gate. It runs lint, typecheck, and tests.
 
 ## Docs Sync Audit
@@ -18,21 +18,21 @@ template, and before calling a feature done if the feature touched docs.
 The docs are synchronized when:
 
 - `docs/guides/HOW_TO_USE_THIS_TEMPLATE.md` mentions every core doc.
-- `docs/PROGRESS.md` points to the relevant source docs instead of restating them.
-- Product scope changes are reflected in `docs/PRD.md` and `docs/FEATURES.md`.
-- Product-specific design changes are reflected in `docs/UI_UX.md`.
-- API changes are reflected in `docs/API.md` and `packages/types`.
+- `docs/engineering/PROGRESS.md` points to the relevant source docs instead of restating them.
+- Product scope changes are reflected in `docs/product/PRD.md` and `docs/product/FEATURES.md`.
+- Product-specific design changes are reflected in `docs/product/UI_UX.md`.
+- API changes are reflected in `docs/engineering/API.md` and `packages/types`.
 - Database changes are reflected in `supabase/migrations/`, `packages/types/src/database.types.ts`,
-  and the `docs/DATABASE.md` data model catalog.
-- Payment changes are reflected in `docs/PAYMENTS.md`.
-- Real architectural choices are appended to `docs/DECISIONS.md`.
+  and the `docs/engineering/DATABASE.md` data model catalog.
+- Payment changes are reflected in `docs/engineering/PAYMENTS.md`.
+- Real architectural choices are appended to `docs/engineering/DECISIONS.md`.
 
 ## UI Consistency
 
-- Frontend rendering, performance & design-craft rules: see `docs/FRONTEND.md`. Product-specific visual identity and UX direction: see `docs/UI_UX.md`. The bar is "professionally designed, human-made" - never AI-generic. Self-review UI work against the code-based double-check at the bottom of `docs/DESIGN_DNA.md` before calling it done (no rendering required).
+- Frontend rendering, performance & design-craft rules: see `docs/engineering/FRONTEND.md`. Product-specific visual identity and UX direction: see `docs/product/UI_UX.md`. The bar is "professionally designed, human-made" - never AI-generic. Self-review UI work against the code-based double-check at the bottom of `docs/engineering/DESIGN_DNA.md` before calling it done (no rendering required).
 - Use shared UI primitives and design tokens before creating one-off styles, but do not
   force every product into the same layout. Product-specific composition belongs in
-  `docs/UI_UX.md`; `docs/FRONTEND.md` is the guardrail.
+  `docs/product/UI_UX.md`; `docs/engineering/FRONTEND.md` is the guardrail.
 - Persistent navigation exists on every route and highlights the active route on desktop
   and mobile with `aria-current="page"`.
 - Navigation has a visible background/surface treatment on every route. It is not invisible
@@ -84,7 +84,7 @@ A task is done when:
 - [ ] Tests written and passing (logic + edge cases)
 - [ ] `pnpm verify` passes
 - [ ] `pnpm docs:check` passes when docs changed or project docs were initialized
-- [ ] UI work: self-reviewed against the code-based double-check in `docs/DESIGN_DNA.md` (Part A greps + Part B file reading), with anything that missed fixed. No rendering required.
+- [ ] UI work: self-reviewed against the code-based double-check in `docs/engineering/DESIGN_DNA.md` (Part A greps + Part B file reading), with anything that missed fixed. No rendering required.
 - [ ] Route navigation is present and the current page/section is visibly active in
       desktop and mobile nav (`aria-current="page"`)
 - [ ] Navbar/sidebar/bottom nav has a visible surface/background treatment on every route,
@@ -95,7 +95,7 @@ A task is done when:
       that route context
 - [ ] Rich text/scannability was reviewed: useful emphasis, inline links, captions,
       metadata, helper text, lists, or callouts exist where they improve comprehension
-- [ ] Card/surface usage was reviewed against `docs/UI_UX.md`; the page is not card-heavy
+- [ ] Card/surface usage was reviewed against `docs/product/UI_UX.md`; the page is not card-heavy
       by default
 - [ ] Paper-prototype feel was reviewed: the page is not carried by pale bordered boxes,
       weak one-note neutrals, faded imagery, quiet controls, or empty bands
@@ -114,7 +114,7 @@ A task is done when:
 - [ ] Spacing follows the 4px grid. No arbitrary values like `10px`, `14px`, `18px`, `22px` in Tailwind classes or CSS
 - [ ] Typography uses max 3 font weights (`400`, `500/600`, `700`). Font sizes come from the defined scale; no intermediate sizes like `13px`, `15px`, `17px`, `18px`, `22px`
 - [ ] Matches naming & folder conventions (ARCHITECTURE.md)
-- [ ] API matches `docs/API.md` (if applicable)
+- [ ] API matches `docs/engineering/API.md` (if applicable)
 - [ ] Backend/database/payment work matches the relevant domain doc (`BACKEND.md`,
       `DATABASE.md`, `PAYMENTS.md`)
 - [ ] Database work uses committed migrations, not dashboard-only changes

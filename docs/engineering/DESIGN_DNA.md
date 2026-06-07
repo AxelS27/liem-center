@@ -1,7 +1,7 @@
 # Design DNA
 
 > Read this before any UI work. Short on purpose.
-> Detailed rules → `docs/FRONTEND.md`. Product-specific direction → `docs/UI_UX.md`.
+> Detailed rules → `docs/engineering/FRONTEND.md`. Product-specific direction → `docs/product/UI_UX.md`.
 
 **Build on the default starter — do not start from scratch.**
 
@@ -13,11 +13,11 @@ reference to look at and then ignore.
 What you change per product:
 - `globals.css` — swap the accent/brand color. Keep background white.
 - `app/page.tsx` — replace content, sections, and copy to fit the product. Keep the
-  open-band composition unless `docs/UI_UX.md` explicitly calls for a different layout.
+  open-band composition unless `docs/product/UI_UX.md` explicitly calls for a different layout.
 - `components/shared/site-header.tsx` — update nav links and logo to match the product.
 - `components/shared/site-footer.tsx` — update links and brand name.
 
-What you do not change without a clear reason from `docs/UI_UX.md`:
+What you do not change without a clear reason from `docs/product/UI_UX.md`:
 - The white background and neutral surface tokens
 - The sticky nav with surface treatment
 - The open-band section pattern (hero, features, CTA band, footer)

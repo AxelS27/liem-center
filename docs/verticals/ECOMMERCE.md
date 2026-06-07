@@ -3,9 +3,9 @@
 > Use this when the product is an ecommerce store, local commerce site, marketplace,
 > seller platform, catalog, deals site, or shopping experience.
 >
-> This playbook does not override `docs/FRONTEND.md`. It translates the universal frontend
+> This playbook does not override `docs/engineering/FRONTEND.md`. It translates the universal frontend
 > rules into ecommerce-specific product instincts. Record the final product-specific choices
-> in `docs/UI_UX.md`, then turn them into tasks in `docs/PROGRESS.md`.
+> in `docs/product/UI_UX.md`, then turn them into tasks in `docs/engineering/PROGRESS.md`.
 
 ## Core Principle
 
@@ -393,7 +393,7 @@ If the product supports sellers:
 - Buyer-facing proof points should answer buyer questions: product availability, shipping,
   return policy, ratings, sold count, seller trust, vouchers, and price clarity.
 - Marketplace payment, payout, refund, and seller settlement flows must follow
-  `docs/PAYMENTS.md` before implementation.
+  `docs/engineering/PAYMENTS.md` before implementation.
 
 ## Common Anti-Patterns
 
@@ -425,7 +425,7 @@ Avoid:
 
 ## UI_UX.md Mapping Checklist
 
-When this playbook applies, `docs/UI_UX.md` should answer:
+When this playbook applies, `docs/product/UI_UX.md` should answer:
 
 - Which ecommerce model is this: single store, catalog, marketplace, local commerce, seller
   platform, or deals site?

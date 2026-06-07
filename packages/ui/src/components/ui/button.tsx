@@ -8,7 +8,7 @@ import { cn } from '../../lib/cn';
  * house style other components should match: token-driven colors, a deliberate
  * radius and weight, denser padding, and a real focus-visible ring. When you pull
  * more shadcn components (`pnpm dlx shadcn@latest add ...`), retune them to this -
- * do not ship the defaults. See the shadcn-ui skill and docs/FRONTEND.md.
+ * do not ship the defaults. See the shadcn-ui skill and docs/engineering/FRONTEND.md.
  */
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',

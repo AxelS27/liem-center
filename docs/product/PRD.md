@@ -1,6 +1,6 @@
 # PRD - <Project Name>
 
-<!-- Keep this file short. It defines WHAT and WHY, never HOW. The feature-by-feature breakdown lives in docs/FEATURES.md. -->
+<!-- Keep this file short. It defines WHAT and WHY, never HOW. The feature-by-feature breakdown lives in docs/product/FEATURES.md. -->
 
 ## Summary
 

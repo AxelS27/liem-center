@@ -6,7 +6,7 @@ import type { Config } from 'tailwindcss';
  * border-border, ...), never raw palette classes (bg-zinc-900) or hex. To retheme,
  * edit the token values in globals.css; this file maps those tokens to Tailwind and
  * is rarely touched. The type scale and tracking below are the house identity - build
- * hierarchy from them, not ad-hoc sizes. See docs/FRONTEND.md and the shadcn-ui skill.
+ * hierarchy from them, not ad-hoc sizes. See docs/engineering/FRONTEND.md and the shadcn-ui skill.
  */
 const config: Config = {
   darkMode: 'class',

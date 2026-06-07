@@ -7,8 +7,8 @@
 - Auth: `Authorization: Bearer <token>` (Supabase Auth session token).
 - Content-Type: `application/json`
 - Request/response contracts are **Zod schemas in `packages/types`**, imported by both apps. The server validates with the schema; the client infers its types from it.
-- Backend implementation rules live in `docs/BACKEND.md`. Payment-specific endpoints and
-  webhooks must also follow `docs/PAYMENTS.md`.
+- Backend implementation rules live in `docs/engineering/BACKEND.md`. Payment-specific endpoints and
+  webhooks must also follow `docs/engineering/PAYMENTS.md`.
 
 ## Success Envelope
 

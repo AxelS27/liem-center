@@ -2,7 +2,7 @@
 
 Real, well-designed products to study **before** you design a screen, grouped by vertical. The point is not to copy them, it is to absorb _why_ they read as human-made: hierarchy from spacing and weight, restraint with borders and color, one clear focal point, and copy that does not over-explain. Pick the one or two closest to what you are building and keep them open while you work.
 
-This beats inventing a layout from scratch, which is where the generic-AI look comes from. See `docs/FRONTEND.md` for the rules these examples follow. When starting a product, choose the closest references here and record the actual design direction in `docs/UI_UX.md`.
+This beats inventing a layout from scratch, which is where the generic-AI look comes from. See `docs/engineering/FRONTEND.md` for the rules these examples follow. When starting a product, choose the closest references here and record the actual design direction in `docs/product/UI_UX.md`.
 
 > Domains change as companies rebrand. If a link 404s, search the product name.
 

@@ -9,7 +9,7 @@
 trusted Supabase operations, payment integration, hosted AI calls, and any logic that must
 not run in the browser.
 
-The API contract source of truth is `docs/API.md` plus Zod schemas in `packages/types`.
+The API contract source of truth is `docs/engineering/API.md` plus Zod schemas in `packages/types`.
 This file explains how backend code should be structured and verified.
 
 ## Server Structure
@@ -46,7 +46,7 @@ Keep files focused:
 - Base URL is `/api/v1`.
 - Resource names are plural and lowercase: `/users`, `/orders`, `/products`.
 - Validate params, query, and body at the route boundary with Zod.
-- Return the envelopes defined in `docs/API.md`: `{ data: ... }` or `{ error: ... }`.
+- Return the envelopes defined in `docs/engineering/API.md`: `{ data: ... }` or `{ error: ... }`.
 - Never return raw arrays at the top level.
 - Keep error codes stable and `SCREAMING_SNAKE_CASE`.
 - Paginate list endpoints. Do not return unbounded lists.
@@ -54,7 +54,7 @@ Keep files focused:
 
 ## Auth And Secrets
 
-- Bearer tokens are Supabase Auth session tokens unless `docs/API.md` says a route is public.
+- Bearer tokens are Supabase Auth session tokens unless `docs/engineering/API.md` says a route is public.
 - Server-only secrets stay in `apps/server` and environment variables without
   `NEXT_PUBLIC_`.
 - The Supabase service-role key is never imported into `apps/web`.
@@ -86,8 +86,8 @@ details in server logs and monitoring.
 
 ## External Integrations
 
-- Payments: see `docs/PAYMENTS.md`.
-- Supabase/Postgres: see `docs/DATABASE.md`.
+- Payments: see `docs/engineering/PAYMENTS.md`.
+- Supabase/Postgres: see `docs/engineering/DATABASE.md`.
 - Large AI models: call hosted Hugging Face APIs from `apps/server`; never ship model
   weights to web or Node runtime.
 
@@ -114,10 +114,10 @@ Before marking backend work done:
 
 ## Sync Checklist
 
-- [ ] Any new endpoint is documented in `docs/API.md`.
+- [ ] Any new endpoint is documented in `docs/engineering/API.md`.
 - [ ] Request/response schemas live in `packages/types`.
-- [ ] API tasks are reflected in `docs/PROGRESS.md`.
-- [ ] Database changes are reflected in `docs/DATABASE.md`.
-- [ ] Payment changes are reflected in `docs/PAYMENTS.md`.
-- [ ] Security-sensitive decisions are added to `docs/DECISIONS.md` when they are real
+- [ ] API tasks are reflected in `docs/engineering/PROGRESS.md`.
+- [ ] Database changes are reflected in `docs/engineering/DATABASE.md`.
+- [ ] Payment changes are reflected in `docs/engineering/PAYMENTS.md`.
+- [ ] Security-sensitive decisions are added to `docs/engineering/DECISIONS.md` when they are real
       architectural choices.

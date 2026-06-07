@@ -130,9 +130,9 @@
 - Status: Accepted
 - Date: 2026-05-31
 
-## ADR-015: Product-specific UI/UX brief in docs/UI_UX.md
+## ADR-015: Product-specific UI/UX brief in docs/product/UI_UX.md
 
-- Decision: Add `docs/UI_UX.md` as the product-specific design source of truth. `docs/FRONTEND.md` remains the universal frontend rulebook; `docs/UI_UX.md` captures the user's design direction, selected references, visual system, navigation model, page UX map, copy tone, and product-specific UI non-goals. `docs/PROGRESS.md` must synthesize both files into implementation tasks.
+- Decision: Add `docs/product/UI_UX.md` as the product-specific design source of truth. `docs/engineering/FRONTEND.md` remains the universal frontend rulebook; `docs/product/UI_UX.md` captures the user's design direction, selected references, visual system, navigation model, page UX map, copy tone, and product-specific UI non-goals. `docs/engineering/PROGRESS.md` must synthesize both files into implementation tasks.
 - Reason: The template needs to support different products without polluting universal frontend rules with one project's taste. A separate UI/UX brief keeps each product's design direction explicit and reusable across long agent sessions while still making `FRONTEND.md` the higher-priority guardrail.
 - Rejected: Putting product design direction in `FRONTEND.md` (would make the template mutate per product); putting it only in `PROGRESS.md` (turns the checklist into a design spec); relying only on chat context (lost across sessions).
 - Status: Accepted
@@ -140,7 +140,7 @@
 
 ## ADR-016: Domain docs for backend, database, and payments
 
-- Decision: Add focused domain docs: `docs/BACKEND.md`, `docs/DATABASE.md`, and `docs/PAYMENTS.md`. Keep `docs/ARCHITECTURE.md` as the boundary overview and `docs/API.md` as the contract reference. Agents read domain docs only when the task touches that domain, and `docs/PROGRESS.md` synthesizes applicable domain tasks into the active checklist.
+- Decision: Add focused domain docs: `docs/engineering/BACKEND.md`, `docs/engineering/DATABASE.md`, and `docs/engineering/PAYMENTS.md`. Keep `docs/engineering/ARCHITECTURE.md` as the boundary overview and `docs/engineering/API.md` as the contract reference. Agents read domain docs only when the task touches that domain, and `docs/engineering/PROGRESS.md` synthesizes applicable domain tasks into the active checklist.
 - Reason: The template needs more depth than a single architecture doc can hold, especially for backend validation, Supabase/RLS, and payment/marketplace money flow. Splitting these concerns keeps context small during normal work while making the important rules discoverable when needed.
 - Rejected: One giant architecture/spec doc (too much to read every turn); putting backend/database/payment rules only in AGENTS.md (too long for daily workflow); making every domain doc mandatory for every task (wastes context and encourages stale reading).
 - Status: Accepted

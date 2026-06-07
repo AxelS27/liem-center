@@ -55,7 +55,7 @@
 □ dangerouslySetInnerHTML is not used without DOMPurify sanitization
 □ External URLs from user input are validated for safe protocols
 □ HTTPS is enforced (no HTTP fallback)
-□ If payments: Midtrans webhook verified by signature hash, not Bearer auth (see docs/PAYMENTS.md)
+□ If payments: Midtrans webhook verified by signature hash, not Bearer auth (see docs/engineering/PAYMENTS.md)
 ```
 
 ---
@@ -80,7 +80,7 @@
 □ Empty, loading, and error states are designed for every data-driven view
 □ No public page exposes implementation details (Supabase, Midtrans, Hono names, API latency, etc.)
 □ No public/customer page shows audience-mismatched data (admin KPIs, seller stats, etc.)
-□ Self-reviewed via the code-based double-check in docs/DESIGN_DNA.md (Part A greps + Part B file reading) — no rendering required
+□ Self-reviewed via the code-based double-check in docs/engineering/DESIGN_DNA.md (Part A greps + Part B file reading) — no rendering required
 ```
 
 ---
@@ -121,10 +121,10 @@
 ## Docs & Config
 
 ```
-□ docs/PROGRESS.md is current (all shipped features marked done)
-□ docs/DECISIONS.md has entries for all major architectural choices made
-□ docs/API.md matches the actual implemented endpoints
-□ docs/DATABASE.md data model catalog matches the actual schema
+□ docs/engineering/PROGRESS.md is current (all shipped features marked done)
+□ docs/engineering/DECISIONS.md has entries for all major architectural choices made
+□ docs/engineering/API.md matches the actual implemented endpoints
+□ docs/engineering/DATABASE.md data model catalog matches the actual schema
 □ .env.example has all required variables documented with comments
 □ README (or docs/guides/HOW_TO_USE_THIS_TEMPLATE.md) is accurate for the product
 ```

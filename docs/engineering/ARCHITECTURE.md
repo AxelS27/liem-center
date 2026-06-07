@@ -22,22 +22,22 @@ Managed with **pnpm workspaces** + **Turborepo**. Run tasks from root via `turbo
 
 Internal packages are consumed **as TypeScript source** (their `exports` point at `src/`), so there's no separate build step. Next.js must list workspace packages it imports in `transpilePackages` (e.g. `['@repo/ui', '@repo/types', '@repo/utils']`).
 
-Frontend rendering, data-fetching, performance, and design-craft rules live in **`docs/FRONTEND.md`** - open it for any `apps/web` work.
+Frontend rendering, data-fetching, performance, and design-craft rules live in **`docs/engineering/FRONTEND.md`** - open it for any `apps/web` work.
 
 Domain implementation rules are split by concern so agents do not need to read every doc
 for every task:
 
-- **`docs/FRONTEND.md`** - universal frontend/UI rules.
-- **`docs/UI_UX.md`** - product-specific UI/UX direction.
-- **`docs/BACKEND.md`** - backend route/service/auth/test rules.
-- **`docs/DATABASE.md`** - Supabase/Postgres/RLS/Storage rules.
-- **`docs/PAYMENTS.md`** - checkout, webhook, refund, settlement, payout, and marketplace
+- **`docs/engineering/FRONTEND.md`** - universal frontend/UI rules.
+- **`docs/product/UI_UX.md`** - product-specific UI/UX direction.
+- **`docs/engineering/BACKEND.md`** - backend route/service/auth/test rules.
+- **`docs/engineering/DATABASE.md`** - Supabase/Postgres/RLS/Storage rules.
+- **`docs/engineering/PAYMENTS.md`** - checkout, webhook, refund, settlement, payout, and marketplace
   money-flow rules.
 
 ## Frontend / Backend Separation
 
 - `apps/web` and `apps/server` are fully independent deployables.
-- They communicate **only** over the API defined in `docs/API.md`.
+- They communicate **only** over the API defined in `docs/engineering/API.md`.
 - No shared runtime imports between them - shared code goes through `packages/*`.
 
 ## Package Responsibilities

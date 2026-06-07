@@ -8,14 +8,14 @@
 When sources conflict, follow this order (top wins):
 
 1. **AGENTS.md** (this file) - workflow & rules
-2. **docs/ARCHITECTURE.md** - structure & boundaries
-3. **docs/DECISIONS.md** - locked technical choices
-4. **docs/API.md** - API contracts
-5. **docs/BACKEND.md** - backend implementation rules
-6. **docs/DATABASE.md** - database, RLS, storage rules
-7. **docs/PAYMENTS.md** - payment and marketplace money-flow rules
-8. **docs/FRONTEND.md** - universal frontend/UI rules
-9. **docs/UI_UX.md** - product-specific design direction
+2. **docs/engineering/ARCHITECTURE.md** - structure & boundaries
+3. **docs/engineering/DECISIONS.md** - locked technical choices
+4. **docs/engineering/API.md** - API contracts
+5. **docs/engineering/BACKEND.md** - backend implementation rules
+6. **docs/engineering/DATABASE.md** - database, RLS, storage rules
+7. **docs/engineering/PAYMENTS.md** - payment and marketplace money-flow rules
+8. **docs/engineering/FRONTEND.md** - universal frontend/UI rules
+9. **docs/product/UI_UX.md** - product-specific design direction
 10. Existing code patterns
 11. Your own judgment
 
@@ -25,21 +25,21 @@ Never override a higher source with a lower one without flagging it.
 
 | Open this            | Only when the task involves                                                            |
 | -------------------- | -------------------------------------------------------------------------------------- |
-| docs/PRD.md          | Scope/feature questions, "should we build X"                                           |
-| docs/FEATURES.md     | Building or scoping a specific feature module                                          |
-| docs/PROGRESS.md     | Building product features; tracking what's done, in progress, and how features connect |
-| docs/ARCHITECTURE.md | Adding folders, cross-package imports, new module                                      |
-| docs/DESIGN_DNA.md   | **Any apps/web UI work — read this first.** Short rules: palette, composition, nav, spacing |
-| docs/FRONTEND.md     | Detailed UI rules — open only when DESIGN_DNA.md doesn't cover the specific question   |
-| docs/UI_UX.md        | Product-specific visual identity, UX direction, navigation model, page UX map          |
+| docs/product/PRD.md          | Scope/feature questions, "should we build X"                                           |
+| docs/product/FEATURES.md     | Building or scoping a specific feature module                                          |
+| docs/engineering/PROGRESS.md     | Building product features; tracking what's done, in progress, and how features connect |
+| docs/engineering/ARCHITECTURE.md | Adding folders, cross-package imports, new module                                      |
+| docs/engineering/DESIGN_DNA.md   | **Any apps/web UI work — read this first.** Short rules: palette, composition, nav, spacing |
+| docs/engineering/FRONTEND.md     | Detailed UI rules — open only when DESIGN_DNA.md doesn't cover the specific question   |
+| docs/product/UI_UX.md        | Product-specific visual identity, UX direction, navigation model, page UX map          |
 | docs/verticals/*.md  | Starting a product in a known vertical (ecommerce, SaaS, fintech, marketplace, etc.)   |
-| docs/BACKEND.md      | Any apps/server work - routes, middleware, services, validation, backend tests         |
-| docs/DATABASE.md     | Supabase/Postgres schema, RLS, Storage, indexes, migrations, data lifecycle            |
-| docs/PAYMENTS.md     | Payments, checkout, refunds, settlement, payouts, marketplace money flow               |
-| docs/REFERENCES.md   | Starting visual design; need non-generic reference sites for a product vertical        |
-| docs/DECISIONS.md    | Choosing a lib, DB, pattern (check if already decided)                                 |
-| docs/API.md          | Any endpoint work                                                                      |
-| docs/QUALITY.md      | Before marking a task done                                                             |
+| docs/engineering/BACKEND.md      | Any apps/server work - routes, middleware, services, validation, backend tests         |
+| docs/engineering/DATABASE.md     | Supabase/Postgres schema, RLS, Storage, indexes, migrations, data lifecycle            |
+| docs/engineering/PAYMENTS.md     | Payments, checkout, refunds, settlement, payouts, marketplace money flow               |
+| docs/product/REFERENCES.md   | Starting visual design; need non-generic reference sites for a product vertical        |
+| docs/engineering/DECISIONS.md    | Choosing a lib, DB, pattern (check if already decided)                                 |
+| docs/engineering/API.md          | Any endpoint work                                                                      |
+| docs/engineering/QUALITY.md      | Before marking a task done                                                             |
 | docs/checklists/new-product.md | Initializing a new product from this template — fill docs and setup env first |
 | docs/checklists/code-review.md | Before approving a PR or calling a task done — multi-axis quality check       |
 | docs/checklists/launch-readiness.md | Before going live — functionality, perf, security, UI, a11y, deployment  |
@@ -47,7 +47,7 @@ Never override a higher source with a lower one without flagging it.
 ## UI Critical Rules
 
 > Inline so you don't need to open any doc for simple UI tasks.
-> For more detail: `docs/DESIGN_DNA.md`. For full rules: `docs/FRONTEND.md`.
+> For more detail: `docs/engineering/DESIGN_DNA.md`. For full rules: `docs/engineering/FRONTEND.md`.
 
 - **Build on `apps/web/` — don't regenerate from scratch.** Extend the existing code.
 - **Background stays white.** Only change the accent/brand color (`--primary`, `--ring`). Never warm the background to cream/beige.
@@ -60,11 +60,11 @@ Never override a higher source with a lower one without flagging it.
 - **4px spacing grid** — valid: 4 8 12 16 20 24 32 40 48 64 80 96px. No `p-[10px]` or other arbitrary values.
 - **Animate `transform` and `opacity` only.** Never `width`, `height`, `top`, `left`. Max 800ms. Gate behind `prefers-reduced-motion`.
 - **Every interactive element** needs: hover (150ms) · focus ring (2px accent + 2px offset) · active (scale 0.98).
-- **Mandatory double-check before done**: run the two-part checklist at the bottom of `docs/DESIGN_DNA.md` ("Mandatory double-check after ANY frontend work"). It is code-based — no rendering needed. Part A is mechanical greps (run them, paste output) that catch silent traps like `overflow-x-hidden` killing sticky; Part B is reading 3 files and reasoning about the markup. Do not call UI work done without it.
+- **Mandatory double-check before done**: run the two-part checklist at the bottom of `docs/engineering/DESIGN_DNA.md` ("Mandatory double-check after ANY frontend work"). It is code-based — no rendering needed. Part A is mechanical greps (run them, paste output) that catch silent traps like `overflow-x-hidden` killing sticky; Part B is reading 3 files and reasoning about the markup. Do not call UI work done without it.
 
 ## Tech Stack (locked)
 
-Rationale lives in `docs/DECISIONS.md`. Don't introduce an alternative to any of these without a new ADR.
+Rationale lives in `docs/engineering/DECISIONS.md`. Don't introduce an alternative to any of these without a new ADR.
 
 | Layer           | Choice                                                         |
 | --------------- | -------------------------------------------------------------- |
@@ -75,7 +75,7 @@ Rationale lives in `docs/DECISIONS.md`. Don't introduce an alternative to any of
 | Auth            | Supabase Auth                                                  |
 | Storage         | Supabase Storage                                               |
 | Payments        | Midtrans - **only** when the project takes payments            |
-| Deploy          | See `docs/DECISIONS.md` ADR-007                                |
+| Deploy          | See `docs/engineering/DECISIONS.md` ADR-007                                |
 | Large AI models | Hugging Face - **only** when the project involves large models |
 
 Stack rules:
@@ -85,18 +85,18 @@ Stack rules:
 - Large AI models are **never bundled** into the app - call Hugging Face (Inference API / Endpoints) from `apps/server`.
 - Custom model handoff lives in root `huggingface/`. Put model weights/checkpoints under `huggingface/models/` or exported artifacts under `huggingface/artifacts/`; those files are ignored for normal GitHub pushes.
 - Payments: integrate **Midtrans** from `apps/server`. The **server key is server-only**; the browser uses the public `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` for Snap. The webhook is verified by **signature hash**, never Bearer auth. See ADR-012.
-- Marketplace payments are not assumed to be solved by normal Midtrans checkout. For multi-seller, split settlement, seller payout, or platform-as-merchant-of-record flows, read `docs/PAYMENTS.md` first.
+- Marketplace payments are not assumed to be solved by normal Midtrans checkout. For multi-seller, split settlement, seller payout, or platform-as-merchant-of-record flows, read `docs/engineering/PAYMENTS.md` first.
 - Auth extras are **Supabase-native**: OAuth (Google, GitHub) and password reset run through the Supabase SDK with providers and redirect URLs configured in the dashboard; profile pictures go to a Supabase **Storage** bucket with RLS. See ADR-013.
-- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. The starter page (`apps/web/src/app/page.tsx`) is the **design foundation** — build on it, do not replace it with a fresh generation. Change the palette (accent only, keep background white), content, and routes per product; keep the open-band layout, nav shell, font wiring, and footer structure unless `docs/UI_UX.md` explicitly calls for something different. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/DESIGN_DNA.md` (short) and `docs/FRONTEND.md` (detailed).
+- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. The starter page (`apps/web/src/app/page.tsx`) is the **design foundation** — build on it, do not replace it with a fresh generation. Change the palette (accent only, keep background white), content, and routes per product; keep the open-band layout, nav shell, font wiring, and footer structure unless `docs/product/UI_UX.md` explicitly calls for something different. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/engineering/DESIGN_DNA.md` (short) and `docs/engineering/FRONTEND.md` (detailed).
 
 ## Workflow
 
 1. Confirm which app/package you're touching: `apps/web`, `apps/server`, or `packages/*`.
 2. Match existing patterns in that folder before inventing new ones.
 3. Shared logic goes in `packages/` - never duplicate across apps.
-4. Building product features → keep `docs/PROGRESS.md` current: derive the build map from `docs/FEATURES.md`, `docs/UI_UX.md`, `docs/API.md`, and the relevant domain docs (`FRONTEND`, `BACKEND`, `DATABASE`, `PAYMENTS` only when they apply); mark each item in progress and done, and note how it connects to other features.
-5. Finish → self-check against `docs/QUALITY.md` Definition of Done.
-6. Made a real architectural choice → append to `docs/DECISIONS.md`.
+4. Building product features → keep `docs/engineering/PROGRESS.md` current: derive the build map from `docs/product/FEATURES.md`, `docs/product/UI_UX.md`, `docs/engineering/API.md`, and the relevant domain docs (`FRONTEND`, `BACKEND`, `DATABASE`, `PAYMENTS` only when they apply); mark each item in progress and done, and note how it connects to other features.
+5. Finish → self-check against `docs/engineering/QUALITY.md` Definition of Done.
+6. Made a real architectural choice → append to `docs/engineering/DECISIONS.md`.
 
 ## Running & Verifying
 
@@ -116,7 +116,7 @@ Stack rules:
 | DB push     | `pnpm db:push`                                                   |
 | Format      | `pnpm format`                                                    |
 
-Before marking a task done, run `pnpm verify` and check the Definition of Done in `docs/QUALITY.md`. Run `pnpm docs:check` when docs changed or when initializing product docs. For `apps/web` UI work: read `docs/DESIGN_DNA.md` first (short), run the code-based double-check at the bottom of that file (Part A greps + Part B file reading, no rendering), then open `docs/FRONTEND.md` only if you need more detail. For a thorough multi-axis check, run the **`ui-audit` skill**. Green lint/typecheck does not catch an AI-generic layout — the grep + markup review is the real gate.
+Before marking a task done, run `pnpm verify` and check the Definition of Done in `docs/engineering/QUALITY.md`. Run `pnpm docs:check` when docs changed or when initializing product docs. For `apps/web` UI work: read `docs/engineering/DESIGN_DNA.md` first (short), run the code-based double-check at the bottom of that file (Part A greps + Part B file reading, no rendering), then open `docs/engineering/FRONTEND.md` only if you need more detail. For a thorough multi-axis check, run the **`ui-audit` skill**. Green lint/typecheck does not catch an AI-generic layout — the grep + markup review is the real gate.
 
 ## Git & Tooling Hygiene
 
@@ -176,10 +176,10 @@ These five rules are supreme. They override all other decisions. If anything con
 - ✅ Match the naming + folder conventions exactly
 - ✅ Update the relevant doc when you change its domain
 - ✅ Ask before introducing a new top-level folder
-- ✅ If `docs/PRD.md` is still a blank template, ask the user for scope before building features - don't invent it
-- ✅ For product UI work, read `docs/DESIGN_DNA.md` first, then fill or update `docs/UI_UX.md` from the user's design direction. The starter UI (`apps/web/`) is the **design foundation** — build on it. Change the accent palette (keep background white), content, and routes per product. Only deviate from the open-band layout structure when `docs/UI_UX.md` explicitly calls for a different composition.
-- ✅ For a known product vertical, read the matching `docs/verticals/*.md` playbook first and use it to fill `docs/UI_UX.md`. The playbook informs the product brief; it does not override `docs/FRONTEND.md`.
-- ✅ Start the app at a real landing page with a navbar and footer; only protected routes redirect to sign in (see `docs/FRONTEND.md`)
+- ✅ If `docs/product/PRD.md` is still a blank template, ask the user for scope before building features - don't invent it
+- ✅ For product UI work, read `docs/engineering/DESIGN_DNA.md` first, then fill or update `docs/product/UI_UX.md` from the user's design direction. The starter UI (`apps/web/`) is the **design foundation** — build on it. Change the accent palette (keep background white), content, and routes per product. Only deviate from the open-band layout structure when `docs/product/UI_UX.md` explicitly calls for a different composition.
+- ✅ For a known product vertical, read the matching `docs/verticals/*.md` playbook first and use it to fill `docs/product/UI_UX.md`. The playbook informs the product brief; it does not override `docs/engineering/FRONTEND.md`.
+- ✅ Start the app at a real landing page with a navbar and footer; only protected routes redirect to sign in (see `docs/engineering/FRONTEND.md`)
 - ✅ Keep public, auth, app, and mobile navigation visible, route-aware, and connected: nav has a surface/background, active links use `aria-current="page"`, app routes can get back to public/product home, and every route has a context-aware footer/endcap.
 - ✅ Use rich text with restraint where it improves scanning: useful emphasis, inline links, captions, metadata, helper text, short lists, and callouts. Do not make pages flat plaintext or decorative markdown clutter.
 - ✅ Ship one theme and one language (English) first; add a second theme or locale only when the product needs it
