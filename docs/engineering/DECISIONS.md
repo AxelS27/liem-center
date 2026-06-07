@@ -145,3 +145,27 @@
 - Rejected: One giant architecture/spec doc (too much to read every turn); putting backend/database/payment rules only in AGENTS.md (too long for daily workflow); making every domain doc mandatory for every task (wastes context and encourages stale reading).
 - Status: Accepted
 - Date: 2026-05-31
+
+## ADR-017: Transactional email via Resend
+
+- Decision: Liem Center sends all transactional and optional email through Resend, called only from `apps/server` via `lib/email.ts`. Templates are authored as React Email components and registered in a template registry. Mandatory emails (welcome, purchase, gift, redeem, GitHub invite sent/failed, support reply) always send; optional categories (product updates, sales, announcements, wishlist alerts) check the `email_preferences` row before sending. Every optional email carries a signed-token unsubscribe link resolved by the no-auth `/unsubscribe/:token` endpoint.
+- Reason: Resend has the best DX for a developer-focused product, first-class React Email templating (keeps copy/markup in the same TS toolchain), good deliverability, and a simple API key model that fits the server-only secret pattern. One provider covers both transactional and optional/broadcast sends.
+- Rejected: Postmark (excellent deliverability but separate templating, less ergonomic with React/TS); Supabase SMTP (fine for auth emails, but weak for product/transactional templating, broadcasts, and analytics); self-hosted SMTP / SES raw (deliverability and ops burden not worth it at this scale).
+- Status: Accepted
+- Date: 2026-06-07
+
+## ADR-018: GitHub product delivery via a GitHub App, identity via OAuth
+
+- Decision: GitHub repository invitations are sent server-side using a **GitHub App** installed on the org/repos that hold Liem products; the server uses a short-lived installation token per action (`lib/github.ts`). The user's GitHub **identity** (username + id) is captured via Supabase GitHub OAuth or the just-in-time link flow and stored on the profile, but the user's GitHub OAuth token is **not** persisted for sending invites. Invite, retry, and revoke all run through the App. Invite state is tracked in `github_invites`.
+- Reason: A GitHub App gives fine-grained, org-scoped, auditable repo access with rotating installation tokens, and survives a user revoking their personal OAuth grant. Storing per-user personal access tokens to send invites would be a long-lived secret sprawl and a security liability. Separating identity (OAuth) from delivery (App) matches the "GitHub linked on-demand, not at signup" model.
+- Rejected: Per-user personal access tokens (long-lived secrets, broad scope, break when user revokes); a single org PAT/machine account (shared secret, no per-repo scoping, poor audit trail); inviting by email instead of GitHub username (less reliable, no linked-account guarantee).
+- Status: Accepted
+- Date: 2026-06-07
+
+## ADR-019: Launch auth providers - Google + GitHub + Email; Apple deferred
+
+- Decision: At launch, Liem Center offers three sign-in providers via Supabase Auth: **Google OAuth, GitHub OAuth, and Email + password**. **Apple OAuth is deferred** to a later phase. GitHub remains optional at signup and is only required (via the just-in-time link flow) when a user activates a GitHub-based product. The Connected Accounts settings surface still lists Apple as a future provider but it is not wired at launch.
+- Reason: Apple Sign In requires an Apple Developer Program membership, a Services ID, and a signing key, plus periodic key rotation — operational overhead the product owner chose not to take on for launch. Google + GitHub already cover the developer audience, and Email/password is the universal fallback. Deferring Apple removes a launch dependency without losing meaningful coverage.
+- Rejected: Shipping Apple at launch (blocked on Apple Developer setup the owner is not ready to do); dropping Apple permanently (kept as a future option for broader consumer reach); GitHub-only auth (would force GitHub on every user, contradicting the low-signup-friction principle).
+- Status: Accepted
+- Date: 2026-06-07

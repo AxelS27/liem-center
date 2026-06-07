@@ -1,224 +1,187 @@
-# UI/UX Brief - <Project Name>
-
-<!--
-  Product-specific design source of truth.
-
-  FRONTEND.md defines the universal UI rules for this template.
-  UI_UX.md defines the identity and UX direction for THIS product.
-
-  Fill this after PRD.md and FEATURES.md, before generating PROGRESS.md.
-  Use the user's design brief, product scope, and selected REFERENCES.md examples.
-  When the product matches a known vertical, read the matching docs/verticals/*.md playbook
-  and capture the relevant choices here.
-  The starter UI (`apps/web/`) is the design foundation — build on it, not from scratch.
-  Keep its open-band composition, white surface, sticky nav, font wiring, and footer shell.
-  This brief records what changes per product: accent palette, content direction, layout
-  deviations (only when the product genuinely needs a different structure), and routes.
-  Read `docs/engineering/DESIGN_DNA.md` before filling this file.
-  Do not copy long rules from FRONTEND.md. Point to them when needed.
--->
+# UI/UX Brief - Liem Center
 
 ## Summary
 
-<!--
-  One short paragraph. What should the product feel like, and why does that fit
-  the audience and problem?
--->
+Liem Center should feel like a calm, premium developer hub — closer to Vercel, Linear, and Resend than to a retail store. The product is one-time purchase only and brand-led, so the surface should communicate restraint, quality, and ownership: clean white background, one strong accent, generous spacing, and editorial typography. Buy buttons, library, and profile carry the experience — never gradients, stock illustrations, or promo chaos.
 
 ## Design Inputs
 
-<!--
-  Capture what the user asked for. If a section is unknown, ask instead of inventing.
--->
-
-- **User direction:**
-- **Vertical playbook:** <docs/verticals/ECOMMERCE.md / none / other>
-- **Closest vertical from REFERENCES.md:**
-- **Reference products/sites:**
-- **Starter design DNA to keep:** <clean/open/non-boxy/restraint/nav-footer polish/motion/media/none>
-- **Starter UI patterns not to copy:** <exact layout/section order/placeholder copy/starter brand/other>
-- **Things the user explicitly likes:**
-- **Things the user explicitly dislikes:**
+- **User direction:** Premium developer hub. Combine developer-tool polish (Linear/Vercel/Resend) with the structural clarity of an account-based marketplace. Never a generic ecommerce store look.
+- **Vertical playbook:** none (developer products / digital marketplace hybrid; ecommerce playbook does not apply because there is no cart, shipping, or seller flow)
+- **Closest vertical from REFERENCES.md:** Developer tools & infrastructure (Vercel, Resend, Clerk, Supabase) + AI products (Anthropic, OpenAI)
+- **Reference products/sites:** Vercel, Resend, Linear, Raycast, Anthropic, Clerk, Supabase
+- **Starter design DNA to keep:** clean white surface, open bands, sticky nav, font wiring, footer shell, restraint with borders
+- **Starter UI patterns not to copy:** placeholder copy, starter brand name, "feature highlight" boilerplate
+- **Things the user explicitly likes:** premium feel, ecosystem framing, badges/tiers, GitHub-native delivery
+- **Things the user explicitly dislikes:** subscription mental model, generic-AI gradients, cream/beige editorial palettes, card soup
 
 ## Product Personality
 
-<!-- Pick 3-5 traits that guide tradeoffs. Avoid vague words unless explained. -->
-
-- <Trait> - <what this means in UI decisions>
-- <Trait> - <what this means in UI decisions>
+- **Premium-quiet** — restraint over decoration; the surface should feel earned, not loud.
+- **Developer-native** — GitHub, repos, changelogs, version numbers are first-class UI elements.
+- **Ecosystem, not store** — the user is joining something. Library, profile, and tier are the heart, not the cart.
+- **Calm momentum** — motion exists but is subtle; nothing pulses, slides, or auto-rotates.
+- **Honest** — prices in IDR, ownership permanent, no fake urgency outside real seasonal campaigns.
 
 ## Layout Principles
 
-<!--
-  Product-specific layout rules. FRONTEND.md gives guardrails; this section chooses the
-  product's actual layout direction. Keep it concrete enough to guide pages, but not so
-  detailed that it becomes CSS.
--->
-
-- **Primary layout model:** <top navbar / sidebar / hybrid / editorial / dashboard / other>
-- **Page composition:** <how landing, list, detail, form, and dashboard pages should feel>
-- **Surface budget:** <where cards/panels are allowed, and where open lists, sections,
-  tables, or typography should carry hierarchy instead>
-- **Open composition:** Define how the product should avoid a boxy or paper-prototype feel:
-  which areas stay open, which sections can use bands, and which content truly earns a
-  framed card/panel.
-- **Navigation placement:** Primary nav links navigate to real routes/pages, not same-page
-  section jumps. Define whether public/app nav uses a top navbar, sidebar, bottom nav, or
-  drawer at each breakpoint.
-- **Navigation surface:** Define the visible nav treatment: background band, sidebar rail,
-  border, blur, solid token surface, or another product-appropriate surface. Nav must not
-  be invisible floating text. Primary nav should normally be anchored (sticky) on scroll.
-- **First viewport:** The landing hero (headline, supporting copy, primary CTA, and for
-  commerce the search/shop entry) must fit the first screen without scrolling at ~720-768px
-  desktop height and on mobile. Note any product-specific above-the-fold priorities.
-- **Route connectivity:** Define how users move between public, auth, and app contexts.
-  App pages need a clear route back to the public landing/product home; public/auth pages
-  need clear routes into sign in, sign up, or the app.
-- **Footer model:** Every route has a footer or footer-equivalent endcap. Define what
-  public, app, and auth footers contain for this product.
-- **Desktop gutters:** Use wide page shells with small desktop gutters unless the route is
-  a focused reading or form page.
+- **Primary layout model:** Top navbar across all public, app, and auth routes. No sidebar at launch — library, orders, profile, and admin all live under the same top-nav shell with a sub-nav strip where needed.
+- **Page composition:**
+  - Landing = open bands (hero → featured products → ecosystem narrative → seasonal slot → footer).
+  - Catalog = open grid of product cards on a white surface, filter strip above.
+  - Product detail = two-column on desktop (left: media + tabs, right: sticky purchase panel), single-column on mobile.
+  - Library = open list/table with status pills, not a card grid.
+  - Profile = editorial: avatar header band, stats row, pinned showcase, timeline.
+  - Admin = denser table-first layout; still no sidebar (top tabs).
+- **Surface budget:** Cards are reserved for **product cards** in the catalog, **dialog/sheet** content, and **stat tiles in admin**. Everything else uses open bands, lists, and tables. Hero, library, profile sections, and admin filters are not card-wrapped.
+- **Open composition:** Hero, ecosystem narrative, profile sections, and library are open bands divided by spacing and section rhythm. Only product listings and admin metric tiles are framed.
+- **Navigation placement:** Top navbar everywhere. Mobile collapses to a drawer with the same links. No bottom nav.
+- **Navigation surface:** `sticky top-0 bg-background/80 border-b border-border backdrop-blur` with active state + `aria-current="page"`. Auth pages keep the same navbar (signed-out variant).
+- **First viewport:** Landing hero headline + supporting line + one primary CTA (browse products) + one secondary (sign in) visible at ~720px desktop height. Featured product strip starts just below the fold, not pushed by oversized hero padding.
+- **Route connectivity:** App routes (`/library`, `/orders`, `/profile`) include the same public navbar so users can always return to landing or product index. Auth pages link back to landing via the wordmark. Admin shell links to public via the wordmark.
+- **Footer model:**
+  - Public/landing/catalog: full footer — wordmark, product columns (Browse, Library, Profile), Liem ecosystem links, legal, copyright.
+  - App (library/orders/profile): compact footer — wordmark, support link, legal, copyright.
+  - Auth: minimal endcap — wordmark + copyright + privacy/terms.
+  - Admin: minimal endcap — env label + copyright.
+- **Desktop gutters:** Wide page shells with small desktop gutters; product detail and reading flows (changelog, roadmap) use a narrower reading column inside the same shell.
 
 ## Visual System
 
-<!--
-  This guides globals.css, shared components, and page composition.
-  Exact token values may live in globals.css; explain the design intent here.
--->
-
-- **App name for metadata:**
-- **Browser title pattern:** `<Page> | <AppName>`
-- **Icon/brand asset direction:** Use the template default icon/mark or a clean wordmark
-  unless the user provides product-specific branding. Do not invent placeholder initials,
-  random logo tiles, or generic marks that pretend to be a real brand.
-- **Color direction:** Commit to a deliberate product palette. Avoid the tired AI-starter
-  defaults (violet/indigo, emerald/forest + cream editorial, muted sage, dark-purple SaaS).
-- **Typography direction:** Name the actual typeface(s). A modern family wired via `next/font`
-  to `--font-sans`, never the browser default serif/system font.
-- **Density and spacing:**
-- **Non-boxy hierarchy:** How should spacing, type weight, alignment, section rhythm,
-  imagery, and inline metadata carry hierarchy before adding borders or cards?
-- **Rich text/scannability:** Where should emphasis, inline links, captions, metadata,
-  lists, helper text, or callouts be used to make content easier to scan?
-- **Audience-appropriate data:** Which metrics, counts, badges, and operational data are
-  useful for each route context? Public/customer pages should not show internal KPIs or
-  admin/seller operational data unless the user can act on it.
-- **Radius and borders:**
-- **Cards and surfaces:** Where should cards be used, and where should hierarchy come from
-  spacing, typography, open lists, tables, or section bands instead? Define how the product
-  avoids card soup and a paper-prototype feel while still feeling clear and balanced.
-- **Imagery/product visuals:**
-- **Icon style:** Define where icons help users scan controls and entry points. Prefer
-  familiar `lucide-react` icons for actions such as search, cart, category, filter, deal,
-  store/seller, checkout, account, delivery, and arrows; avoid decorative or mismatched
-  icons. Specify which controls are icon-only, icon + label, text + optional icon, or
-  text-only.
-- **Motion:**
+- **App name for metadata:** Liem Center
+- **Browser title pattern:** `<Page> | Liem Center` (e.g. `Library | Liem Center`, `Liem Monorepo | Liem Center`)
+- **Icon/brand asset direction:** Use template default favicon/icon until product branding lands. When it lands, expect a wordmark "Liem Center" with a small mark, not initials.
+- **Color direction:** White background, neutral grays for surfaces and borders, one deliberate accent. Default accent direction: a confident developer blue (think Vercel/Linear territory) — **not** violet/indigo, not emerald, not cream-editorial. Exact `--primary` HSL lives in `globals.css`. Semantic colors (success/warning/destructive) are separate and used sparingly (status pills, refunds, failed invites).
+- **Typography direction:** Modern geometric sans wired via `next/font` to `--font-sans`. Default: **Inter** (or **Geist Sans** if the project prefers Vercel's stack). Weights used: 400 body, 500/600 medium, 700 bold. No display serif at launch.
+- **Density and spacing:** Comfortable on landing and product detail; denser on library/orders/admin tables. Section vertical rhythm uses 64px / 80px / 96px bands on landing, 32px / 48px inside app pages.
+- **Non-boxy hierarchy:** Spacing, weight, and section bands carry hierarchy before borders. Product detail tabs use an underline strip, not boxed tab containers. Library status uses pills inline in a list row, not a card per entitlement.
+- **Rich text/scannability:** Product descriptions use real headings, short paragraphs, inline links, code spans for commands, and callouts for prerequisites. Changelog uses version headings + bullet lists. Roadmap uses three columns by status with short item titles + optional one-line context.
+- **Audience-appropriate data:** Public product page shows price, type, last updated, version, owners count (optional, only if it adds trust). Library shows per-user status. Admin shows revenue, conversion, redemption counts. Internal KPIs never appear on public surfaces.
+- **Radius and borders:** Subtle radius (`rounded-md` / `rounded-lg`), thin borders using `border-border`. No heavy shadows; use `shadow-sm` at most on the sticky product purchase panel.
+- **Cards and surfaces:** See surface budget above. Catalog product cards are the dominant card use; everything else stays open.
+- **Imagery/product visuals:** Each product needs real screenshots / hero image. No stock photos. No illustrated mascots. GitHub products may show a code/terminal screenshot.
+- **Icon style:** `lucide-react`. Use icons for: search, filter, GitHub, library, profile, cart-equivalent (Buy), gift, redeem, link-out, check, alert, copy. Buttons keep text labels primary; icon-only is reserved for compact controls (copy code, link-out, close).
+- **Motion:** Subtle. Hover transitions 150ms. Page-level entrance fades only on the hero and modal/sheet open. No parallax, no auto-rotating banners.
 
 ## Navigation Model
 
-<!--
-  List the intended top-level pages. Keep primary nav route-based.
--->
+- `/` — Landing. Hero, featured products, ecosystem narrative.
+- `/products` — Product catalog with filter.
+- `/products/[slug]` — Product detail with tabs (Overview, Changelog, Roadmap, Reviews).
+- `/library` — Owned products list (auth required).
+- `/orders` — Order history (auth required).
+- `/orders/[id]` — Order detail.
+- `/wishlist` — Saved products (auth required).
+- `/redeem` — Redeem a gift or promo code (auth required).
+- `/notifications` — In-app notification center (auth required; also opened as a drawer from the 🔔 icon in the navbar).
+- `/support` — Support tickets list (auth required).
+- `/support/new` — File a new ticket.
+- `/support/[id]` — Ticket detail with message thread.
+- `/u/[username]` — Public profile.
+- `/settings` — Tabs: Profile, Connected Accounts, Notifications, Security.
+- `/checkout` — Checkout for a single product or bundle.
+- `/checkout/success` — Post-payment confirmation.
+- `/signin`, `/signup`, `/forgot-password`, `/auth/callback` — Auth.
+- `/unsubscribe` — No-auth unsubscribe page reached from email footers.
+- `/admin` — Admin shell with sub-tabs: Products, Orders, Users, Codes, Coupons, Campaigns, GitHub Access, Reviews, Support, Analytics. (Coupons + Campaigns are P2 tabs.)
 
-- `/` - <landing purpose>
-- `/features` - <purpose>
-- `/pricing` - <purpose, if applicable>
-- `/blog` - <purpose, if applicable>
-- `/signin` - <purpose>
-- `<protected route>` - <purpose>
+## Auth Providers Surface
+
+Sign-in and sign-up screens expose three providers at launch, in this order: Google, GitHub, Email. GitHub does **not** appear as required during signup — it is one option among the three. A separate "Connect GitHub" prompt appears later (in `/library` and on the order success page) only when the user is about to activate a GitHub product. Apple is deferred (ADR-019) and not shown on the auth screens at launch. See `docs/product/FEATURES.md` §2 and §6.
+
+## Notification Center UX
+
+- 🔔 bell icon in the signed-in navbar, with a small unread count badge.
+- Click opens a right-side drawer (desktop) or full-screen page on mobile.
+- List rows: icon by type, title, one-line context, relative time. Unread rows use a subtle accent dot.
+- "Mark all read" action at the top; per-row mark-as-read on click.
+- Empty state: friendly one-liner + "Browse products" or "Go to library" CTA.
+- Notification settings link in the drawer footer routes to `/settings` → Notifications tab.
+
+## Support Ticket UX
+
+- `/support` list: Subject · Status pill (Open / In Progress / Resolved / Closed) · Last activity · Unread indicator if admin replied.
+- `/support/new` form: subject, category select (Payment issue / GitHub invite failed / Redeem code invalid / Refund request / Other), message, optional order link.
+- `/support/[id]` thread: each message is a row with author, time, and text. Reply box at the bottom. Status pill at the top right.
+- Admin queue in `/admin/support` uses a denser table with priority and SLA hints.
 
 ## Page UX Map
 
-<!--
-  One row per important route or area. This is product-specific UX intent, not
-  implementation status. Implementation status lives in PROGRESS.md.
--->
-
-| Route / Area | User goal | Primary action | Layout notes                   | States needed                     |
-| ------------ | --------- | -------------- | ------------------------------ | --------------------------------- |
-| `/`          | <goal>    | <action>       | <product-specific composition> | <empty/loading/error if relevant> |
-| `<route>`    | <goal>    | <action>       | <notes>                        | <states>                          |
+| Route / Area | User goal | Primary action | Layout notes | States needed |
+| --- | --- | --- | --- | --- |
+| `/` | Understand the ecosystem, find something worth claiming/buying | "Browse products" CTA | Hero open band, featured strip, ecosystem narrative band, optional sale banner | Active-campaign vs. no-campaign |
+| `/products` | Find a product | Click product card | Filter strip + responsive card grid | Empty (filter yields none), loading skeleton, error |
+| `/products/[slug]` | Decide to claim/buy/wishlist | Buy / Claim / Buy as Gift | Two-column desktop; sticky right purchase panel; tabs for Overview/Changelog/Roadmap/Reviews | Owned (shows "In your library" instead of Buy), not-signed-in (CTAs route to sign-in), out-of-stock N/A |
+| `/checkout` | Pay | "Pay with Midtrans" | Single-column focused form, line items left, summary right (desktop) | Coupon applied/invalid, payment pending, error |
+| `/checkout/success` | Confirm purchase + reach library | "Go to library" | Open band confirmation, status of GitHub invite if applicable | Pending (webhook not in), success, failed |
+| `/library` | Access owned products | Open product / retry invite / download | List/table with status pills | Empty (no entitlements yet), per-row pending/failed |
+| `/orders` | See history, get invoice | Open order | List with date, total, status | Empty, refunded row |
+| `/wishlist` | Watch products | Open product | List | Empty, on-sale highlight |
+| `/redeem` | Enter a code | "Redeem" | Single input, simple confirmation | Invalid, expired, already-redeemed, success |
+| `/notifications` | See activity at a glance | Mark as read / open target | Drawer (desktop) or full page (mobile); list rows | Empty, loading skeleton |
+| `/support` | Get help, track issues | New ticket / open ticket | List with status pills | Empty (no tickets), unread reply highlight |
+| `/support/new` | File a ticket | Submit | Single-column form | Validation, success → ticket detail |
+| `/support/[id]` | Resolve issue | Reply | Thread view, status pill, reply box | Closed (reply disabled) |
+| `/u/[username]` | Showcase / view profile | View pinned products | Editorial header band, stats row, pinned grid, activity feed | Country hidden when not opted in, own-profile edit affordance |
+| `/settings` | Manage account, providers, notifications, security | Save | Tabbed section page (Profile / Connected Accounts / Notifications / Security) | Linked/unlinked Google/GitHub, OAuth error, active sessions list |
+| `/signin` `/signup` | Authenticate | Sign in | Minimal centered form, navbar present | OAuth pending, error |
+| `/admin` | Operate | Per-section actions | Top-tabs shell, tables, filter strip, drawers for edit | Empty, loading, error per table |
 
 ## Components And Patterns
 
-<!--
-  Reusable UI patterns this product should feel consistent around.
-  Put shared implementation tasks in PROGRESS.md.
--->
-
-- **Buttons and CTAs:** Define which primary and secondary actions use icon + label,
-  text-only, or icon-only controls. Do not put icons on every button by default; use icons
-  where they clarify the action or make dense navigation/category/deal surfaces easier to
-  scan. For compact universal controls, icon-only is allowed with accessible labels; for
-  major CTAs, keep the text label primary.
-- **Navigation active states:** How active navbar/sidebar/bottom-nav links look, including
-  mobile.
-- **Route links:** How public, app, and auth shells link to each other so no context becomes
-  a dead end.
-- **Click affordance:** Define how text links, section actions, clickable cards, and rows
-  look interactive before hover. Plain body text should not be the only clue that something
-  is clickable.
-- **Footer/endcap:** Contextual footer content for public, app, and auth routes.
-- **Cards/lists/tables:** Include a surface budget so the UI does not become card-heavy.
-- **Product/list metadata:** For commerce or catalog products, define how names, prices,
-  discounts, ratings, sold counts, stock, delivery, seller/location, category badges, and
-  actions are visually distinguished.
-- **Metrics and stats:** Define which stats are shown to public users, signed-in users,
-  sellers, admins, or finance users. Avoid generic stat strips and internal planning data
-  on customer-facing pages.
-- **Forms:**
-- **Empty states:**
-- **Error states:**
-- **Loading states:**
+- **Buttons and CTAs:** Primary actions (Buy, Claim, Redeem, Save) use solid `--primary` text labels, no icon by default. Icon + label for actions where the icon clarifies (GitHub-connect, Copy code, Buy as Gift). Icon-only allowed for: copy, link-out, close, expand. Always include `aria-label`.
+- **Navigation active states:** Underline-on-active for desktop top nav; filled pill background for mobile drawer; `aria-current="page"` everywhere.
+- **Route links:** Wordmark → `/`. App pages → `/library` in nav. Auth pages → wordmark links home. Library row → product detail. Order row → order detail. Profile pinned card → product detail.
+- **Click affordance:** Product cards have hover lift (subtle) + focus ring. Table rows in library/orders/admin show hover background and a chevron on the right when navigable. Inline text links use `--primary` underline-on-hover.
+- **Footer/endcap:** As defined under Layout Principles → Footer model.
+- **Cards/lists/tables:** Product cards in catalog only. Library and orders use rows. Admin uses tables with sticky header.
+- **Product/list metadata:** Catalog cards show name, one-line summary, type badge (Free / GitHub / Download), price (or "Free"), version, last updated. Owned products show an "Owned" badge replacing price.
+- **Metrics and stats:** Public profile stats are limited and humane (owned count, reviews, joined date, tier progress). Admin metric tiles are denser and labeled.
+- **Forms:** Single-column, labels above inputs, helper text under, error inline under field. Settings form sections are banded with a heading + description on the left, fields on the right at desktop.
+- **Empty states:** Friendly one-line message + a clear next action button (Browse products / Connect GitHub / Redeem a code). Never just blank.
+- **Error states:** Inline for forms; full-page only for unrecoverable route errors with a return-to-landing CTA.
+- **Loading states:** Skeletons that match shape (card grid skeleton, list row skeleton, profile header skeleton). No full-page spinners.
+- **Status pills:** Used for invite status, payment status, order status, code status. Colors come from semantic tokens.
 
 ## Copy Tone
 
-<!--
-  Product-specific voice. Still obey FRONTEND.md: clear English, no filler,
-  no decorative emoji, no em dash in UI copy.
--->
-
-- **Voice:**
-- **Words to use:**
-- **Words to avoid:**
-- **Example headline style:**
-- **Example button style:**
+- **Voice:** Calm, specific, developer-fluent. Short sentences. No marketing filler.
+- **Words to use:** "Own", "claim", "redeem", "library", "version", "invite", "code", "repository".
+- **Words to avoid:** "Unleash", "supercharge", "next-level", "revolutionary", "ecosystem of possibilities", any em dash in UI copy.
+- **Example headline style:** "Every Liem product. One account." / "Your developer library, permanent."
+- **Example button style:** "Buy now", "Claim", "Buy as gift", "Redeem code", "Go to library", "Open repository".
 
 ## Responsive Rules
 
-<!-- Product-specific breakpoint behavior that PROGRESS.md should turn into tasks. -->
-
-- Mobile:
-- Tablet:
-- Desktop:
+- Mobile: single column everywhere. Drawer nav. Product detail collapses purchase panel to a sticky bottom bar with Buy CTA.
+- Tablet: two-column product detail when room allows; catalog 2-up grid.
+- Desktop: full nav, two-column product detail with sticky purchase panel, catalog 3- or 4-up grid.
 
 ## Accessibility Notes
 
-<!-- Anything specific beyond FRONTEND.md and QUALITY.md. -->
-
-- Keyboard:
-- Focus states:
-- Contrast:
-- Motion sensitivity:
+- Keyboard: every interactive element tabbable; drawer and dialogs trap focus.
+- Focus states: 2px ring at accent + 2px offset, visible on all surfaces.
+- Contrast: body text and labels must hit WCAG AA on white. Status pills must hit AA on their fills.
+- Motion sensitivity: all animations gated behind `prefers-reduced-motion`.
 
 ## Explicit UI Non-Goals
 
-<!--
-  Product-specific design directions to avoid. These should mirror user dislikes
-  and any relevant PRD non-goals.
--->
-
-- <thing not to design>
-- <thing not to design>
+- No cream/beige editorial palette.
+- No violet/indigo or warm-orange gradients.
+- No hero illustration of a "developer at desk".
+- No card-soup layouts (every section boxed).
+- No auto-rotating product carousels.
+- No bottom navigation.
+- No dark mode at launch (planned later; not P0).
+- No language switcher at launch (English first; Indonesian copy strings noted later).
 
 ## Sync Checklist
 
 Before building or updating PROGRESS.md:
 
-- [ ] This brief matches `docs/product/PRD.md` goals and non-goals.
-- [ ] This brief covers all relevant `docs/product/FEATURES.md` modules.
-- [ ] This brief follows `docs/engineering/FRONTEND.md`; any conflict is resolved in favor of FRONTEND.md.
-- [ ] Selected references come from, or are added to, `docs/product/REFERENCES.md`.
-- [ ] Route/page intent here is reflected as tasks in `docs/engineering/PROGRESS.md`.
-- [ ] Any API/data needs implied by UX are reflected in `docs/engineering/API.md` and `packages/types`.
+- [x] This brief matches `docs/product/PRD.md` goals and non-goals.
+- [x] This brief covers all relevant `docs/product/FEATURES.md` modules.
+- [x] This brief follows `docs/engineering/FRONTEND.md`; any conflict is resolved in favor of FRONTEND.md.
+- [x] Selected references come from, or are added to, `docs/product/REFERENCES.md`.
+- [x] Route/page intent here is reflected as tasks in `docs/engineering/PROGRESS.md`.
+- [x] Any API/data needs implied by UX are reflected in `docs/engineering/API.md` and `packages/types`.

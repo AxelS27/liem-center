@@ -3,6 +3,32 @@
 > Open this only when the project takes payments, sells products/subscriptions, issues
 > refunds, pays out sellers/creators, or has marketplace/platform money flow.
 
+## Liem Center Classification
+
+**Model: Single-Merchant + Digital Product, one-time payment only.**
+
+Liem is the merchant of record. Every product is one-time-purchase or free. There are no
+subscriptions, no recurring billing, no third-party sellers, no split settlement, and no
+seller payouts (see `docs/product/PRD.md` Non-Goals). This collapses the marketplace
+complexity in this doc to the simple Midtrans Snap flow.
+
+Money flow:
+
+```text
+Buyer -> Midtrans Snap -> Liem merchant account -> Liem bank account
+```
+
+Build surface for P0:
+
+- `orders` + `order_items` tables (see `docs/engineering/DATABASE.md`).
+- `payments` table keyed by `(provider, provider_order_id)` for webhook idempotency.
+- `POST /api/v1/checkout` — creates the order + Midtrans transaction, returns Snap token.
+- `POST /api/v1/payments/notification` — Midtrans webhook, signature-verified.
+- Order/payment state machine where the webhook is the source of truth.
+- Refund flow for admin (P1).
+- On `payments.status = 'paid'`, server creates one `entitlements` row per order item and
+  fires GitHub invites for `type='github'` products.
+
 ## Default Choice
 
 Midtrans is the default payment gateway for Indonesian payment needs in this template.

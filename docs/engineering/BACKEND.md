@@ -12,6 +12,39 @@ not run in the browser.
 The API contract source of truth is `docs/engineering/API.md` plus Zod schemas in `packages/types`.
 This file explains how backend code should be structured and verified.
 
+## Liem Center Feature Modules
+
+Planned feature modules under `apps/server/src/features/`:
+
+- `catalog` — products, media, changelog, roadmap (read endpoints public; admin write).
+- `library` — entitlements list, claim free, retry invite.
+- `checkout` — order + Midtrans Snap creation, coupon validation.
+- `payments` — Midtrans webhook, signature verification, payment state transitions, entitlement fan-out.
+- `codes` — gift/promo/admin code generation and redemption.
+- `wishlist` — owner-scoped CRUD.
+- `reviews` — owner-verified write, public read.
+- `profile` — me + public profile, showcase pinning.
+- `integrations/github` — link, invite, retry, revoke (uses GitHub App or token).
+- `integrations/google` — link/unlink helper around the Supabase provider. (Apple deferred — ADR-019.)
+- `notifications` — create/list/mark-read; broadcast for admin.
+- `email` — transactional email sender (welcome, purchase, gift, redeem, github sent/failed, ticket reply) and optional digests; respects `email_preferences`.
+- `support` — tickets + messages CRUD; status transitions; admin queue.
+- `activity` — append activity events; read personal + public timelines.
+- `dependencies` — product dependency admin CRUD; checkout pre-check.
+- `unsubscribe` — signed-token endpoint to disable an optional category without auth.
+- `sessions` — read/revoke Supabase Auth sessions via admin API.
+- `admin/*` — products, orders, users, codes, campaigns, github, analytics, support, broadcasts.
+- `badges` — award rules triggered by other modules (event-driven inside the service layer).
+
+Cross-cutting:
+
+- `lib/auth.ts` — Supabase JWT validation + role check middleware (`requireUser`, `requireAdmin`).
+- `lib/midtrans.ts` — server-key client + signature verification helper.
+- `lib/github.ts` — invite/revoke API wrapper.
+- `lib/entitlements.ts` — pure function that takes a paid order and produces entitlement + invite jobs.
+- `lib/email.ts` — transactional sender wrapper (Resend/Postmark/Supabase SMTP — to be ADR'd) with template registry; mandatory emails ignore preferences, optional ones check `email_preferences`.
+- `lib/events.ts` — emit-and-fan-out helper so a single payment-paid event fans into entitlements, GitHub invites, badge awards, notifications, email, tier recompute, and activity row.
+
 ## Server Structure
 
 Use feature-based modules as the app grows:

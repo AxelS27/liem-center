@@ -1,241 +1,259 @@
 # Build Progress & Feature Map
 
-<!--
-  The live map of the product build: which features live on which pages, how they
-  connect, and what is done / in progress / next. This is the agent's memory across
-  sessions, so a long build stays consistent instead of drifting screen by screen.
+> Status: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked.
+> Pointer-based checklist. Detail lives in source docs — do not restate it here.
 
-  This file does NOT define scope or specs:
-    - WHAT / WHY                         -> docs/product/PRD.md
-    - Feature capabilities + phases      -> docs/product/FEATURES.md
-    - Product-specific UI/UX direction   -> docs/product/UI_UX.md
-    - Structure / boundaries             -> docs/engineering/ARCHITECTURE.md
-    - Universal frontend rules           -> docs/engineering/FRONTEND.md
-    - Backend implementation rules        -> docs/engineering/BACKEND.md
-    - Database/RLS/storage rules          -> docs/engineering/DATABASE.md
-    - Payment/money-flow rules            -> docs/engineering/PAYMENTS.md
-  Here you track STATUS and CONNECTIONS only. Pull feature names from FEATURES.md;
-  do not restate their specs here.
+## Source docs
 
-  It is only useful if it matches reality. Update it before and during the work,
-  not after.
--->
+- `docs/product/PRD.md` — scope, goals, non-goals.
+- `docs/product/FEATURES.md` — feature modules with P0/P1/P2 phases.
+- `docs/product/UI_UX.md` — product-specific UI/UX direction.
+- `docs/engineering/API.md` — endpoint contracts.
+- `docs/engineering/FRONTEND.md` — universal frontend rules.
+- `docs/engineering/BACKEND.md` — server module layout and rules.
+- `docs/engineering/DATABASE.md` — schema catalog, RLS, indexes, storage.
+- `docs/engineering/PAYMENTS.md` — Midtrans + entitlement flow.
+- `docs/engineering/QUALITY.md` — Definition of Done.
 
-## How to use this (agent)
+## Launch scope (reminder)
 
-- **Read the docs first, then derive this.** Before you build or fill this file, read:
-  `docs/product/PRD.md` (scope), `docs/product/FEATURES.md` (features + phases),
-  `docs/product/UI_UX.md` (product-specific design direction), `docs/engineering/ARCHITECTURE.md`
-  (structure), `docs/engineering/API.md` (contracts), and `docs/engineering/QUALITY.md` (Definition of Done).
-  Then read only the domain docs that apply: `docs/engineering/FRONTEND.md`, `docs/engineering/BACKEND.md`,
-  `docs/engineering/DATABASE.md`, `docs/engineering/PAYMENTS.md`, `docs/product/REFERENCES.md`, and any matching
-  `docs/verticals/*.md` playbook. This file is where you synthesize those docs into one
-  working checklist.
-- **Break features into concrete tasks.** Each feature becomes the real pieces of work:
-  the UI parts (navbar, hero, form, table, empty state, ...) and the API / data they need.
-  Granular enough to check off, ordered roughly by build phase.
-- **Reference the spec, do not restate it.** A task points to where the detail lives
-  (e.g. "Navbar - primary route links, see FRONTEND.md"), it does not copy the rules. Restating
-  design or API detail here just creates a second copy that drifts out of date - the opposite
-  of consistency. The detail stays in UI_UX.md / FRONTEND.md / API.md; this file tracks the work.
-- **Wire it.** Fill "Connects to" for every area so features are built as one product
-  (shared nav, shared components, server data), never as isolated screens.
-- **Include all work surfaces.** A page/feature checklist should include the UI, shared
-  components, data layer, API contracts, server routes, empty/loading/error states, docs,
-  and verification tasks that make the feature actually done.
-- **Update as you go.** Move an item to in progress before you start it, and to done
-  only when its self-review against `docs/engineering/FRONTEND.md` and `docs/product/UI_UX.md` holds. Add a
-  line to the log.
-- **One focus at a time.** Keep "Now building" to 1-3 items.
-
-Status: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked (say why).
-
-## Before filling this file
-
-Use this quick pass whenever a new product starts or the scope changes:
-
-1. Confirm `docs/product/PRD.md` is filled in. If it is still the blank template, stop and ask
-   for product scope before inventing features.
-2. Convert `docs/product/FEATURES.md` modules into route/area work below. Keep the feature names
-   and phases from FEATURES.md so the checklist stays traceable.
-3. Pull product-specific design direction from `docs/product/UI_UX.md`: references, navigation
-   model, page UX map, visual system, copy tone, and product-specific layout choices. Do
-   not copy the starter UI's composition unless UI_UX.md explicitly chooses that pattern.
-4. Pull structure and boundaries from `docs/engineering/ARCHITECTURE.md`: which work belongs in
-   `apps/web`, `apps/server`, or `packages/*`.
-5. Pull endpoint and schema tasks from `docs/engineering/API.md` and implementation rules from
-   `docs/engineering/BACKEND.md`: every API task should mention the
-   Zod contract in `packages/types` and the route in `apps/server`.
-6. Pull data tasks from `docs/engineering/DATABASE.md` when the feature touches schema, tables,
-   columns, relationships, RLS, storage, indexes, migrations, seed data, or data lifecycle.
-7. Pull payment tasks from `docs/engineering/PAYMENTS.md` when the feature touches checkout, refunds,
-   settlement, payouts, subscriptions, or marketplace money flow.
-8. Pull universal UI tasks from `docs/engineering/FRONTEND.md` and visual reference context from
-   `docs/product/REFERENCES.md`. If the product matches a vertical playbook, pull those
-   genre-specific tasks too: nav, layout, spacing rhythm, states, responsiveness, and
-   rendered review belong in the checklist, but the detailed rules stay in those docs.
-9. Pull final verification from `docs/engineering/QUALITY.md`: lint, typecheck, tests, UI render
-   review, and any doc updates needed by the change.
-
-## Task checklist shape
-
-Write tasks at the level where someone can work through them without reopening the whole
-product plan, but must still follow the source docs for details.
-
-Good task examples:
-
-- `[ ]` Navbar - primary links navigate to real routes/pages, not same-page section jumps.
-  (UI_UX.md "Navigation Model", FRONTEND.md "App Structure & Page Flow")
-- `[ ]` Navigation surface - navbar/sidebar/bottom nav has a visible background or surface
-  treatment on every route; it is not invisible floating text. (UI_UX.md "Navigation
-  surface", FRONTEND.md)
-- `[ ]` Active navigation - route-aware active state for desktop and mobile nav with
-  `aria-current="page"`. (FRONTEND.md "Primary and In-page Navigation")
-- `[ ]` Route graph - public, auth, and app contexts link to each other; app pages include
-  a clear route back to landing/product home. (UI_UX.md "Route connectivity",
-  FRONTEND.md)
-- `[ ]` Footer/endcap - present on public, app, and auth routes with context-specific
-  content. (UI_UX.md "Footer model", FRONTEND.md "App Structure & Page Flow")
-- `[ ]` Hero - product-specific headline, primary CTA, and composition from UI_UX.md.
-  (UI_UX.md "Page UX Map", FRONTEND.md "Design Craft")
-- `[ ]` Layout composition - follow the product-specific layout model in UI_UX.md, not a
-  generic template scaffold. (UI_UX.md "Layout Principles", FRONTEND.md)
-- `[ ]` Starter UI replacement - product screens are designed from UI_UX.md and references,
-  not copied from the starter sample. (FRONTEND.md, UI_UX.md)
-- `[ ]` Starter design DNA - keep the clean, open, non-boxy, restrained feel where it fits,
-  while replacing starter layout, copy, brand, palette, and route composition with the
-  product-specific direction. (FRONTEND.md "Starter design DNA", UI_UX.md)
-- `[ ]` Surface budget - use cards/panels only where they clarify grouping; avoid boxing
-  nav, filters, tables, forms, and every repeated item by default. (UI_UX.md "Cards and
-  surfaces", FRONTEND.md "Design Craft")
-- `[ ]` `GET /api/v1/projects` - list endpoint with Zod response contract in
-  `packages/types`. (API.md)
-- `[ ]` Empty/loading/error states - designed for this route, not raw strings or spinners.
-  (FRONTEND.md "States, Errors & Responsiveness")
-- `[ ]` Rich text/scannability - useful emphasis, inline links, helper text, captions,
-  metadata, lists, and callouts where they help the page scan. (FRONTEND.md "Rich Text And
-  Scannability", UI_UX.md)
-- `[ ]` Self-review - run the code-based double-check (Part A greps + Part B file reading,
-  no rendering) before marking the page done. (DESIGN_DNA.md, FRONTEND.md "Self-review", QUALITY.md)
-
-Avoid task examples:
-
-- `[ ]` Build frontend` (too broad)
-- `[ ]` Navbar margin 24px, links 14px, IntersectionObserver threshold 0.4...`
-  (too much copied spec; put durable rules in FRONTEND.md)
-- `[ ]` Add API` (too vague)
+- **P0:** Auth · Catalog · Product Pages · Checkout/Midtrans · GitHub Integration · Library · Profile · Tiers · Badges · In-app Notifications · Email System · Support Tickets · Admin Dashboard · Foundation/Public shell · Account Settings (Profile / Connected Accounts / Notifications / Security).
+- **P1:** Gifts · Redeem · Wishlist · Reviews · Changelog · Roadmap · Founder Program · Activity Feed · Ownership Metadata · Product Dependencies.
+- **P2:** Bundles · Complete-Your-Collection · Seasonal Sales · Coupons · Advanced product analytics · Liem Launcher · One-click repo generation.
 
 ## Now building
 
-<!-- 1-3 items max. What is actively being worked on right now. -->
-
-- `[x]` Starter web UI - responsive landing baseline - verified by build and HTTP smoke
+- `[ ]` Docs synchronized; review pass with the user before code.
 
 ## Build map
 
-<!--
-  One section per page / route / area, derived from docs/product/FEATURES.md. Order roughly
-  by build phase (P0 first). Each section should include UI, API/data, state handling,
-  and verification tasks where they apply. Replace the example block below with the
-  real product.
--->
+### Public shell (`/`, navbar, footer) — P0
 
-### Example: Landing (`/`) <!-- delete this whole example block -->
+- `[ ]` Site-header with wordmark + top-level routes (Products, Library, Profile, Sign in) + 🔔 unread badge (signed-in). (UI_UX.md "Notification Center UX")
+- `[ ]` Active route state + `aria-current="page"` desktop + mobile drawer. (docs/engineering/FRONTEND.md)
+- `[ ]` Site-footer with brand, product/library/profile/legal/support columns. (UI_UX.md "Footer model")
+- `[ ]` Landing `/` — open-band hero, featured products strip, ecosystem narrative band. (UI_UX.md)
+- `[ ]` Replace starter copy and palette accent in `globals.css` (white background stays). (DESIGN_DNA.md)
+- `[ ]` Metadata + browser title pattern `<Page> | Liem Center`. (UI_UX.md "Visual System")
+- `[ ]` 404 + generic error route with link back home. (docs/engineering/FRONTEND.md)
 
-Public marketing page. Phase: P0. Spec: UI_UX.md "Page UX Map", FRONTEND.md "App Structure", design refs in REFERENCES.md.
+### Database foundation — P0
 
-- `[~]` Navbar - route links for top-level pages, mobile behavior, sign in, and get started.
-  (FRONTEND.md "App Structure & Page Flow")
-- `[ ]` Navigation surface - visible public navbar treatment across public routes. (UI_UX.md,
-  FRONTEND.md)
-- `[ ]` Active public nav - current route highlighted on desktop and mobile. (FRONTEND.md)
-- `[ ]` Public route graph - links to sign in/sign up/app where appropriate; footer
-  reinforces key route paths. (FRONTEND.md)
-- `[x]` Hero - headline, primary CTA, and product-specific composition. (FEATURES:
-  Foundation)
-- `[ ]` Feature highlights - 3 anchored sections. (FEATURES: Foundation)
-- `[ ]` Pricing - plan cards linking to checkout. (FEATURES: Payments)
-- `[ ]` Surface budget - sections are not all boxed as cards; use product-specific layout
-  direction from UI_UX.md. (UI_UX.md, FRONTEND.md)
-- `[ ]` Landing states - responsive behavior and section transitions reviewed at required
-  viewports. (FRONTEND.md "Self-review")
-- `[ ]` Footer - product/legal links, contextual footer content, back-to-top if useful.
+- `[ ]` Migration: enums (product/order/payment/entitlement/invite/code/coupon/membership/roadmap/notification/ticket/activity). (docs/engineering/DATABASE.md "Enums")
+- `[ ]` Migration: `profiles` (with `country_public`), `products`, `product_media`, `changelog_entries`, `roadmap_items`. (docs/engineering/DATABASE.md)
+- `[ ]` Migration: `orders`, `order_items`, `payments`, `entitlements`, `github_invites`. (docs/engineering/DATABASE.md)
+- `[ ]` Migration: `codes`, `coupons`, `wishlist_items`, `reviews`. (docs/engineering/DATABASE.md)
+- `[ ]` Migration: `notifications`, `email_preferences`, `support_tickets`, `support_messages`, `activity_events`, `product_dependencies`. (docs/engineering/DATABASE.md)
+- `[ ]` Migration: `badges`, `user_badges`, `campaigns`. (docs/engineering/DATABASE.md)
+- `[ ]` RLS policies per matrix. (docs/engineering/DATABASE.md "RLS Policy Matrix")
+- `[ ]` Indexes per catalog. (docs/engineering/DATABASE.md "Indexes")
+- `[ ]` Storage buckets `avatars`, `banners`, `product-media`, `downloads`. (docs/engineering/DATABASE.md "Storage")
+- `[ ]` Seed: badges catalog + at least one product per type. (docs/engineering/DATABASE.md)
+- `[ ]` Triggers: profile + `email_preferences` row on `auth.users` insert; founder number assignment up to cap. (docs/engineering/DATABASE.md, docs/product/FEATURES.md §16)
+- `[ ]` `pnpm db:types` regenerated; types exported to `packages/types`. (AGENTS.md)
 
-**Connects to:** navbar links -> real routes/pages; "Get started" -> `/signup`; Pricing -> checkout flow; secondary footer links may use anchors; uses the shared public layout.
+### Auth (`/signin`, `/signup`, `/forgot-password`, `/auth/callback`) — P0
 
-### Example: Projects (`/app/projects`) <!-- delete this example block too -->
+- `[ ]` Sign in / sign up forms (email + password). (docs/engineering/FRONTEND.md "Forms")
+- `[ ]` Google OAuth button. (docs/product/FEATURES.md §2)
+- `[ ]` GitHub OAuth button (signup option, not gating). (docs/product/FEATURES.md §2)
+- Apple OAuth — deferred to P2, not built at launch. (ADR-019)
+- `[ ]` Password reset request + reset confirmation routes. (docs/product/FEATURES.md §2)
+- `[ ]` Auth callback route with redirect target. (docs/engineering/FRONTEND.md)
+- `[ ]` Protected route middleware (Supabase session). (docs/engineering/BACKEND.md, docs/engineering/FRONTEND.md)
+- `[ ]` Welcome email on first signup. (docs/product/FEATURES.md §18, docs/engineering/BACKEND.md `lib/email.ts`)
 
-Signed-in list page. Phase: P0. Spec: UI_UX.md "Layout Principles", FRONTEND.md
-"Consistent Page Behavior"; contract in API.md.
+### Catalog (`/products`, `/products/[slug]`) — P0/P1
 
-- `[ ]` Page composition - follow the product layout model in UI_UX.md while keeping list
-  behavior predictable. (FRONTEND.md "Consistent Page Behavior")
-- `[ ]` Active app nav - Projects highlighted for `/app/projects` and child routes,
-  including mobile app navigation. (FRONTEND.md)
-- `[ ]` App navigation surface - visible app nav shell on all signed-in pages, not just
-  landing/dashboard. (UI_UX.md, FRONTEND.md)
-- `[ ]` App route graph - app shell includes a clear link back to the public landing/product
-  home; users are not trapped in the dashboard/app context. (FRONTEND.md)
-- `[ ]` Project list - table or cards with empty, loading, and error states. (FEATURES: Projects)
-- `[ ]` App footer/endcap - contextual help/legal/status content appears after app content.
-  (FRONTEND.md)
-- `[ ]` `GET /api/v1/projects` - list endpoint, Zod contract in `packages/types`. (API.md)
-- `[ ]` Create project - dialog + `POST /api/v1/projects`. (FEATURES: Projects, API.md)
-- `[ ]` Data layer - typed fetch from `apps/web` to `apps/server`, no duplicated shape
-  definitions. (ARCHITECTURE.md "Data Flow")
+- `[ ]` `/products` filter strip + responsive card grid. (docs/product/UI_UX.md)
+- `[ ]` Product card — name, tagline, type badge, price/Free, version, owned badge. (docs/product/UI_UX.md)
+- `[ ]` Product detail two-column desktop with sticky purchase panel; tabs Overview/Changelog/Roadmap/Reviews. (docs/product/UI_UX.md)
+- `[ ]` Dependency strip ("Requires: …") on product detail. (docs/product/FEATURES.md §24)
+- `[ ]` `GET /api/v1/products`, `GET /api/v1/products/:slug` + Zod contracts. (docs/engineering/API.md)
+- `[ ]` `GET /api/v1/products/:slug/changelog | roadmap | reviews` (P1). (docs/engineering/API.md)
+- `[ ]` Empty / loading / error states. (docs/engineering/FRONTEND.md)
+- `[ ]` Self-review code-based double-check after UI. (DESIGN_DNA.md)
 
-**Connects to:** uses the app shell + shared behavior primitives; reads from `apps/server`
-via the typed data layer; a row -> `/app/projects/[id]`.
+### Checkout & Payments (`/checkout`, webhook) — P0
 
-### <Area / route>
+- `[ ]` `/checkout` page — line items + summary + Pay CTA. (docs/product/UI_UX.md)
+- `[ ]` Dependency pre-check — warn buyer if required products are not owned + offer to add. (docs/product/FEATURES.md §24)
+- `[ ]` `POST /api/v1/checkout` — create order, Midtrans Snap token. (docs/engineering/API.md, docs/engineering/BACKEND.md)
+- `[ ]` Midtrans Snap opens client-side. (docs/engineering/PAYMENTS.md)
+- `[ ]` `POST /api/v1/payments/notification` webhook — Zod + SHA512 signature verify. (docs/engineering/PAYMENTS.md)
+- `[ ]` Idempotency via `(provider, provider_order_id)`. (docs/engineering/DATABASE.md)
+- `[ ]` Paid-event fan-out: entitlements + GitHub invites + tier recompute + badges + notification + email + activity row (`lib/events.ts`). (docs/engineering/BACKEND.md)
+- `[ ]` Purchase confirmation email. (docs/product/FEATURES.md §18)
+- `[ ]` `/checkout/success` page — pending / paid / failed states; GitHub-activation prompt when needed. (docs/product/UI_UX.md)
+- `[ ]` Admin refund endpoint (P1). (docs/engineering/API.md)
 
-<One line: what this page is for. Phase.>
+### Library & Ownership (`/library`) — P0/P1
 
-- `[ ]` <feature> - <one line>. (FEATURES: <module>)
+- `[ ]` `/library` list/table with status pills (Open / Pending / Invited / Failed / Active / Revoked). (docs/product/UI_UX.md)
+- `[ ]` Filter by source. (docs/product/FEATURES.md §5)
+- `[ ]` Per-entitlement ownership metadata block: Owned Since / Source / Access / GitHub Status (P1). (docs/product/FEATURES.md §5)
+- `[ ]` `GET /api/v1/library` returns entitlements + product snapshot + invite status. (docs/engineering/API.md)
+- `[ ]` "Connect GitHub" CTA on first GitHub product when not linked. (docs/product/FEATURES.md §6)
+- `[ ]` "Retry invite" action (rate-limited). (docs/product/FEATURES.md §6)
+- `[ ]` Signed download URL flow for `download` products. (docs/engineering/DATABASE.md)
+- `[ ]` Empty state with "Browse products" CTA. (docs/engineering/FRONTEND.md)
 
-**Connects to:** <routes, shared components, or server data this depends on or feeds>
+### GitHub integration — P0
+
+- `[ ]` Just-in-time GitHub-link flow from library / order success. (docs/product/FEATURES.md §6)
+- `[ ]` `/settings` Connected Accounts manual link/unlink. (docs/product/FEATURES.md §27)
+- `[ ]` GitHub App setup (installation token flow) for sending invites; user OAuth token not persisted. (ADR-018)
+- `[ ]` Server-side invite call on entitlement create via `lib/github.ts`. (docs/engineering/BACKEND.md, ADR-018)
+- `[ ]` Retry + admin revoke endpoints. (docs/engineering/API.md)
+- `[ ]` "GitHub invitation sent" + "failed" emails + notifications. (docs/product/FEATURES.md §17/§18)
+
+### Free claim — P0
+
+- `[ ]` "Claim" button on free product detail. (docs/product/UI_UX.md)
+- `[ ]` `POST /api/v1/products/:slug/claim` — idempotent. (docs/engineering/API.md)
+
+### Orders (`/orders`, `/orders/[id]`) — P0
+
+- `[ ]` `/orders` list. (docs/product/UI_UX.md)
+- `[ ]` `/orders/[id]` detail. (docs/product/FEATURES.md §20)
+- `[ ]` `GET /api/v1/orders` + `GET /api/v1/orders/:id`. (docs/engineering/API.md)
+
+### Profile (`/u/[username]`) — P0/P1
+
+- `[ ]` Editorial header band (avatar, banner, display name, tier badge, member since). (docs/product/UI_UX.md)
+- `[ ]` Country shown only when `country_public=true`. (docs/engineering/DATABASE.md, docs/product/FEATURES.md §13)
+- `[ ]` Public stats row. (docs/product/FEATURES.md §13)
+- `[ ]` Pinned showcase grid. (docs/product/FEATURES.md §13)
+- `[ ]` Activity feed section (P1). (docs/product/FEATURES.md §13)
+- `[ ]` Tier progress bar. (docs/product/FEATURES.md §14)
+- `[ ]` Badge list. (docs/product/FEATURES.md §15)
+- `[ ]` `GET /api/v1/users/:username` + `GET /api/v1/users/me`. (docs/engineering/API.md)
+
+### Settings (`/settings`) — P0
+
+Tabs: Profile / Connected Accounts / Notifications / Security.
+
+- `[ ]` Profile tab — avatar, banner, display name, username, country (optional, hidden default), bio. (docs/product/FEATURES.md §27)
+- `[ ]` Connected Accounts tab — Google / GitHub link/unlink with status; Apple listed as future, not wired. (docs/product/FEATURES.md §27, ADR-019)
+- `[ ]` Notifications tab — toggles for product updates / sales / announcements / wishlist alerts; note that mandatory emails always send. (docs/product/FEATURES.md §18/§27)
+- `[ ]` Security tab — change password, active sessions, log out all. (docs/product/FEATURES.md §27)
+- `[ ]` `PATCH /api/v1/users/me`, email-preferences GET/PATCH, sessions GET/revoke, integrations link/unlink endpoints. (docs/engineering/API.md)
+
+### Notification Center — P0
+
+- `[ ]` Drawer (desktop) / page (mobile) with list rows and unread badge. (docs/product/UI_UX.md "Notification Center UX")
+- `[ ]` `GET /api/v1/notifications`, `POST /:id/read`, `POST /read-all`, `GET /unread-count`. (docs/engineering/API.md)
+- `[ ]` Server hooks insert notifications on payment paid, redeem, invite events, badge award, tier upgrade, ticket reply. (docs/engineering/BACKEND.md `lib/events.ts`)
+
+### Email System — P0/P1
+
+- `[ ]` `lib/email.ts` Resend sender + React Email template registry. (docs/engineering/BACKEND.md, ADR-017)
+- `[ ]` Mandatory templates: welcome, purchase confirmation, GitHub invite sent, GitHub invite failed, support ticket reply. (docs/product/FEATURES.md §18)
+- `[ ]` Mandatory P1 templates: gift purchase, product redeemed. (docs/product/FEATURES.md §18)
+- `[ ]` Optional templates: product updates, new product, sales, wishlist alerts. Respect `email_preferences`. (docs/product/FEATURES.md §18)
+- `[ ]` `/unsubscribe/:token` no-auth page + endpoint. (docs/engineering/API.md "Unsubscribe")
+
+### Support Tickets (`/support`) — P0
+
+- `[ ]` `/support` list with status pills + unread-reply highlight. (docs/product/UI_UX.md "Support Ticket UX")
+- `[ ]` `/support/new` form (category, subject, message, optional order link). (docs/product/UI_UX.md)
+- `[ ]` `/support/[id]` thread + reply box; status pill. (docs/product/UI_UX.md)
+- `[ ]` Endpoints: list/create/get/append-message/close. (docs/engineering/API.md "Support")
+- `[ ]` Reply triggers notification + email. (docs/product/FEATURES.md §17/§18)
+- `[ ]` Admin queue under `/admin/support` with priority + status controls. (docs/product/FEATURES.md §25)
+
+### Tiers, Badges, Founder — P0/P1
+
+- `[ ]` Tier recompute on `payments.status='paid'`; emit `tier_upgrade` notification + activity row. (docs/engineering/BACKEND.md)
+- `[ ]` Badge award rules: signup (Founding Member up to cap), first purchase, first gift sent, etc. (docs/product/FEATURES.md §15)
+- `[ ]` Founder-number trigger up to cap (P1). (docs/product/FEATURES.md §16, docs/engineering/DATABASE.md)
+
+### Activity Feed — P1
+
+- `[ ]` `activity_events` write helper inside `lib/events.ts`. (docs/engineering/BACKEND.md)
+- `[ ]` `GET /api/v1/users/me/activity` + public timeline endpoint. (docs/engineering/API.md)
+- `[ ]` Profile renderer respects `timeline_public`. (docs/engineering/DATABASE.md, docs/product/UI_UX.md)
+
+### Product Dependencies — P1
+
+- `[ ]` Admin CRUD (`POST /api/v1/admin/products/:id/dependencies`, `DELETE`). (docs/engineering/API.md)
+- `[ ]` Product detail "Requires" strip. (docs/product/FEATURES.md §24)
+- `[ ]` Checkout warning + add-to-cart helper. (docs/product/FEATURES.md §24)
+
+### Gifts & Redeem (`/redeem`) — P1
+
+- `[ ]` "Buy as Gift" path in checkout → `gift` code on payment. (docs/product/FEATURES.md §8)
+- `[ ]` Gift success screen + copy. (docs/product/UI_UX.md)
+- `[ ]` `/redeem` input page. (docs/product/UI_UX.md)
+- `[ ]` `POST /api/v1/codes/redeem` server-only. (docs/engineering/API.md)
+- `[ ]` Redeem fires GitHub-activation prompt when GitHub-type product + GitHub not linked. (docs/product/FEATURES.md §8/§6)
+- `[ ]` Mandatory emails: gift purchase, product redeemed. (docs/product/FEATURES.md §18)
+
+### Wishlist (`/wishlist`) — P1
+
+- `[ ]` `/wishlist` list + add/remove on product detail. (docs/product/FEATURES.md §10)
+- `[ ]` `GET/POST/DELETE /api/v1/wishlist`. (docs/engineering/API.md)
+
+### Reviews — P1
+
+- `[ ]` Review form (owner-only). (docs/product/UI_UX.md)
+- `[ ]` `POST /api/v1/products/:slug/reviews` with ownership check. (docs/engineering/API.md)
+- `[ ]` Public list on product page. (docs/product/UI_UX.md)
+- `[ ]` Admin moderation toggle. (docs/engineering/API.md)
+
+### Changelog & Roadmap — P1
+
+- `[ ]` Public render on product page. (docs/product/UI_UX.md)
+- `[ ]` Admin CRUD. (docs/engineering/API.md)
+- `[ ]` Publishing a changelog entry fires `product_updated` notification to owners + optional email. (docs/product/FEATURES.md §12/§17/§18)
+
+### Admin (`/admin/*`) — P0/P1/P2
+
+- `[ ]` Admin shell with top-tabs + role check. (docs/engineering/FRONTEND.md, docs/engineering/BACKEND.md)
+- `[ ]` Products CRUD + archive. (docs/product/FEATURES.md §25)
+- `[ ]` Orders list + refund. (docs/product/FEATURES.md §25, docs/engineering/PAYMENTS.md)
+- `[ ]` Users search + grant + suspend. (docs/product/FEATURES.md §25)
+- `[ ]` Support queue + reply + status. (docs/product/FEATURES.md §25/§19)
+- `[ ]` GitHub access view + retry + revoke. (docs/product/FEATURES.md §6)
+- `[ ]` Codes batch + revoke (P1). (docs/product/FEATURES.md §9)
+- `[ ]` Coupons CRUD (P2). (docs/product/FEATURES.md §21)
+- `[ ]` Campaigns CRUD (P2). (docs/product/FEATURES.md §23)
+- `[ ]` Changelog/Roadmap CRUD per product (P1). (docs/product/FEATURES.md §12)
+- `[ ]` Product dependencies admin (P1). (docs/product/FEATURES.md §24)
+- `[ ]` Reviews moderation (P1). (docs/product/FEATURES.md §11)
+- `[ ]` Notification broadcast (P1). (docs/product/FEATURES.md §25)
+- `[ ]` Analytics summary — revenue + sales + orders only at launch. (docs/product/FEATURES.md §26)
+
+### Bundles & sales — P2
+
+- `[ ]` Bundle product type. (docs/product/FEATURES.md §22)
+- `[ ]` "Complete your collection" auto-discount calc. (docs/product/FEATURES.md §22)
+- `[ ]` Campaign banner + per-product sale price + wishlist sale highlight. (docs/product/FEATURES.md §23)
+- `[ ]` Coupons at checkout. (docs/product/FEATURES.md §21)
 
 ## Shared building blocks
 
-<!--
-  Cross-cutting pieces most features depend on. Build once, reuse everywhere -
-  inconsistency here is what makes a product feel assembled screen by screen.
--->
-
-- `[x]` Golden path baseline (shared health Zod contract, Hono health route, typed web
-  service, starter page, baseline tests)
-- `[x]` Responsive starter landing baseline (mobile menu, adaptive hero, route CTAs,
-  non-technical public copy; see `docs/engineering/FRONTEND.md`)
-- `[ ]` Replace starter UI composition for the real product; keep only the clean,
-  non-boxy design DNA and wiring patterns that fit `docs/product/UI_UX.md`
-- `[ ]` Design tokens and theme in `globals.css` (a real palette, not the neutral default)
-- `[ ]` Product UI/UX brief (`docs/product/UI_UX.md`) filled from the user's design direction
-- `[ ]` Public layout (navbar + footer) and app layout (signed-in shell)
-- `[ ]` Visible nav surfaces for public, app, auth, and mobile route contexts
-- `[ ]` Route-aware navigation active states for public, app, auth/mobile navigation
-- `[ ]` Connected route graph across public, auth, and app contexts
-- `[ ]` Contextual footer/endcap for public, signed-in app, and auth routes
-- `[ ]` Rich text/scannability patterns from `docs/product/UI_UX.md`
-- `[ ]` Surface budget and card usage rules from `docs/product/UI_UX.md`
-- `[ ]` Metadata and browser icons (short page titles, default icons replaced only when
-  product branding exists)
-- `[ ]` Shared page behavior primitives (route-aware nav links, page actions, filters,
-  empty states, footer/endcaps, spacing rhythm)
-- `[ ]` Auth wiring (Supabase) and the protected-route redirect
-- `[ ]` Data layer (typed fetch to `apps/server`, shared types from `packages/types`)
-- `[ ]` API contract layer (Zod schemas in `packages/types`, Hono routes in `apps/server`)
-- `[ ]` Backend service layer (feature routes/services/tests, see `docs/engineering/BACKEND.md`)
-- `[ ]` Database layer (data model catalog, schema, tables/columns, RLS, storage, indexes,
-  seed data, see `docs/engineering/DATABASE.md`)
-- `[ ]` Payments layer if needed (checkout, webhooks, refunds, settlement, marketplace
-  money flow, see `docs/engineering/PAYMENTS.md`)
-- `[ ]` Verification pass (`pnpm lint`, `pnpm typecheck`, `pnpm test`, plus rendered UI
-  review for `apps/web`)
+- `[x]` Golden path baseline (health Zod contract, Hono health route, typed web service, starter page, baseline tests)
+- `[x]` Responsive starter landing baseline
+- `[ ]` Public + app + auth layout shells (one navbar; footer variants)
+- `[ ]` Design tokens in `globals.css` — Liem accent in `--primary`/`--ring`; white background untouched
+- `[ ]` `next/font` wiring (Inter or Geist Sans) → `--font-sans`
+- `[ ]` Shared status pill component (entitlement / payment / order / code / ticket)
+- `[ ]` Shared rich-text renderer (`description_md`, changelog, roadmap, reviews, ticket messages)
+- `[ ]` Shared product card
+- `[ ]` Shared notification drawer + bell badge
+- `[ ]` Auth wiring (Supabase) + protected-route middleware
+- `[ ]` Data layer (typed fetch to `apps/server`; types from `packages/types`)
+- `[ ]` API contract layer (Zod schemas + Hono routes)
+- `[ ]` Backend services per BACKEND.md feature module list
+- `[ ]` `lib/events.ts` event fan-out + `lib/email.ts` template registry + `lib/github.ts`
+- `[ ]` Database layer (migrations, RLS, storage, seed)
+- `[ ]` Payments layer (Midtrans Snap + webhook + entitlement fan-out)
+- `[ ]` Verification pass (`pnpm lint`, `pnpm typecheck`, `pnpm test`, code-based UI self-review per DESIGN_DNA.md)
 
 ## Done log
 
-<!-- Newest first. One line per shipped milestone, with date. Cross-session memory. -->
-
-- 2026-05-31 - Responsive starter landing baseline added with mobile navigation,
-  adaptive hero type, route CTAs, and no visible stack/debug details.
-- YYYY-MM-DD - <what shipped>
+- 2026-06-07 — Locked ADR-017 (email via Resend), ADR-018 (GitHub delivery via GitHub App, identity via OAuth), ADR-019 (launch auth = Google + GitHub + Email; Apple deferred to P2). Docs updated to match.
+- 2026-06-07 — Updated docs for v1.1 PRD additions: 4-provider auth (Google/Apple/Email/GitHub) with GitHub not required at signup; in-app notification center; transactional + optional email system; support ticket system; activity feed; product dependencies; ownership metadata; referrals deferred; analytics trimmed; country optional/private by default; new tables `notifications`, `email_preferences`, `support_tickets`, `support_messages`, `activity_events`, `product_dependencies`.
+- 2026-06-07 — Initialized Liem Center docs (PRD, FEATURES, UI_UX, API, BACKEND, DATABASE, PAYMENTS, PROGRESS) from product brief.
+- 2026-05-31 — Responsive starter landing baseline added.
