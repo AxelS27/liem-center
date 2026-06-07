@@ -1,6 +1,6 @@
 ---
 name: shadcn-ui
-description: Use when building or restyling any apps/web UI - landing pages, app screens, adding or customizing shadcn/ui components, or editing theme tokens. Enforces the customization discipline that keeps the result from looking generic-AI: opinionated palette first, every shadcn component retuned off its defaults, and a self-review of the rendered page against docs/FRONTEND.md at real viewports. Read before touching apps/web or packages/ui visuals.
+description: Use when building or restyling any apps/web UI - landing pages, app screens, adding or customizing shadcn/ui components, or editing theme tokens. Enforces the customization discipline that keeps the result from looking generic-AI: opinionated palette first, every shadcn component retuned off its defaults, and a code-based self-review (no rendering) against the docs/DESIGN_DNA.md double-check. Read before touching apps/web or packages/ui visuals.
 ---
 
 # shadcn/ui customization discipline
@@ -57,11 +57,11 @@ Mock the layout first - rough markup in one file, no data wiring - until the str
 
 Build hierarchy from spacing, type scale, and weight before reaching for cards or borders, and disclose progressively (secondary actions in menus, not all surfaced inline). Use asymmetry and real content density, not centered-everything stacks. The landing hero (headline, copy, and primary CTA) must fit the first viewport without scrolling at ~720-768px; anchor the primary navbar (sticky with a real surface) so it does not scroll away. Whatever the product type, the finished page must read as clean: uncluttered, intentional, one focal point, no surfaces stacked on surfaces. Honor the App Structure rules in `docs/FRONTEND.md`: a real landing page (not a login wall), navbar + footer on public pages, anchor nav with an active state, one shared page scaffold. Ship one theme and one language (English) first. Keep `docs/PROGRESS.md` current as you build - what lives on each page, what connects to what, what is done - so a long build stays consistent.
 
-## Step 4 - Render and self-review before you finish
+## Step 4 - Self-review before you finish (code-based, no rendering)
 
-Reading `docs/FRONTEND.md` is not applying it. **Before you consider any apps/web UI finished, run the app and self-review it against the checks in `docs/FRONTEND.md`,** then fix anything that misses.
+Reading `docs/FRONTEND.md` is not applying it. **Before you consider any apps/web UI finished, run the code-based double-check at the bottom of `docs/DESIGN_DNA.md`,** then fix anything that misses.
 
-- Review the **actually rendered viewports**, not the code: mobile plus **1366x768, 1440x900, 1920x1080**. Scroll through every section transition.
-- If you cannot render the app locally, say so explicitly rather than assuming the page is fine. Do not guess.
+- This review is **code-based — do not render the app or take screenshots** (it burns tokens and the preview often isn't available). Run the Part A greps and read `app/page.tsx`, `app/layout.tsx`, and the site header.
+- The greps catch the silent traps that pass a casual code read (overflow-x-hidden killing sticky, near-opaque header hiding blur, bg-foreground stealing the hero focal point). The file reading covers section structure, card soup, focal point, and footer.
 
-`pnpm lint && pnpm typecheck` passing does not cover a single layout check. Looking at the rendered page is the point: it turns the spec from something you read into something you applied.
+`pnpm lint && pnpm typecheck` passing does not cover a single layout check, but the greps plus reading the markup do. Rendering is only a last-resort tie-breaker for exact visual balance, never a required step.

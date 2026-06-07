@@ -10,7 +10,7 @@
 
 ## How to Run This Audit
 
-For each axis below, inspect the actual rendered page (or the code if the page cannot be rendered). Mark each item PASS, FAIL, or N/A. For every FAIL, state the exact issue and the fix.
+For each axis below, inspect the code — read the relevant files and run the greps. Do not render the page or take screenshots. Mark each item PASS, FAIL, or N/A. For every FAIL, state the exact issue and the fix.
 
 Do not mark everything PASS without evidence. The audit is only useful if it catches real problems.
 
@@ -172,24 +172,35 @@ FAIL if any applicable state is missing or indistinguishable from default.
 
 ---
 
-## Axis 7 — Rendered Viewport Evidence
+## Axis 7 — Code-Based Evidence (no rendering)
 
-The audit is only valid if the page was actually rendered and checked.
+The audit is code-based. Do not render the page or take screenshots — read the markup and
+run the greps. This is intentional: rendering burns tokens and the preview often isn't
+available.
 
 ```
-□ I checked the rendered page at: [list viewports]
-    Required: mobile (~375px), 1366x768, 1440x900, 1920x1080
+□ I ran the Part A greps from docs/DESIGN_DNA.md and pasted the output:
+    □ overflow-x-hidden on sticky ancestors → none
+    □ backdrop-blur element uses a transparent bg (/80), not /95 or solid
+    □ no raw hex or raw palette classes
+    □ no bg-foreground on a large hero panel
+    □ --background token still white/neutral
+    □ no off-grid spacing
 
-□ I scrolled through every major section at those widths and checked:
-    □ No hard section divider cuts across the viewport near mid-screen
-    □ No stacked "slice" feeling where each section is a full-bleed band separated by borders
-    □ No half-empty sections at any scroll position
+□ I read app/page.tsx, app/layout.tsx, and the site header and reasoned about:
+    □ Section structure: open bands vs card soup
+    □ Hero is the single focal point; no heavy sibling competing
+    □ Sticky header has no overflow ancestor (will actually pin)
+    □ Section transitions: no hard divider band with large blank padding between sections
+    □ Footer endcap present with real structure
 
-□ I checked short routes (auth, empty state, 404) at desktop height:
-    □ Footer is not prematurely visible below sparse content
+□ I checked short routes' markup (auth, empty state, 404):
+    □ Enough content/structure that the footer is not exposed by a sparse panel
 
 □ pnpm lint and pnpm typecheck pass (necessary but not sufficient — they do not catch layout issues)
 ```
+
+Rendering is only a last-resort tie-breaker for exact visual balance, never a required step.
 
 ---
 

@@ -115,8 +115,8 @@ Good task examples:
 - `[ ]` Rich text/scannability - useful emphasis, inline links, helper text, captions,
   metadata, lists, and callouts where they help the page scan. (FRONTEND.md "Rich Text And
   Scannability", UI_UX.md)
-- `[ ]` Render review - inspect mobile plus 1366x768, 1440x900, and 1920x1080 before
-  marking the page done. (FRONTEND.md "Self-review", QUALITY.md)
+- `[ ]` Self-review - run the code-based double-check (Part A greps + Part B file reading,
+  no rendering) before marking the page done. (DESIGN_DNA.md, FRONTEND.md "Self-review", QUALITY.md)
 
 Avoid task examples:
 

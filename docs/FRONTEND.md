@@ -153,7 +153,7 @@ Do not use:
   empty middles and dead side gutters. A too-wide shell for thin content is just as much an
   AI tell as a too-narrow one. Narrow reading columns (prose, forms) live inside a wider
   layout.
-- **Compose against real viewport heights.** Design every major section and section transition as a complete viewport experience at common desktop heights, especially 720px, 768px, 900px, and 1080px. A page that looks fine in code but leaves hard section dividers or half-empty bands across visible scroll positions is not done.
+- **Compose against real viewport heights.** Design every major section and section transition to read as complete. Watch for the patterns that break this when reading the markup: a `border-t`/`border-b` band with large blank padding sitting between two sections, or a section whose only content is a short centered block in a tall container. Fix these in the markup; you do not need to render to spot them.
 - **Make the hero land in the first viewport.** On a landing/home page, the headline, its
   supporting copy, and the primary CTA must be visible without scrolling at common desktop
   heights (~720-768px) and on mobile. The user
@@ -292,20 +292,20 @@ right context.
 - Test mobile and desktop for stable spacing, readable line lengths, and no awkward empty zones.
 - Prefer real product references and mature design systems over AI-generated landing page patterns.
 
-### Self-review (render the page, then check it)
+### Self-review (code-based, no rendering)
 
-Reading this file is not the same as applying it. The most common failure is an agent that read these rules and still shipped something that feels like a generic template instead of this product. So before you consider any `apps/web` UI finished, **do a self-review**: go through the checks below against the running app and fix anything that misses. If you cannot judge a check from the code alone, build and run the app and look at the rendered page, do not guess.
+Reading this file is not the same as applying it. The most common failure is an agent that read these rules and still shipped something that feels like a generic template instead of this product. So before you consider any `apps/web` UI finished, **do a self-review** by reading your own markup and running the mechanical greps in the `docs/DESIGN_DNA.md` double-check.
 
-The review must be based on actual rendered viewports, not only code inspection. For landing/public pages, check at least one mobile viewport and these desktop sizes: **1366x768**, **1440x900**, and **1920x1080**. Scroll through the page, including every major section transition, not just the hero. If the app cannot be rendered locally, say so explicitly rather than assuming the page is fine.
+This review is **code-based — do not render the page or take screenshots** (it burns tokens and the preview often isn't available). Judge the checks below from the markup: container widths, breakpoint classes (`sm:`/`md:`/`lg:`), section structure, surface usage, and the grep results. The one thing code cannot fully confirm is exact visual balance and fold height at a specific pixel size; treat that as residual risk and note it rather than rendering by default.
 
 **Layout (the failures that make a page read as AI-built):**
 
-- [ ] At a wide desktop width (~1440px) the page does not leave large dead side gutters. Content aligns to a defined container; background bands may run full-bleed, but content is never stranded in a narrow centered column with empty sides.
+- [ ] The container class does not leave large dead side gutters on wide desktops. Content aligns to a defined container; background bands may run full-bleed, but content is never stranded in a narrow centered column with empty sides.
 - [ ] Container width matches content density. Sparse content (hero, short landing, auth) is contained to a composed measure, not flung across an extra-wide shell that leaves the navbar and hero with empty middles. Dense pages (dashboards, catalogs, grids) go wide. Neither extreme is present.
-- [ ] At 1366px, 1440px, and 1920px widths, the main page shell uses small, intentional
-      side gutters. It does not look like a 1280px site floating in the middle of a large
+- [ ] The main page shell uses small, intentional side gutters via its container/padding
+      classes. It is not a fixed ~1280px island that would float in the middle of a large
       monitor.
-- [ ] At 1366x768, 1440x900, and 1920x1080, no hard full-width section divider cuts across any viewport near the middle of the screen. If the next section is visible, it reads as an intentional continuation, not a page break.
+- [ ] No hard full-width section divider (a `border-t`/`border-b` band with large blank padding) sits between sections where the next section would be partly visible. Section transitions read as intentional continuations, not page breaks.
 - [ ] Scrolling through the page does not reveal "stacked slices" where each section is separated by a border and large blank vertical padding. Section transitions have rhythm, overlap, continuous background, or enough adjacent content density to feel natural.
 - [ ] On short routes such as sign in, sign up, onboarding, empty states, and confirmations, the footer is not visible on initial desktop load unless the content above it forms a complete, dense page. A sparse form plus visible footer is a fail.
 - [ ] On the landing/home page, the hero headline, supporting copy, and primary CTA are visible without scrolling at ~720-768px desktop height and on mobile. The navbar does not push the hero below the fold.
@@ -381,13 +381,13 @@ The review must be based on actual rendered viewports, not only code inspection.
 - [ ] The layout adapts across breakpoints (behavior changes, not just scaled-down). Checked at mobile and desktop.
 - [ ] Empty, loading, and error states are designed, not just the happy path.
 
-**Rendered viewport evidence:**
+**Code-based evidence (no rendering):**
 
-- [ ] I checked the actual rendered page at mobile width, 1366x768, 1440x900, and 1920x1080. List the routes and viewport sizes checked in the audit.
-- [ ] I scrolled through every major public-page section at those sizes and inspected section transitions for mid-screen divider lines, half-empty bands, clipped text, and overlapping UI.
-- [ ] I checked short public routes at desktop height and verified the footer is not prematurely visible below sparse content.
+- [ ] I ran the Part A greps from `docs/DESIGN_DNA.md` and pasted the output (overflow-x-hidden on sticky ancestors, raw hex/palette classes, bg-foreground in the hero, off-grid spacing, background token still neutral).
+- [ ] I read `app/page.tsx`, `app/layout.tsx`, and the site header and reasoned about section structure: open bands vs card soup, hero focal point, sticky ancestors, footer endcap, container widths.
+- [ ] I checked short public routes' markup (sign in, sign up, empty states) for enough content/structure that the footer is not exposed by a sparse panel.
 
-Looking at the rendered page is the point: it turns this list from something you read into something you applied. `pnpm lint && pnpm typecheck` passing does **not** cover any of the above, a build can be green and the page still AI-generic.
+This review is code-based by design. `pnpm lint && pnpm typecheck` passing does **not** cover the above — a build can be green and the page still AI-generic — but reading the markup and running the greps does. Rendering is only a last-resort tie-breaker for exact visual balance, not a required step.
 
 ## App Structure & Page Flow
 

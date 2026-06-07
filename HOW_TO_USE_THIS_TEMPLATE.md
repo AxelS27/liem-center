@@ -47,7 +47,7 @@ The starter page is the design foundation. Build on it — change content, palet
 only, keep background white), and routes per product. Open `docs/DESIGN_DNA.md` before
 any UI work; it is the short rules file that keeps every product on the same quality level.
 
-During implementation, update `PROGRESS.md` before starting work, while items are in progress, and when they are done. A feature is not done just because the code exists: the checklist should also cover tests, lint/typecheck, API contract checks, doc updates, and rendered UI review when `apps/web` changes.
+During implementation, update `PROGRESS.md` before starting work, while items are in progress, and when they are done. A feature is not done just because the code exists: the checklist should also cover tests, lint/typecheck, API contract checks, doc updates, and the code-based UI self-review (the `docs/DESIGN_DNA.md` double-check, no rendering) when `apps/web` changes.
 
 Use `pnpm docs:check` after documentation changes and `pnpm verify` before calling work done.
 

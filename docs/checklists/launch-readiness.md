@@ -80,7 +80,7 @@
 □ Empty, loading, and error states are designed for every data-driven view
 □ No public page exposes implementation details (Supabase, Midtrans, Hono names, API latency, etc.)
 □ No public/customer page shows audience-mismatched data (admin KPIs, seller stats, etc.)
-□ Rendered and self-reviewed at mobile, 1366x768, 1440x900, and 1920x1080
+□ Self-reviewed via the code-based double-check in docs/DESIGN_DNA.md (Part A greps + Part B file reading) — no rendering required
 ```
 
 ---

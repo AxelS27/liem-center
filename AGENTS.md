@@ -54,13 +54,13 @@ Never override a higher source with a lower one without flagging it.
 - **Hero is never wrapped in a card.** Open band, fits first viewport (~720px) without scrolling.
 - **One focal point in the first viewport** — the headline + primary action. No heavy `bg-foreground`/near-black panel in the hero; it steals the eye. Dark/inverted surfaces are for late-page CTA bands and the footer. In a split hero, the side panel must be lighter than the headline column (`bg-secondary`/`bg-muted`, not solid black).
 - **Sections = open bands by default.** Cards only for product listings, data panels, dialogs. Not as a default wrapper for every section.
-- **Sticky nav** — `sticky top-0 bg-background border-b border-border backdrop-blur-sm` — with `aria-current="page"` on the active link.
+- **Sticky nav** — `sticky top-0 bg-background/80 border-b border-border backdrop-blur` — with `aria-current="page"` on the active link. Never put `overflow-x-hidden` on a sticky ancestor (it kills sticky — use `overflow-x-clip`). Keep header bg partly transparent (`/80`) or the blur shows nothing.
 - **Font must be wired** — `next/font` → `--font-sans` in layout.tsx. Unset = browser serif fallback = instant AI tell.
 - **Max 3 font weights**: 400 · 500/600 · 700. No 300, no 800/900.
 - **4px spacing grid** — valid: 4 8 12 16 20 24 32 40 48 64 80 96px. No `p-[10px]` or other arbitrary values.
 - **Animate `transform` and `opacity` only.** Never `width`, `height`, `top`, `left`. Max 800ms. Gate behind `prefers-reduced-motion`.
 - **Every interactive element** needs: hover (150ms) · focus ring (2px accent + 2px offset) · active (scale 0.98).
-- **Self-check before done**: render at 375px + 1366×768 + 1440×900 + 1920×1080. If it looks like any AI demo site, it's not done.
+- **Mandatory double-check before done**: run the two-part checklist at the bottom of `docs/DESIGN_DNA.md` ("Mandatory double-check after ANY frontend work"). It is code-based — no rendering needed. Part A is mechanical greps (run them, paste output) that catch silent traps like `overflow-x-hidden` killing sticky; Part B is reading 3 files and reasoning about the markup. Do not call UI work done without it.
 
 ## Tech Stack (locked)
 
@@ -116,7 +116,7 @@ Stack rules:
 | DB push     | `pnpm db:push`                                                   |
 | Format      | `pnpm format`                                                    |
 
-Before marking a task done, run `pnpm verify` and check the Definition of Done in `docs/QUALITY.md`. Run `pnpm docs:check` when docs changed or when initializing product docs. For `apps/web` UI work: read `docs/DESIGN_DNA.md` first (short), check the self-review checklist at the bottom of that file against the rendered page, then open `docs/FRONTEND.md` only if you need more detail. For a thorough multi-axis check, run the **`ui-audit` skill**. Green lint/typecheck does not catch an AI-generic layout — the render check is the real gate.
+Before marking a task done, run `pnpm verify` and check the Definition of Done in `docs/QUALITY.md`. Run `pnpm docs:check` when docs changed or when initializing product docs. For `apps/web` UI work: read `docs/DESIGN_DNA.md` first (short), run the code-based double-check at the bottom of that file (Part A greps + Part B file reading, no rendering), then open `docs/FRONTEND.md` only if you need more detail. For a thorough multi-axis check, run the **`ui-audit` skill**. Green lint/typecheck does not catch an AI-generic layout — the grep + markup review is the real gate.
 
 ## Git & Tooling Hygiene
 

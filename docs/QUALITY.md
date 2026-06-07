@@ -29,7 +29,7 @@ The docs are synchronized when:
 
 ## UI Consistency
 
-- Frontend rendering, performance & design-craft rules: see `docs/FRONTEND.md`. Product-specific visual identity and UX direction: see `docs/UI_UX.md`. The bar is "professionally designed, human-made" - never AI-generic. Render and self-review UI work against both docs before calling it done.
+- Frontend rendering, performance & design-craft rules: see `docs/FRONTEND.md`. Product-specific visual identity and UX direction: see `docs/UI_UX.md`. The bar is "professionally designed, human-made" - never AI-generic. Self-review UI work against the code-based double-check at the bottom of `docs/DESIGN_DNA.md` before calling it done (no rendering required).
 - Use shared UI primitives and design tokens before creating one-off styles, but do not
   force every product into the same layout. Product-specific composition belongs in
   `docs/UI_UX.md`; `docs/FRONTEND.md` is the guardrail.
@@ -52,7 +52,7 @@ The docs are synchronized when:
 - Visible brand/logo treatment uses a real approved asset, the template icon, or a clean
   wordmark. Do not ship invented initials tiles or generic placeholder marks as if they
   were product branding.
-- Test responsive behavior at mobile and desktop widths. For public/landing pages, inspect every major section and section transition at 1366x768, 1440x900, and 1920x1080 so hard mid-screen dividers, stacked page slices, half-empty sections, and prematurely visible footers cannot slip through.
+- Review responsive behavior by reading the breakpoint classes (`sm:`/`md:`/`lg:`) and container widths in the markup: confirm layouts adapt rather than just scaling, the hero is not card-wrapped or pushed below the fold, sections are open bands, and the footer is not exposed by sparse content. This is a code review, not a render.
 - Public-facing UI does not expose implementation details. No visible Supabase/Midtrans/Hono
   stack labels, API health badges, response-time numbers, build IDs, environment names,
   internal route names, or debug diagnostics unless the product itself is a developer/status
@@ -84,7 +84,7 @@ A task is done when:
 - [ ] Tests written and passing (logic + edge cases)
 - [ ] `pnpm verify` passes
 - [ ] `pnpm docs:check` passes when docs changed or project docs were initialized
-- [ ] UI work: rendered and self-reviewed against `docs/FRONTEND.md` and `docs/UI_UX.md` at the required viewports, with anything that missed fixed
+- [ ] UI work: self-reviewed against the code-based double-check in `docs/DESIGN_DNA.md` (Part A greps + Part B file reading), with anything that missed fixed. No rendering required.
 - [ ] Route navigation is present and the current page/section is visibly active in
       desktop and mobile nav (`aria-current="page"`)
 - [ ] Navbar/sidebar/bottom nav has a visible surface/background treatment on every route,

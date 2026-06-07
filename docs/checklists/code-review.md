@@ -136,7 +136,7 @@
 
 ```
 □ pnpm verify passes (lint + typecheck + tests)
-□ UI work rendered and self-reviewed at mobile, 1366x768, 1440x900, 1920x1080
+□ UI work self-reviewed via the code-based double-check in docs/DESIGN_DNA.md (Part A greps + Part B file reading) — no rendering required
 □ No route is a dead end — public ↔ auth ↔ app contexts all cross-link
 □ The Definition of Done in docs/QUALITY.md is satisfied
 ```

@@ -82,9 +82,16 @@ The starter uses **open sections as the default**. Cards earn their place.
 
 ## Navigation
 
-- `sticky top-0` with visible surface: `bg-background border-b border-border backdrop-blur`
+- `sticky top-0` with visible surface: `bg-background/80 border-b border-border backdrop-blur`
 - Route-aware active state + `aria-current="page"` on every nav
 - Mobile and desktop nav must show the same active link
+- **Never put `overflow-x-hidden` on a sticky header's ancestor** (the layout shell, body,
+  or any wrapper). `overflow-x: hidden` forces `overflow-y: auto`, turning that element into
+  a scroll container and silently killing `position: sticky`. To kill horizontal scroll, use
+  `overflow-x-clip` instead — it clips without creating a scroll container, so sticky still
+  works. Better: find and constrain the element that actually overflows.
+- For the backdrop blur to be visible, the header background must be partly transparent
+  (`bg-background/80`), not near-opaque (`/95`). Blur on a solid fill shows nothing.
 
 ## First viewport
 
@@ -117,21 +124,69 @@ Arbitrary values like `p-[10px]` `gap-[14px]` `mt-[22px]` are violations.
 
 ---
 
-## Self-check before calling done
+## Mandatory double-check after ANY frontend work
 
-Render the page, then check:
+After building or changing `apps/web` UI, run this checklist **before** calling the work
+done. It is **code-based — no rendering / screenshots needed** (those burn tokens and the
+preview often isn't available). The point is to catch the silent bugs that pass a casual
+code read: broken sticky, invisible blur, hero focal competition.
+
+Run it in two passes. Part A is mechanical greps — run them, paste the output, do not
+eyeball it. Part B is targeted code reading of three files.
+
+### Part A — Mechanical greps (run the commands, report output)
+
+Run from `apps/web/src`:
 
 ```
-[ ] Checked at: mobile (375px), 1366×768, 1440×900, 1920×1080
-[ ] Page does not look like it could be from any AI demo site
-[ ] Palette is deliberate — not one of the forbidden feels above
-[ ] Hero fits first viewport, not card-wrapped
-[ ] Nav is sticky, has surface, active state visible
-[ ] Footer has real structure — not floating muted text
-[ ] No card soup — most sections are open bands
-[ ] All interactive elements have hover/focus/active states
+[ ] No overflow-x-hidden on any sticky ancestor (it silently kills position: sticky):
+      grep -rn "overflow-x-hidden\|overflow-hidden" app/ components/
+      → any hit on the layout shell, body, or a sticky header's wrapper is a FAIL.
+        Use overflow-x-clip instead, or constrain the element that actually overflows.
+
+[ ] Header background is partly transparent so backdrop-blur is visible:
+      grep -rn "backdrop-blur" components/
+      → the same element must use bg-background/80 (or similar), not /95 or a solid fill.
+
+[ ] No raw hex or raw palette classes (tokens only):
+      grep -rEn "#[0-9a-fA-F]{3,6}|(bg|text|border)-(red|blue|green|zinc|slate|violet|indigo|emerald|teal|orange|amber)-[0-9]" app/ components/
+      → any hit is a FAIL.
+
+[ ] No heavy near-black panel in the hero/first viewport:
+      grep -rn "bg-foreground" app/page.tsx
+      → bg-foreground on a large hero panel is a FAIL (steals the focal point).
+        It is fine on a late-page CTA band or the footer.
+
+[ ] Background token is still white/neutral (only the accent changed):
+      grep -n "\-\-background" styles/globals.css
+      → must be 0 0% 100% or a near-neutral; any warm/cream value is a FAIL.
+
+[ ] No off-grid spacing:
+      grep -rEn "(p|m|gap|space)[a-z-]*-\[[0-9]" app/ components/
+      → arbitrary values like p-[10px], gap-[14px] are FAILs.
+
+[ ] pnpm lint passes (catches min-h-screen, and the patterns lint is wired to block)
 [ ] pnpm verify passes
-[ ] pnpm lint passes (catches min-h-screen, raw hex, palette classes)
 ```
 
-A green lint does not mean the UI looks human-made. The render check is the real gate.
+### Part B — Read three files and reason (no render)
+
+Open `app/page.tsx`, `app/layout.tsx`, and the site-header, then confirm by reading the markup:
+
+```
+[ ] Header has `sticky top-0` AND no overflow on its ancestors (cross-checks Part A) →
+    the nav will actually pin on scroll.
+[ ] The hero is one focal point: the headline + primary action carry the first section;
+    no sibling element uses a heavy dark/inverted surface or competes at equal weight.
+[ ] The hero is not wrapped in a card (no bg-card/border/rounded around the headline block),
+    and there is no min-h-screen or oversized top padding pushing it down.
+[ ] Footer markup has a real endcap: a top border/surface, brand/wordmark, link group(s),
+    and a copyright line — not two muted text lines.
+[ ] Sections are mostly open bands. Count the `bg-card`/`border ... rounded` wrappers: if
+    nearly every section is boxed, that is card soup — FAIL.
+[ ] A font is wired in layout.tsx via next/font and bound to --font-sans.
+```
+
+Reading the markup is enough for everything above — none of it needs a screenshot. The one
+thing code cannot fully confirm is exact visual balance and fold height at a given screen
+size; if that ever matters, note it as the residual risk rather than rendering by default.

@@ -87,7 +87,7 @@
 Before building any feature, verify the shared primitives in packages/ui work for this product:
 
 ```
-□ Button — all variants render with the product palette. Verify:
+□ Button — all variants use the product palette (read the variant classes). Verify:
     □ primary, secondary, ghost, destructive variants
     □ All sizes (sm, md, lg)
     □ Loading state (spinner replaces text, width locked)
@@ -124,10 +124,10 @@ Before building any feature, verify the shared primitives in packages/ui work fo
 □ pnpm lint passes
 □ pnpm typecheck passes
 □ Landing page (/) is a real product landing page, not the starter wiring example
-□ Landing page hero fits in the first viewport at 720-768px desktop height
-□ No hard mid-screen section dividers at 1366x768, 1440x900, 1920x1080
+□ Landing page hero is not card-wrapped and has no min-h-screen/oversized top padding that would push it below the fold
+□ No hard mid-screen section dividers (read page.tsx: no border-t/border-b band with large blank padding sitting between sections)
 □ Footer has visible treatment (border-t, surface, brand, links, copyright)
-□ Every route listed in docs/UI_UX.md renders without error
+□ Every route listed in docs/UI_UX.md compiles and loads without error (pnpm build)
 □ No page shows the starter "WIRING EXAMPLE" content
 □ pnpm verify passes
 ```
