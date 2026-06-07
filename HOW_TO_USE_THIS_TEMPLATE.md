@@ -2,6 +2,10 @@
 
 Internal guide for starting a new project from this monorepo template. The public `README.md` is a non-technical overview of whatever you build.
 
+> **Quick start:** `INIT.md` is the copy-paste flow for setting up a new product (clone +
+> the first-run prompt with your PRD attached). `CONTINUE.md` is the kickoff prompt for
+> resuming work in a fresh chat. This file is the full reference behind both.
+
 ## What this is
 
 An AI-native, production-grade monorepo template optimized for AI coding agents (Claude Code and Codex). Documentation-first, low-noise, strict-architecture. Copy the folder, fill the docs, build.
