@@ -17,7 +17,7 @@ template, and before calling a feature done if the feature touched docs.
 
 The docs are synchronized when:
 
-- `HOW_TO_USE_THIS_TEMPLATE.md` mentions every core doc.
+- `docs/guides/HOW_TO_USE_THIS_TEMPLATE.md` mentions every core doc.
 - `docs/PROGRESS.md` points to the relevant source docs instead of restating them.
 - Product scope changes are reflected in `docs/PRD.md` and `docs/FEATURES.md`.
 - Product-specific design changes are reflected in `docs/UI_UX.md`.

@@ -126,7 +126,7 @@
 □ docs/API.md matches the actual implemented endpoints
 □ docs/DATABASE.md data model catalog matches the actual schema
 □ .env.example has all required variables documented with comments
-□ README (or HOW_TO_USE_THIS_TEMPLATE.md) is accurate for the product
+□ README (or docs/guides/HOW_TO_USE_THIS_TEMPLATE.md) is accurate for the product
 ```
 
 ---

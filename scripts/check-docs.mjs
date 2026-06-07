@@ -19,7 +19,12 @@ const coreDocs = [
   'docs/QUALITY.md',
 ];
 
-const rootDocs = ['AGENTS.md', 'HOW_TO_USE_THIS_TEMPLATE.md', 'README.md', 'CLAUDE.md'];
+const rootDocs = ['AGENTS.md', 'README.md', 'CLAUDE.md'];
+const guideDocs = [
+  'docs/guides/HOW_TO_USE_THIS_TEMPLATE.md',
+  'docs/guides/INIT.md',
+  'docs/guides/CONTINUE.md',
+];
 const supabaseFiles = [
   'supabase/migrations/.gitkeep',
   'supabase/seed.sql',
@@ -33,7 +38,7 @@ const goldenPathFiles = [
   'apps/web/src/app/page.tsx',
   'packages/utils/src/index.test.ts',
 ];
-const requiredFiles = [...rootDocs, ...coreDocs, ...supabaseFiles, ...goldenPathFiles];
+const requiredFiles = [...rootDocs, ...guideDocs, ...coreDocs, ...supabaseFiles, ...goldenPathFiles];
 const failures = [];
 const warnings = [];
 
@@ -89,14 +94,14 @@ if (packageJson) {
 
 let howToUse = '';
 try {
-  howToUse = read('HOW_TO_USE_THIS_TEMPLATE.md');
+  howToUse = read('docs/guides/HOW_TO_USE_THIS_TEMPLATE.md');
 } catch {
   // Missing file is already reported above.
 }
 
 for (const doc of coreDocs) {
   if (howToUse && !howToUse.includes(doc)) {
-    failures.push(`HOW_TO_USE_THIS_TEMPLATE.md does not mention ${doc}.`);
+    failures.push(`docs/guides/HOW_TO_USE_THIS_TEMPLATE.md does not mention ${doc}.`);
   }
 }
 

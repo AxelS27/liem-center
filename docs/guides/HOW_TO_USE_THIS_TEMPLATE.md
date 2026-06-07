@@ -60,7 +60,7 @@ Use `pnpm docs:check` after documentation changes and `pnpm verify` before calli
 After you fill the PRD or describe the product in chat, give the agent a prompt like this:
 
 ```text
-Read HOW_TO_USE_THIS_TEMPLATE.md and AGENTS.md first.
+Read docs/guides/HOW_TO_USE_THIS_TEMPLATE.md and AGENTS.md first.
 Initialize this product from my PRD/design brief:
 1. Fill or update docs/PRD.md and docs/FEATURES.md.
 2. Read docs/DESIGN_DNA.md. Then fill docs/UI_UX.md from my design direction and docs/REFERENCES.md.
