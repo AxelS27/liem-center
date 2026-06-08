@@ -157,6 +157,18 @@ export function ProductTabs({ product, owned }: { product: Product; owned: boole
                 </li>
               ))}
             </ul>
+
+            <h3 className="mt-8 text-sm font-semibold text-foreground">How to use</h3>
+            <ol className="mt-4 space-y-3">
+              {product.howToUse.map((step, index) => (
+                <li key={step} className="flex gap-3 text-sm leading-6 text-muted-foreground">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground">
+                    {index + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
           </div>
         ) : null}
 

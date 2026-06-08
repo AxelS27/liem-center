@@ -48,6 +48,7 @@ export type Product = {
   cover: StaticImageData;
   overview: string[];
   features: string[];
+  howToUse: string[];
   requires?: string[];
   githubRepo?: string;
   changelog: ChangelogEntry[];
@@ -105,6 +106,12 @@ const products: Product[] = [
       'Hono API skeleton with Zod-validated contracts in packages/types',
       'Supabase auth, database, and storage pre-wired',
     ],
+    howToUse: [
+      'Buy the product to create a permanent entitlement on your account.',
+      'Connect your GitHub account when prompted.',
+      'Accept the repository invitation we send automatically.',
+      'Clone the repo, run pnpm install, then pnpm dev.',
+    ],
     changelog: [
       {
         version: 'v2.1.0',
@@ -157,6 +164,12 @@ const products: Product[] = [
       'Doc synchronization helpers',
       'Server-side model calls, never bundled into the app',
     ],
+    howToUse: [
+      'Make sure you own Liem Monorepo first (checkout will offer to add it).',
+      'Buy the plugin and connect GitHub when prompted.',
+      'Accept the repository invitation.',
+      'Follow the README to wire the plugin into your monorepo.',
+    ],
     changelog: [
       { version: 'v0.4.0', date: '2026-05-30', changes: ['Early access release', 'Feature scaffolder preview'] },
     ],
@@ -181,6 +194,11 @@ const products: Product[] = [
       'Claim it once and it stays in your library at no cost.',
     ],
     features: ['Project switcher', 'One-click dev scripts', 'Library sync (coming soon)'],
+    howToUse: [
+      'Claim the app to add it to your library at no cost.',
+      'Download the installer from your library.',
+      'Open Liem Code and sign in with your Liem account.',
+    ],
     changelog: [{ version: 'v1.0.0', date: '2026-05-20', changes: ['First public release'] }],
     roadmap: [
       { title: 'Project switcher', status: 'completed' },
@@ -206,6 +224,11 @@ const products: Product[] = [
       'Feature, review, and planning prompt templates',
       'Copy-ready and organized by task',
       'Versioned updates as the pack grows',
+    ],
+    howToUse: [
+      'Buy the pack to add it to your library.',
+      'Download the pack from your library.',
+      'Open the prompt you need and paste it into your AI assistant.',
     ],
     changelog: [
       { version: 'v1.3.0', date: '2026-05-26', changes: ['Added review and refactor prompts', 'Reorganized by task'] },
@@ -236,6 +259,12 @@ const products: Product[] = [
       'Skills for review, docs, testing, and release',
       'Works with Claude-style skill loading',
     ],
+    howToUse: [
+      'Buy the skills and connect GitHub when prompted.',
+      'Accept the repository invitation.',
+      'Copy the .md skill files into your assistant’s skills folder.',
+      'Reload your assistant to pick up the new skills.',
+    ],
     changelog: [
       { version: 'v0.6.0', date: '2026-05-29', changes: ['Added release and testing skills', 'Tightened skill triggers'] },
     ],
@@ -263,6 +292,11 @@ const products: Product[] = [
       'Token-driven components that drop into any Tailwind project',
       'Patterns for catalog, library, profile, and checkout surfaces',
       'Dark-mode-ready token sheet',
+    ],
+    howToUse: [
+      'Buy the kit to add it to your library.',
+      'Download it from your library.',
+      'Copy the components and design tokens into your Tailwind project.',
     ],
     changelog: [
       {
@@ -297,6 +331,11 @@ const products: Product[] = [
       'A docs-check script that keeps the system synchronized',
       'Opinionated structure proven across Liem products',
     ],
+    howToUse: [
+      'Claim it to add it to your library at no cost.',
+      'Download the docs starter from your library.',
+      'Drop the docs folder into your repo and fill in the templates.',
+    ],
     changelog: [
       {
         version: 'v1.2.0',
@@ -326,6 +365,11 @@ const products: Product[] = [
       'Already own part of the bundle? The price drops automatically to cover only what you are missing.',
     ],
     features: ['Includes Liem Monorepo', 'Includes Liem UI Kit', 'Includes Liem Starter Docs'],
+    howToUse: [
+      'Buy the bundle to own every included product at once.',
+      'Each product appears separately in your library.',
+      'Follow each product’s own how-to to set it up.',
+    ],
     changelog: [{ version: 'v1.0', date: '2026-05-28', changes: ['Bundle launched'] }],
     roadmap: [{ title: 'Complete-your-collection pricing', status: 'completed' }],
     reviews: [],
