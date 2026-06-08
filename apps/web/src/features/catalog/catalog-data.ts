@@ -107,10 +107,10 @@ const products: Product[] = [
       'Supabase auth, database, and storage pre-wired',
     ],
     howToUse: [
-      'Buy the product to create a permanent entitlement on your account.',
-      'Connect your GitHub account when prompted.',
-      'Accept the repository invitation we send automatically.',
-      'Clone the repo, run pnpm install, then pnpm dev.',
+      'Clone your repo: git clone https://github.com/axels27/liem-monorepo <project-name>',
+      'Install and run: pnpm install, then pnpm dev.',
+      'New project: prompt your agent "Read AGENTS.md and docs/guides/INIT.md, then initialize from my brief: ..."',
+      'Continuing later: prompt your agent "Read AGENTS.md and docs/engineering/PROGRESS.md, then continue with: <task>"',
     ],
     changelog: [
       {
@@ -165,10 +165,9 @@ const products: Product[] = [
       'Server-side model calls, never bundled into the app',
     ],
     howToUse: [
-      'Make sure you own Liem Monorepo first (checkout will offer to add it).',
-      'Buy the plugin and connect GitHub when prompted.',
-      'Accept the repository invitation.',
-      'Follow the README to wire the plugin into your monorepo.',
+      'In your Liem Monorepo, install the plugin following the repo README.',
+      'Register it in your agent config.',
+      'Prompt your agent "scaffold a feature for <X>" and it writes the contracts and docs.',
     ],
     changelog: [
       { version: 'v0.4.0', date: '2026-05-30', changes: ['Early access release', 'Feature scaffolder preview'] },
@@ -195,9 +194,9 @@ const products: Product[] = [
     ],
     features: ['Project switcher', 'One-click dev scripts', 'Library sync (coming soon)'],
     howToUse: [
-      'Claim the app to add it to your library at no cost.',
-      'Download the installer from your library.',
-      'Open Liem Code and sign in with your Liem account.',
+      'Open Liem Code and point it at your project folder.',
+      'Use the project switcher to jump between your Liem projects.',
+      'Run dev scripts with one click instead of memorizing commands.',
     ],
     changelog: [{ version: 'v1.0.0', date: '2026-05-20', changes: ['First public release'] }],
     roadmap: [
@@ -226,9 +225,9 @@ const products: Product[] = [
       'Versioned updates as the pack grows',
     ],
     howToUse: [
-      'Buy the pack to add it to your library.',
-      'Download the pack from your library.',
-      'Open the prompt you need and paste it into your AI assistant.',
+      'Pick the prompt for your task: feature, review, or planning.',
+      'Paste it into your AI assistant and replace the placeholders.',
+      'Refine with the follow-up prompts included in the pack.',
     ],
     changelog: [
       { version: 'v1.3.0', date: '2026-05-26', changes: ['Added review and refactor prompts', 'Reorganized by task'] },
@@ -260,10 +259,9 @@ const products: Product[] = [
       'Works with Claude-style skill loading',
     ],
     howToUse: [
-      'Buy the skills and connect GitHub when prompted.',
-      'Accept the repository invitation.',
       'Copy the .md skill files into your assistant’s skills folder.',
-      'Reload your assistant to pick up the new skills.',
+      'Reload your assistant so it loads the new skills.',
+      'Trigger a skill by describing the task, e.g. "review this diff".',
     ],
     changelog: [
       { version: 'v0.6.0', date: '2026-05-29', changes: ['Added release and testing skills', 'Tightened skill triggers'] },
@@ -294,9 +292,9 @@ const products: Product[] = [
       'Dark-mode-ready token sheet',
     ],
     howToUse: [
-      'Buy the kit to add it to your library.',
-      'Download it from your library.',
-      'Copy the components and design tokens into your Tailwind project.',
+      'Copy the component files into your project’s components folder.',
+      'Add the design tokens to your globals.css.',
+      'Import a component and drop it into a page.',
     ],
     changelog: [
       {
@@ -332,9 +330,9 @@ const products: Product[] = [
       'Opinionated structure proven across Liem products',
     ],
     howToUse: [
-      'Claim it to add it to your library at no cost.',
-      'Download the docs starter from your library.',
-      'Drop the docs folder into your repo and fill in the templates.',
+      'Copy the docs/ folder into your repo.',
+      'Fill PRD.md and FEATURES.md with your product scope.',
+      'Run pnpm docs:check to keep the docs in sync.',
     ],
     changelog: [
       {
@@ -366,9 +364,9 @@ const products: Product[] = [
     ],
     features: ['Includes Liem Monorepo', 'Includes Liem UI Kit', 'Includes Liem Starter Docs'],
     howToUse: [
-      'Buy the bundle to own every included product at once.',
-      'Each product appears separately in your library.',
-      'Follow each product’s own how-to to set it up.',
+      'Start with Liem Monorepo: clone it and run pnpm install.',
+      'Add the UI Kit components and design tokens.',
+      'Use the Starter Docs to plan and operate the project.',
     ],
     changelog: [{ version: 'v1.0', date: '2026-05-28', changes: ['Bundle launched'] }],
     roadmap: [{ title: 'Complete-your-collection pricing', status: 'completed' }],
