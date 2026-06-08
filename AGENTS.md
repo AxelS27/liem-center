@@ -23,26 +23,26 @@ Never override a higher source with a lower one without flagging it.
 
 ## When to Open Each Doc (don't read preemptively - saves tokens)
 
-| Open this            | Only when the task involves                                                            |
-| -------------------- | -------------------------------------------------------------------------------------- |
-| docs/product/PRD.md          | Scope/feature questions, "should we build X"                                           |
-| docs/product/FEATURES.md     | Building or scoping a specific feature module                                          |
-| docs/engineering/PROGRESS.md     | Building product features; tracking what's done, in progress, and how features connect |
-| docs/engineering/ARCHITECTURE.md | Adding folders, cross-package imports, new module                                      |
-| docs/engineering/DESIGN_DNA.md   | **Any apps/web UI work — read this first.** Short rules: palette, composition, nav, spacing |
-| docs/engineering/FRONTEND.md     | Detailed UI rules — open only when DESIGN_DNA.md doesn't cover the specific question   |
-| docs/product/UI_UX.md        | Product-specific visual identity, UX direction, navigation model, page UX map          |
-| docs/verticals/*.md  | Starting a product in a known vertical (ecommerce, SaaS, fintech, marketplace, etc.)   |
-| docs/engineering/BACKEND.md      | Any apps/server work - routes, middleware, services, validation, backend tests         |
-| docs/engineering/DATABASE.md     | Supabase/Postgres schema, RLS, Storage, indexes, migrations, data lifecycle            |
-| docs/engineering/PAYMENTS.md     | Payments, checkout, refunds, settlement, payouts, marketplace money flow               |
-| docs/product/REFERENCES.md   | Starting visual design; need non-generic reference sites for a product vertical        |
-| docs/engineering/DECISIONS.md    | Choosing a lib, DB, pattern (check if already decided)                                 |
-| docs/engineering/API.md          | Any endpoint work                                                                      |
-| docs/engineering/QUALITY.md      | Before marking a task done                                                             |
-| docs/checklists/new-product.md | Initializing a new product from this template — fill docs and setup env first |
-| docs/checklists/code-review.md | Before approving a PR or calling a task done — multi-axis quality check       |
-| docs/checklists/launch-readiness.md | Before going live — functionality, perf, security, UI, a11y, deployment  |
+| Open this                           | Only when the task involves                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------------------------- |
+| docs/product/PRD.md                 | Scope/feature questions, "should we build X"                                                |
+| docs/product/FEATURES.md            | Building or scoping a specific feature module                                               |
+| docs/engineering/PROGRESS.md        | Building product features; tracking what's done, in progress, and how features connect      |
+| docs/engineering/ARCHITECTURE.md    | Adding folders, cross-package imports, new module                                           |
+| docs/engineering/DESIGN_DNA.md      | **Any apps/web UI work — read this first.** Short rules: palette, composition, nav, spacing |
+| docs/engineering/FRONTEND.md        | Detailed UI rules — open only when DESIGN_DNA.md doesn't cover the specific question        |
+| docs/product/UI_UX.md               | Product-specific visual identity, UX direction, navigation model, page UX map               |
+| docs/verticals/\*.md                | Starting a product in a known vertical (ecommerce, SaaS, fintech, marketplace, etc.)        |
+| docs/engineering/BACKEND.md         | Any apps/server work - routes, middleware, services, validation, backend tests              |
+| docs/engineering/DATABASE.md        | Supabase/Postgres schema, RLS, Storage, indexes, migrations, data lifecycle                 |
+| docs/engineering/PAYMENTS.md        | Payments, checkout, refunds, settlement, payouts, marketplace money flow                    |
+| docs/product/REFERENCES.md          | Starting visual design; need non-generic reference sites for a product vertical             |
+| docs/engineering/DECISIONS.md       | Choosing a lib, DB, pattern (check if already decided)                                      |
+| docs/engineering/API.md             | Any endpoint work                                                                           |
+| docs/engineering/QUALITY.md         | Before marking a task done                                                                  |
+| docs/checklists/new-product.md      | Initializing a new product from this template — fill docs and setup env first               |
+| docs/checklists/code-review.md      | Before approving a PR or calling a task done — multi-axis quality check                     |
+| docs/checklists/launch-readiness.md | Before going live — functionality, perf, security, UI, a11y, deployment                     |
 
 ## UI Critical Rules
 
@@ -75,7 +75,7 @@ Rationale lives in `docs/engineering/DECISIONS.md`. Don't introduce an alternati
 | Auth            | Supabase Auth                                                  |
 | Storage         | Supabase Storage                                               |
 | Payments        | Midtrans - **only** when the project takes payments            |
-| Deploy          | See `docs/engineering/DECISIONS.md` ADR-007                                |
+| Deploy          | See `docs/engineering/DECISIONS.md` ADR-007                    |
 | Large AI models | Hugging Face - **only** when the project involves large models |
 
 Stack rules:

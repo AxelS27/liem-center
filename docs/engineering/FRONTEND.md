@@ -669,6 +669,7 @@ Design every state, not just the happy path. A screen that only handles "data lo
 **Loading states.** Use `loading.tsx` with designed **skeletons** that mirror the real layout, not bare spinners. Transitions stay subtle and fast.
 
 Skeleton rules:
+
 - The skeleton must match the **exact shape** of the loaded content — same height, same proportions, same grid. A generic rectangle where a product card goes is not a skeleton.
 - Use a **shimmer animation** (background gradient sweeping left-to-right) rather than opacity pulse. The motion direction matches reading direction.
 - Skeletons must appear within **100ms** of navigation. A blank white flash before the skeleton is a fail.
@@ -682,13 +683,13 @@ durations short, easing natural, and every animated surface useful. Always respe
 
 **Animation timing — use only these durations, never invent new ones:**
 
-| Token | Duration | Use for |
-| ----- | -------- | ------- |
-| instant | 80ms | Button press, checkbox, micro feedback |
-| fast | 150ms | Hover states, small element transitions |
-| normal | 250ms | Standard UI transitions, dropdowns |
-| slow | 400ms | Modals, drawers, page content fade |
-| slower | 600ms | Charts, counters, complex reveals |
+| Token   | Duration | Use for                                 |
+| ------- | -------- | --------------------------------------- |
+| instant | 80ms     | Button press, checkbox, micro feedback  |
+| fast    | 150ms    | Hover states, small element transitions |
+| normal  | 250ms    | Standard UI transitions, dropdowns      |
+| slow    | 400ms    | Modals, drawers, page content fade      |
+| slower  | 600ms    | Charts, counters, complex reveals       |
 
 Never exceed 800ms on any interaction — it breaks the "instant" contract and feels laggy.
 
@@ -698,6 +699,7 @@ frames. Use `transform: translate()` instead of `top`/`left`. Use the CSS grid t
 (`grid-template-rows: 0fr → 1fr`) instead of animating height for accordion/collapse.
 
 **Easing guide:**
+
 - Elements entering the screen → ease-decelerate `cubic-bezier(0, 0, 0.2, 1)` (starts fast, slows to rest)
 - Elements leaving → ease-accelerate `cubic-bezier(0.4, 0, 1, 1)` (ends quickly)
 - Toggles, notifications, likes → spring `cubic-bezier(0.34, 1.56, 0.64, 1)` (bouncy, tactile)
@@ -707,16 +709,16 @@ frames. Use `transform: translate()` instead of `top`/`left`. Use the CSS grid t
 
 **Interactive component states.** Every interactive component must implement all of these states before it is considered done:
 
-| State | Requirement |
-| ----- | ----------- |
-| Default | How the element looks at rest |
-| Hover | Visible color/shadow/border shift within 150ms |
-| Focus | `focus-visible` ring: 2px accent ring + 2px offset. Never `outline: none` without a replacement |
-| Active/Pressed | `scale(0.98)` + background darkens within 80ms — tactile press feel |
-| Loading | Spinner replaces text; element width locked to prevent layout shift; `aria-busy="true"` |
-| Disabled | `opacity: 50%`; `cursor: not-allowed`; no hover or click response |
-| Error | Red border + error message below field; shake animation on submit; `role="alert"` |
-| Empty | Icon + title + description + CTA. Never just blank space or "No data" |
+| State          | Requirement                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------- |
+| Default        | How the element looks at rest                                                                   |
+| Hover          | Visible color/shadow/border shift within 150ms                                                  |
+| Focus          | `focus-visible` ring: 2px accent ring + 2px offset. Never `outline: none` without a replacement |
+| Active/Pressed | `scale(0.98)` + background darkens within 80ms — tactile press feel                             |
+| Loading        | Spinner replaces text; element width locked to prevent layout shift; `aria-busy="true"`         |
+| Disabled       | `opacity: 50%`; `cursor: not-allowed`; no hover or click response                               |
+| Error          | Red border + error message below field; shake animation on submit; `role="alert"`               |
+| Empty          | Icon + title + description + CTA. Never just blank space or "No data"                           |
 
 Do not ship a component missing any state that its domain needs. A button without a loading state, a form without inline errors, or a table without an empty state is half-built.
 

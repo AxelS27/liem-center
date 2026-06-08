@@ -132,12 +132,12 @@ accessible label.
 
 ### Commerce Icon Decision Table
 
-| Pattern | Use for | Rules |
-| ------- | ------- | ----- |
-| Icon-only | Compact universal controls: search submit, cart, menu, close, more actions, notification bell, wishlist | Must have an accessible label, visible focus state, and badge/count when status matters. |
-| Icon + label | Navigation and scan-heavy entry points: notifications, help, language, seller center, category rail, voucher, flash sale, local brands, delivery/location | Best default for ecommerce nav and category/deal shortcuts when there is enough space. |
-| Text + optional icon | Major CTAs: shop products, start selling, checkout, view all categories, claim voucher | Keep the text label primary. Add an icon only when it reinforces the action, often leading for nouns and trailing for forward movement. |
-| Text-only | Legal/help links, long copy actions, destructive confirmations, simple secondary links, actions where no familiar icon exists | Prefer clarity over decoration. |
+| Pattern              | Use for                                                                                                                                                   | Rules                                                                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Icon-only            | Compact universal controls: search submit, cart, menu, close, more actions, notification bell, wishlist                                                   | Must have an accessible label, visible focus state, and badge/count when status matters.                                                |
+| Icon + label         | Navigation and scan-heavy entry points: notifications, help, language, seller center, category rail, voucher, flash sale, local brands, delivery/location | Best default for ecommerce nav and category/deal shortcuts when there is enough space.                                                  |
+| Text + optional icon | Major CTAs: shop products, start selling, checkout, view all categories, claim voucher                                                                    | Keep the text label primary. Add an icon only when it reinforces the action, often leading for nouns and trailing for forward movement. |
+| Text-only            | Legal/help links, long copy actions, destructive confirmations, simple secondary links, actions where no familiar icon exists                             | Prefer clarity over decoration.                                                                                                         |
 
 Examples:
 

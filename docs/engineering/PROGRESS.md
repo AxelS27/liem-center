@@ -23,19 +23,23 @@
 
 ## Now building
 
-- `[ ]` Docs synchronized; review pass with the user before code.
+- `[x]` Docs synchronized; review pass completed from AGENTS.md, CONTINUE.md, HOW_TO_USE_THIS_TEMPLATE.md, PRD, FEATURES, UI_UX, DESIGN_DNA, and QUALITY.
+- `[x]` Public shell (`apps/web`) productization: landing, full-surface nav, footer, metadata, accent, 404/error states.
+- `[x]` Blue developer accent set in `globals.css` (`--primary`/`--ring`/`--brand`); white background kept.
+- `[x]` Catalog `/products` + `/products/[slug]`, `/redeem`, `/support`, `/support/new` — frontend on mock catalog data; auth action-gate wired (public pages, gate on confirm). Backend/API still pending.
+- `[ ]` Replace mock catalog data with typed fetches once `apps/server` + Supabase schema land.
 
 ## Build map
 
 ### Public shell (`/`, navbar, footer) — P0
 
-- `[ ]` Site-header with wordmark + top-level routes (Products, Library, Profile, Sign in) + 🔔 unread badge (signed-in). (UI_UX.md "Notification Center UX")
-- `[ ]` Active route state + `aria-current="page"` desktop + mobile drawer. (docs/engineering/FRONTEND.md)
-- `[ ]` Site-footer with brand, product/library/profile/legal/support columns. (UI_UX.md "Footer model")
-- `[ ]` Landing `/` — open-band hero, featured products strip, ecosystem narrative band. (UI_UX.md)
-- `[ ]` Replace starter copy and palette accent in `globals.css` (white background stays). (DESIGN_DNA.md)
-- `[ ]` Metadata + browser title pattern `<Page> | Liem Center`. (UI_UX.md "Visual System")
-- `[ ]` 404 + generic error route with link back home. (docs/engineering/FRONTEND.md)
+- `[~]` Site-header with wordmark + role-aware routes/utilities for guest/user/admin + unread badge (signed-in). Guest/user/admin variants done; unread count waits for notifications API. (UI_UX.md "Notification Center UX")
+- `[x]` Active route state + `aria-current="page"` desktop + mobile drawer. (docs/engineering/FRONTEND.md)
+- `[x]` Site-footer with brand, product/library/profile/legal/support columns. (UI_UX.md "Footer model")
+- `[x]` Landing `/` — open-band hero, featured products strip, ecosystem narrative band. (UI_UX.md)
+- `[x]` Replace starter copy and palette accent in `globals.css` (white background stays). (DESIGN_DNA.md)
+- `[x]` Metadata + browser title pattern `<Page> | Liem Center`. (UI_UX.md "Visual System")
+- `[x]` 404 + generic error route with link back home. (docs/engineering/FRONTEND.md)
 
 ### Database foundation — P0
 
@@ -50,17 +54,17 @@
 - `[ ]` Storage buckets `avatars`, `banners`, `product-media`, `downloads`. (docs/engineering/DATABASE.md "Storage")
 - `[ ]` Seed: badges catalog + at least one product per type. (docs/engineering/DATABASE.md)
 - `[ ]` Triggers: profile + `email_preferences` row on `auth.users` insert; founder number assignment up to cap. (docs/engineering/DATABASE.md, docs/product/FEATURES.md §16)
-- `[ ]` `pnpm db:types` regenerated; types exported to `packages/types`. (AGENTS.md)
+- `[x]` `pnpm db:types` regenerated from linked Supabase project; types exported to `packages/types`. (AGENTS.md)
 
 ### Auth (`/signin`, `/signup`, `/forgot-password`, `/auth/callback`) — P0
 
-- `[ ]` Sign in / sign up forms (email + password). (docs/engineering/FRONTEND.md "Forms")
-- `[ ]` Google OAuth button. (docs/product/FEATURES.md §2)
-- `[ ]` GitHub OAuth button (signup option, not gating). (docs/product/FEATURES.md §2)
+- `[x]` Sign in / sign up forms (email + password). (docs/engineering/FRONTEND.md "Forms")
+- `[x]` Google OAuth button. (docs/product/FEATURES.md §2)
+- `[x]` GitHub OAuth button (signup option, not gating). (docs/product/FEATURES.md §2)
 - Apple OAuth — deferred to P2, not built at launch. (ADR-019)
-- `[ ]` Password reset request + reset confirmation routes. (docs/product/FEATURES.md §2)
-- `[ ]` Auth callback route with redirect target. (docs/engineering/FRONTEND.md)
-- `[ ]` Protected route middleware (Supabase session). (docs/engineering/BACKEND.md, docs/engineering/FRONTEND.md)
+- `[~]` Password reset request + reset confirmation routes. Request route done; reset confirmation/update-password screen still pending. (docs/product/FEATURES.md §2)
+- `[x]` Auth callback route with redirect target. (docs/engineering/FRONTEND.md)
+- `[x]` Protected route middleware (Supabase session). (docs/engineering/BACKEND.md, docs/engineering/FRONTEND.md)
 - `[ ]` Welcome email on first signup. (docs/product/FEATURES.md §18, docs/engineering/BACKEND.md `lib/email.ts`)
 
 ### Catalog (`/products`, `/products/[slug]`) — P0/P1
@@ -155,9 +159,9 @@ Tabs: Profile / Connected Accounts / Notifications / Security.
 
 ### Support Tickets (`/support`) — P0
 
-- `[ ]` `/support` list with status pills + unread-reply highlight. (docs/product/UI_UX.md "Support Ticket UX")
-- `[ ]` `/support/new` form (category, subject, message, optional order link). (docs/product/UI_UX.md)
-- `[ ]` `/support/[id]` thread + reply box; status pill. (docs/product/UI_UX.md)
+- `[ ]` `/support` + `/support/new` are PUBLIC pages (no entry redirect); "your tickets" list shows only when signed in, otherwise a sign-in link. (docs/product/UI_UX.md "Auth Gating Model")
+- `[ ]` `/support/new` form (category, subject, message, optional order link); Submit gates to sign-in (`next` back to form, input preserved) when signed out. (docs/product/UI_UX.md "Auth Gating Model")
+- `[ ]` `/support/[id]` is protected (owner/admin only); thread + reply box; status pill. (docs/product/UI_UX.md)
 - `[ ]` Endpoints: list/create/get/append-message/close. (docs/engineering/API.md "Support")
 - `[ ]` Reply triggers notification + email. (docs/product/FEATURES.md §17/§18)
 - `[ ]` Admin queue under `/admin/support` with priority + status controls. (docs/product/FEATURES.md §25)
@@ -184,8 +188,8 @@ Tabs: Profile / Connected Accounts / Notifications / Security.
 
 - `[ ]` "Buy as Gift" path in checkout → `gift` code on payment. (docs/product/FEATURES.md §8)
 - `[ ]` Gift success screen + copy. (docs/product/UI_UX.md)
-- `[ ]` `/redeem` input page. (docs/product/UI_UX.md)
-- `[ ]` `POST /api/v1/codes/redeem` server-only. (docs/engineering/API.md)
+- `[ ]` `/redeem` input page is PUBLIC (no entry redirect); Confirm gates to sign-in (`next` back to `/redeem`, code preserved) when signed out. (docs/product/UI_UX.md "Auth Gating Model")
+- `[ ]` `POST /api/v1/codes/redeem` server-only; requires an authenticated user (the gate enforces this). (docs/engineering/API.md)
 - `[ ]` Redeem fires GitHub-activation prompt when GitHub-type product + GitHub not linked. (docs/product/FEATURES.md §8/§6)
 - `[ ]` Mandatory emails: gift purchase, product redeemed. (docs/product/FEATURES.md §18)
 
@@ -235,14 +239,15 @@ Tabs: Profile / Connected Accounts / Notifications / Security.
 
 - `[x]` Golden path baseline (health Zod contract, Hono health route, typed web service, starter page, baseline tests)
 - `[x]` Responsive starter landing baseline
-- `[ ]` Public + app + auth layout shells (one navbar; footer variants)
-- `[ ]` Design tokens in `globals.css` — Liem accent in `--primary`/`--ring`; white background untouched
-- `[ ]` `next/font` wiring (Inter or Geist Sans) → `--font-sans`
+- `[~]` Public + app + auth layout shells (one session-aware navbar with guest/user/admin variants; footer variants pending)
+- `[x]` Design tokens in `globals.css` — Liem accent in `--primary`/`--ring`; white background untouched
+- `[x]` `next/font` wiring (Inter or Geist Sans) → `--font-sans`
 - `[ ]` Shared status pill component (entitlement / payment / order / code / ticket)
 - `[ ]` Shared rich-text renderer (`description_md`, changelog, roadmap, reviews, ticket messages)
 - `[ ]` Shared product card
 - `[ ]` Shared notification drawer + bell badge
-- `[ ]` Auth wiring (Supabase) + protected-route middleware
+- `[x]` Auth wiring (Supabase) + protected-route middleware
+- `[x]` Supabase env + client foundation (web anon browser/SSR clients; server service-role client; server `.env` loader)
 - `[ ]` Data layer (typed fetch to `apps/server`; types from `packages/types`)
 - `[ ]` API contract layer (Zod schemas + Hono routes)
 - `[ ]` Backend services per BACKEND.md feature module list
@@ -253,6 +258,11 @@ Tabs: Profile / Connected Accounts / Notifications / Security.
 
 ## Done log
 
+- 2026-06-07 — Productized the public web shell for Liem Center: landing hero, featured products strip, ecosystem band, header/footer links, title metadata, accent token, scaffolded route targets, and 404/error states. Signed-in notification badge remains pending until auth/session state exists.
+- 2026-06-07 — Revised public shell per product-owner feedback: removed the post-hero stat strip, switched accent back to the premium near-black CTA color, expanded navbar to preview key hub routes/utilities, and aligned landing copy with PRD/FEATURES ownership, GitHub activation, notifications, support, and profile goals.
+- 2026-06-07 — Wired Supabase foundation: local `.env`, web anon clients, server service-role client, server `.env` loader, verified service-role connectivity against Supabase Auth Admin, configured pooler `DATABASE_URL`, and regenerated remote Supabase database types.
+- 2026-06-07 — Implemented Supabase auth foundation in `apps/web`: email/password sign in and sign up, Google/GitHub OAuth start, auth callback, sign out route, password reset request, protected-route middleware, and session-aware navbar variants for guest/user/admin.
+- 2026-06-08 — Built catalog (`/products`, `/products/[slug]` with tabs + sticky purchase panel), `/redeem`, and `/support` + `/support/new` on mock catalog data. Added the public-page auth action-gate (`useAuthGate`), made `/redeem` and `/support` public in middleware (only `/support/[id]` protected), threaded `?next=` through sign-in, and set the blue developer accent. Lint + typecheck green; routes smoke-tested 200/404.
 - 2026-06-07 — Locked ADR-017 (email via Resend), ADR-018 (GitHub delivery via GitHub App, identity via OAuth), ADR-019 (launch auth = Google + GitHub + Email; Apple deferred to P2). Docs updated to match.
 - 2026-06-07 — Updated docs for v1.1 PRD additions: 4-provider auth (Google/Apple/Email/GitHub) with GitHub not required at signup; in-app notification center; transactional + optional email system; support ticket system; activity feed; product dependencies; ownership metadata; referrals deferred; analytics trimmed; country optional/private by default; new tables `notifications`, `email_preferences`, `support_tickets`, `support_messages`, `activity_events`, `product_dependencies`.
 - 2026-06-07 — Initialized Liem Center docs (PRD, FEATURES, UI_UX, API, BACKEND, DATABASE, PAYMENTS, PROGRESS) from product brief.

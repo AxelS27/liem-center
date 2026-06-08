@@ -1,10 +1,17 @@
 import { serve } from '@hono/node-server';
 
-import { app } from './app';
+import { loadEnvFile } from './lib/load-env';
 
-const port = Number(process.env.PORT ?? 3000);
+async function main() {
+  loadEnvFile();
 
-serve({
-  fetch: app.fetch,
-  port,
-});
+  const { app } = await import('./app');
+  const port = Number(process.env.PORT ?? 3000);
+
+  serve({
+    fetch: app.fetch,
+    port,
+  });
+}
+
+void main();

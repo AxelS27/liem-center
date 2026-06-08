@@ -26,10 +26,10 @@ const fontSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Liem Monorepo',
-    template: '%s | Liem Monorepo',
+    default: 'Liem Center',
+    template: '%s | Liem Center',
   },
-  description: 'An opinionated monorepo starter for building consistent, production-ready products.',
+  description: 'The official hub for discovering, owning, and managing Liem developer products.',
 };
 
 /**

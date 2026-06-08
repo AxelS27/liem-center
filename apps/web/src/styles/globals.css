@@ -28,7 +28,7 @@
      * specific palette with a real accent and neutrals that carry a slight temperature,
      * then replace these values. The shadcn-ui skill walks the steps; see docs/engineering/FRONTEND.md.
      */
-    --brand: 240 6% 10%;
+    --brand: 240 10% 4%;
     --brand-foreground: 0 0% 98%;
 
     /* Surfaces */
@@ -40,7 +40,7 @@
     --popover-foreground: 240 10% 4%;
 
     /* Roles */
-    --primary: 240 6% 10%;
+    --primary: 240 10% 4%;
     --primary-foreground: 0 0% 98%;
     --secondary: 240 5% 96%;
     --secondary-foreground: 240 6% 10%;

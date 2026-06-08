@@ -4,27 +4,27 @@ import logo from '@/app/icon.png';
 
 const footerSections = [
   {
-    title: 'Product',
+    title: 'Products',
     links: [
-      { label: 'Features', href: '/features' },
-      { label: 'Pricing', href: '/pricing' },
-      { label: 'Changelog', href: '/changelog' },
+      { label: 'Browse products', href: '/products' },
+      { label: 'Library', href: '/library' },
+      { label: 'Redeem code', href: '/redeem' },
     ],
   },
   {
-    title: 'Resources',
+    title: 'Account',
     links: [
-      { label: 'Documentation', href: '/docs' },
-      { label: 'Guides', href: '/guides' },
-      { label: 'Blog', href: '/blog' },
+      { label: 'Profile', href: '/profile' },
+      { label: 'Orders', href: '/orders' },
+      { label: 'Settings', href: '/settings' },
     ],
   },
   {
-    title: 'Company',
+    title: 'Support',
     links: [
-      { label: 'About', href: '/about' },
-      { label: 'Careers', href: '/careers' },
-      { label: 'Contact', href: '/contact' },
+      { label: 'Support tickets', href: '/support' },
+      { label: 'Notifications', href: '/notifications' },
+      { label: 'Legal', href: '/terms' },
     ],
   },
 ];
@@ -40,13 +40,12 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-6xl px-6 py-14">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <div className="max-w-sm">
-            <a href="/" className="flex items-center gap-2.5 font-semibold tracking-tight">
+            <a href="/" className="flex items-center gap-2 font-semibold tracking-tight">
               <Image src={logo} alt="" width={28} height={28} className="h-7 w-7 rounded-md" />
-              <span>Liem Monorepo</span>
+              <span>Liem Center</span>
             </a>
             <p className="mt-4 text-sm text-muted-foreground">
-              An opinionated monorepo starter for building consistent, production-ready products
-              without the boilerplate.
+              The official hub for discovering, owning, and managing every Liem developer product.
             </p>
           </div>
           {footerSections.map((section) => (
@@ -69,7 +68,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} Liem Monorepo. All rights reserved.</span>
+          <span>Copyright {new Date().getFullYear()} Liem Center. All rights reserved.</span>
           <nav aria-label="Legal" className="flex gap-6">
             <a href="/privacy" className="transition-colors hover:text-foreground">
               Privacy

@@ -99,7 +99,8 @@ Buy for someone else; redeem a code.
 
 - Buy as Gift: same checkout, generates a redeem code on success `P1`
 - Gift success page shows code + share UI (copy link, copy code) `P1`
-- Redeem page (`/redeem`) accepts code, creates entitlement on submit `P1`
+- Redeem page (`/redeem`) is publicly viewable; guests can enter a code, but **confirming** the redeem requires sign-in (routes to `/signin?next=/redeem`, code preserved) `P1`
+- On confirm by a signed-in user, creates entitlement `P1`
 - Redeem fires GitHub activation prompt when product is GitHub-type and GitHub not yet linked `P1`
 - Code states: Active / Redeemed / Expired / Revoked `P1`
 
@@ -207,8 +208,9 @@ All important events fire email. Mandatory emails always send; optional emails r
 
 Keep support out of DMs.
 
-- User-facing `/support` to file a ticket: subject, message, attached order/entitlement context `P0`
-- Ticket list under `/support` for the user `P0`
+- `/support` and `/support/new` are publicly viewable: guests can read the page and fill the form. **Submitting** a ticket requires sign-in (routes to `/signin?next=/support/new`, form preserved) `P0`
+- Ticket list of the user's own tickets shows only when signed in; guests see a sign-in link in that area (no redirect on page entry) `P0`
+- Ticket detail (`/support/[id]`) is protected — only the owner or an admin can open a specific ticket `P0`
 - Ticket detail with message thread (user ↔ admin) `P0`
 - Ticket states: Open / In Progress / Resolved / Closed `P0`
 - Admin ticket queue + reply + state changes `P0`

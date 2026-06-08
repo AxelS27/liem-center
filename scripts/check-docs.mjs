@@ -38,7 +38,13 @@ const goldenPathFiles = [
   'apps/web/src/app/page.tsx',
   'packages/utils/src/index.test.ts',
 ];
-const requiredFiles = [...rootDocs, ...guideDocs, ...coreDocs, ...supabaseFiles, ...goldenPathFiles];
+const requiredFiles = [
+  ...rootDocs,
+  ...guideDocs,
+  ...coreDocs,
+  ...supabaseFiles,
+  ...goldenPathFiles,
+];
 const failures = [];
 const warnings = [];
 
@@ -124,7 +130,9 @@ for (const doc of [
   'docs/engineering/QUALITY.md',
 ]) {
   if (progress && !progress.includes(doc)) {
-    warnings.push(`docs/engineering/PROGRESS.md does not mention ${doc}; confirm this is intentional.`);
+    warnings.push(
+      `docs/engineering/PROGRESS.md does not mention ${doc}; confirm this is intentional.`,
+    );
   }
 }
 
@@ -220,7 +228,9 @@ try {
 
 for (const phrase of ['merchant of record', 'seller payout', 'webhook retries', 'refund']) {
   if (paymentsDoc && !paymentsDoc.toLowerCase().includes(phrase)) {
-    warnings.push(`docs/engineering/PAYMENTS.md may be missing payment readiness coverage for "${phrase}".`);
+    warnings.push(
+      `docs/engineering/PAYMENTS.md may be missing payment readiness coverage for "${phrase}".`,
+    );
   }
 }
 

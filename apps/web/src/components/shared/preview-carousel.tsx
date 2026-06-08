@@ -138,7 +138,9 @@ export function PreviewCarousel() {
             onClick={() => go(i)}
             className={cn(
               'h-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              i === index ? 'w-5 bg-foreground' : 'w-1.5 bg-muted-foreground/40 hover:bg-muted-foreground',
+              i === index
+                ? 'w-5 bg-foreground'
+                : 'w-1.5 bg-muted-foreground/40 hover:bg-muted-foreground',
             )}
           />
         ))}
