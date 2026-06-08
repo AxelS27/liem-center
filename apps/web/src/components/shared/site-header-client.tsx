@@ -158,9 +158,10 @@ export function SiteHeaderClient({ role, userName }: { role: NavRole; userName: 
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
-      {/* Top utility row: primary navigation + account */}
-      <div className="hidden border-b border-border/60 bg-secondary/30 sm:block">
-        <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between gap-4 px-6 text-xs">
+      {/* Top utility row: primary navigation + account. No divider/background so the two rows
+          read as one header. */}
+      <div className="hidden pt-2 sm:block">
+        <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between gap-4 px-6 text-sm">
           <nav aria-label="Primary navigation" className="flex items-center gap-4">
             {primaryNavItems.map((item) => (
               <a
