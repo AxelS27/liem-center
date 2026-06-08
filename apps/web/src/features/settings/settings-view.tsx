@@ -17,6 +17,27 @@ const tabs: { key: TabKey; label: string }[] = [
 const fieldClass =
   'h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
 
+const countries = [
+  'Indonesia',
+  'Singapore',
+  'Malaysia',
+  'Thailand',
+  'Vietnam',
+  'Philippines',
+  'Australia',
+  'Japan',
+  'South Korea',
+  'India',
+  'United States',
+  'United Kingdom',
+  'Canada',
+  'Germany',
+  'France',
+  'Netherlands',
+  'Brazil',
+  'Other',
+];
+
 function Field({ label, hint, ...props }: { label: string; hint?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="grid gap-2 text-sm font-medium text-foreground">
@@ -124,7 +145,22 @@ export function SettingsView() {
           <div className="grid max-w-xl gap-5">
             <Field label="Display name" defaultValue="Farrell Axel" />
             <Field label="Username" defaultValue="farrellaxel" hint="Your public profile is /u/farrellaxel" />
-            <Field label="Country" placeholder="Optional" hint="Hidden on your public profile unless you choose to show it." />
+            <label className="grid gap-2 text-sm font-medium text-foreground">
+              Country <span className="font-normal text-muted-foreground">(optional)</span>
+              <select defaultValue="" className={fieldClass}>
+                <option value="" disabled>
+                  Select your country
+                </option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>
+                    {country}
+                  </option>
+                ))}
+              </select>
+              <span className="text-xs font-normal text-muted-foreground">
+                Hidden on your public profile unless you choose to show it.
+              </span>
+            </label>
             <label className="grid gap-2 text-sm font-medium text-foreground">
               Bio
               <textarea
