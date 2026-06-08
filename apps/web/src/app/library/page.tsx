@@ -18,7 +18,8 @@ export default function LibraryPage() {
             Everything you own.
           </h1>
           <p className="mt-3 max-w-xl text-base leading-7 text-muted-foreground">
-            Permanent access to every product you have claimed, purchased, redeemed, or received.
+            {entitlements.length} {entitlements.length === 1 ? 'product' : 'products'} with permanent
+            access, all in one place.
           </p>
         </div>
         <a

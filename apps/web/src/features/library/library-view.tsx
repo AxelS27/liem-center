@@ -1,28 +1,9 @@
-'use client';
-
 import { buttonVariants, cn } from '@repo/ui';
-import { useMemo, useState } from 'react';
 
 import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
 import { getProduct, productTypeLabels } from '@/features/catalog';
 
-import {
-  inviteLabels,
-  sourceLabels,
-  type Entitlement,
-  type EntitlementSource,
-  type InviteStatus,
-} from './library-data';
-
-type Filter = EntitlementSource | 'all';
-
-const filters: { value: Filter; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'purchase', label: 'Purchases' },
-  { value: 'gift', label: 'Gifts' },
-  { value: 'redeem', label: 'Redeemed' },
-  { value: 'free_claim', label: 'Claimed' },
-];
+import { inviteLabels, sourceLabels, type Entitlement, type InviteStatus } from './library-data';
 
 const inviteTone: Record<InviteStatus, StatusTone> = {
   pending: 'warning',
@@ -107,59 +88,25 @@ function EntitlementRow({ entitlement }: { entitlement: Entitlement }) {
 }
 
 export function LibraryView({ entitlements }: { entitlements: Entitlement[] }) {
-  const [active, setActive] = useState<Filter>('all');
-
-  const visible = useMemo(
-    () =>
-      active === 'all'
-        ? entitlements
-        : entitlements.filter((entitlement) => entitlement.source === active),
-    [active, entitlements],
-  );
+  if (entitlements.length === 0) {
+    return (
+      <div className="rounded-lg border border-dashed border-border px-6 py-16 text-center">
+        <p className="text-base font-medium text-foreground">Nothing here yet</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Products you claim, buy, redeem, or receive will appear here.
+        </p>
+        <a href="/products" className={cn(buttonVariants(), 'mt-6')}>
+          Browse products
+        </a>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <div role="tablist" aria-label="Filter by source" className="flex flex-wrap gap-2">
-        {filters.map((filter) => {
-          const isActive = filter.value === active;
-
-          return (
-            <button
-              key={filter.value}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActive(filter.value)}
-              className={cn(
-                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]',
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-secondary-foreground hover:bg-secondary/70',
-              )}
-            >
-              {filter.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {visible.length === 0 ? (
-        <div className="mt-8 rounded-lg border border-dashed border-border px-6 py-16 text-center">
-          <p className="text-base font-medium text-foreground">Nothing here yet</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Products you acquire this way will appear here.
-          </p>
-          <a href="/products" className={cn(buttonVariants(), 'mt-6')}>
-            Browse products
-          </a>
-        </div>
-      ) : (
-        <ul className="mt-6 divide-y divide-border border-y border-border">
-          {visible.map((entitlement) => (
-            <EntitlementRow key={entitlement.id} entitlement={entitlement} />
-          ))}
-        </ul>
-      )}
-    </div>
+    <ul className="divide-y divide-border border-y border-border">
+      {entitlements.map((entitlement) => (
+        <EntitlementRow key={entitlement.id} entitlement={entitlement} />
+      ))}
+    </ul>
   );
 }
