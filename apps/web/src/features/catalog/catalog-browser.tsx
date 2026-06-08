@@ -14,34 +14,14 @@ const categoryOptions: { value: ProductCategory; label: string }[] = [
   { value: 'bundle', label: 'Bundles' },
 ];
 
-type PriceRange = 'all' | 'free' | 'under250' | '250to500' | 'over500';
-
-const priceOptions: { value: PriceRange; label: string }[] = [
-  { value: 'all', label: 'All prices' },
-  { value: 'free', label: 'Free' },
-  { value: 'under250', label: 'Under Rp250.000' },
-  { value: '250to500', label: 'Rp250.000 – Rp500.000' },
-  { value: 'over500', label: 'Over Rp500.000' },
-];
-
-function matchesPrice(priceIdr: number, range: PriceRange): boolean {
-  switch (range) {
-    case 'free':
-      return priceIdr === 0;
-    case 'under250':
-      return priceIdr > 0 && priceIdr < 250000;
-    case '250to500':
-      return priceIdr >= 250000 && priceIdr <= 500000;
-    case 'over500':
-      return priceIdr > 500000;
-    default:
-      return true;
-  }
+function parseBound(value: string, fallback: number): number {
+  const parsed = Number(value);
+  return value.trim() === '' || Number.isNaN(parsed) ? fallback : parsed;
 }
 
 /**
- * Client catalog browser: search + a left filter rail (category checkboxes, price range) + grid.
- * Receives products as a prop and only filters them in memory (UI renders data, never creates it).
+ * Client catalog browser: search + a left filter rail (category checkboxes, a user-entered price
+ * range, free toggle) + grid. Receives products as a prop and only filters in memory.
  */
 export function CatalogBrowser({
   products,
@@ -52,9 +32,16 @@ export function CatalogBrowser({
 }) {
   const [query, setQuery] = useState(initialQuery);
   const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const [price, setPrice] = useState<PriceRange>('all');
+  const [freeOnly, setFreeOnly] = useState(false);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
 
-  const hasFilters = categories.length > 0 || price !== 'all' || query.trim() !== '';
+  const hasFilters =
+    categories.length > 0 ||
+    freeOnly ||
+    minPrice !== '' ||
+    maxPrice !== '' ||
+    query.trim() !== '';
 
   function toggleCategory(value: ProductCategory) {
     setCategories((current) =>
@@ -64,23 +51,33 @@ export function CatalogBrowser({
 
   function clearAll() {
     setCategories([]);
-    setPrice('all');
+    setFreeOnly(false);
+    setMinPrice('');
+    setMaxPrice('');
     setQuery('');
   }
 
   const visible = useMemo(() => {
     const normalized = query.trim().toLowerCase();
+    const min = parseBound(minPrice, 0);
+    const max = parseBound(maxPrice, Number.POSITIVE_INFINITY);
 
     return products.filter((product) => {
       const matchesCategory = categories.length === 0 || categories.includes(product.category);
+      const matchesPrice = freeOnly
+        ? product.priceIdr === 0
+        : product.priceIdr >= min && product.priceIdr <= max;
       const matchesQuery =
         normalized === '' ||
         product.name.toLowerCase().includes(normalized) ||
         product.tagline.toLowerCase().includes(normalized);
 
-      return matchesCategory && matchesPrice(product.priceIdr, price) && matchesQuery;
+      return matchesCategory && matchesPrice && matchesQuery;
     });
-  }, [categories, price, products, query]);
+  }, [categories, freeOnly, minPrice, maxPrice, products, query]);
+
+  const priceInputClass =
+    'h-9 w-full rounded-md border border-input bg-background px-2.5 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50';
 
   return (
     <div>
@@ -149,22 +146,46 @@ export function CatalogBrowser({
             <legend className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Price
             </legend>
-            <div className="mt-3 space-y-2.5">
-              {priceOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className="flex cursor-pointer items-center gap-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  <input
-                    type="radio"
-                    name="price"
-                    checked={price === option.value}
-                    onChange={() => setPrice(option.value)}
-                    className="h-4 w-4 border-input accent-primary"
-                  />
-                  {option.label}
-                </label>
-              ))}
+
+            <label className="mt-3 flex cursor-pointer items-center gap-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground">
+              <input
+                type="checkbox"
+                checked={freeOnly}
+                onChange={(event) => setFreeOnly(event.target.checked)}
+                className="h-4 w-4 rounded border-input accent-primary"
+              />
+              Free only
+            </label>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <label className="grid gap-1 text-xs font-medium text-muted-foreground">
+                Min (Rp)
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  step={50000}
+                  value={minPrice}
+                  disabled={freeOnly}
+                  onChange={(event) => setMinPrice(event.target.value)}
+                  placeholder="0"
+                  className={priceInputClass}
+                />
+              </label>
+              <label className="grid gap-1 text-xs font-medium text-muted-foreground">
+                Max (Rp)
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  step={50000}
+                  value={maxPrice}
+                  disabled={freeOnly}
+                  onChange={(event) => setMaxPrice(event.target.value)}
+                  placeholder="Any"
+                  className={priceInputClass}
+                />
+              </label>
             </div>
           </fieldset>
         </aside>
