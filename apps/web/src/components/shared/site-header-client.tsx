@@ -63,6 +63,13 @@ const profileIcon = (
   </>
 );
 
+const accountMenuItems: NavItem[] = [
+  { label: 'Profile', href: '/profile' },
+  { label: 'Library', href: '/library' },
+  { label: 'Orders', href: '/orders' },
+  { label: 'Settings', href: '/settings' },
+];
+
 const guestUtilityNavItems: NavItem[] = [{ label: 'Cart', href: '/checkout', icon: cartIcon }];
 
 const userUtilityNavItems: NavItem[] = [
@@ -207,27 +214,44 @@ export function SiteHeaderClient({ role, userName }: { role: NavRole; userName: 
                 </a>
               </>
             ) : (
-              <>
-                <a
-                  href="/profile"
-                  aria-current={isActive('/profile') ? 'page' : undefined}
-                  className="flex items-center gap-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
+              <details className="group relative">
+                <summary className="flex cursor-pointer list-none items-center gap-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground marker:hidden [&::-webkit-details-marker]:hidden">
                   <NavIcon>{profileIcon}</NavIcon>
                   <span className="max-w-32 truncate">{userName ?? 'Account'}</span>
-                </a>
-                <span className="text-border" aria-hidden="true">
-                  |
-                </span>
-                <form action="/auth/signout" method="post">
-                  <button
-                    type="submit"
-                    className="font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.75}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-3.5 w-3.5"
+                    aria-hidden="true"
                   >
-                    Sign out
-                  </button>
-                </form>
-              </>
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+                <div className="absolute right-0 z-20 mt-2 w-48 rounded-md border border-border bg-background p-1 shadow-sm">
+                  {accountMenuItems.map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-center rounded-sm px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                  <div className="my-1 border-t border-border" />
+                  <form action="/auth/signout" method="post">
+                    <button
+                      type="submit"
+                      className="flex w-full items-center rounded-sm px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                      Sign out
+                    </button>
+                  </form>
+                </div>
+              </details>
             )}
           </div>
         </div>
