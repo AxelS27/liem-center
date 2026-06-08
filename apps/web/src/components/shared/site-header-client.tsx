@@ -6,10 +6,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, type FormEvent, type ReactNode } from 'react';
 
 import logo from '@/app/icon.png';
-import { getProducts } from '@/features/catalog';
 import { useCart } from '@/hooks/use-cart';
 
-const popularProducts = getProducts().slice(0, 3);
+import { LanguageSwitcher, ThemeSwitcher } from './header-controls';
 
 export type NavRole = 'admin' | 'guest' | 'user';
 
@@ -183,23 +182,12 @@ export function SiteHeaderClient({ role, userName }: { role: NavRole; userName: 
             ))}
           </nav>
 
-          <nav
-            aria-label="Popular products"
-            className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex"
-          >
-            <span className="shrink-0 font-medium text-foreground/50">Popular</span>
-            {popularProducts.map((product) => (
-              <a
-                key={product.slug}
-                href={`/products/${product.slug}`}
-                className="truncate text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {product.name}
-              </a>
-            ))}
-          </nav>
-
           <div className="flex shrink-0 items-center gap-3">
+            <LanguageSwitcher />
+            <ThemeSwitcher />
+            <span className="text-border" aria-hidden="true">
+              |
+            </span>
             {role === 'guest' ? (
               <>
                 <a
