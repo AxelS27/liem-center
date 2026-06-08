@@ -5,7 +5,7 @@ import { formatPrice, getProduct } from '@/features/catalog';
 import { getOrders, orderStatusLabels, type OrderStatus } from '@/features/orders';
 
 export const metadata: Metadata = {
-  title: 'Orders',
+  title: 'Order history',
 };
 
 const statusTone: Record<OrderStatus, StatusTone> = {

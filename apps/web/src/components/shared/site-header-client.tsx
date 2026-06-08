@@ -27,7 +27,6 @@ const guestPrimaryNavItems: NavItem[] = [
 const userPrimaryNavItems: NavItem[] = [
   { label: 'Products', href: '/products' },
   { label: 'Library', href: '/library' },
-  { label: 'Orders', href: '/orders' },
   { label: 'Redeem', href: '/redeem' },
   { label: 'Support', href: '/support' },
 ];
@@ -63,10 +62,11 @@ const profileIcon = (
   </>
 );
 
-// Account-specific entries only. Library and Orders already live in the primary nav, so they are
-// intentionally not duplicated here.
+// Account-specific entries. Order history lives here (not in the primary nav); Library stays in
+// the primary nav and is intentionally not duplicated.
 const accountMenuItems: NavItem[] = [
   { label: 'Profile', href: '/profile' },
+  { label: 'Order history', href: '/orders' },
   { label: 'Settings', href: '/settings' },
 ];
 
