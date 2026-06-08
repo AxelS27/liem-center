@@ -56,33 +56,35 @@ export function LanguageSwitcher() {
   const [active, setActive] = useState(languages[0]);
 
   return (
-    <details className="group relative">
-      <summary className="flex cursor-pointer list-none items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground marker:hidden [&::-webkit-details-marker]:hidden">
+    <div className="group relative">
+      <button
+        type="button"
+        className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground group-hover:text-foreground"
+      >
         <GlobeIcon />
         <span className="hidden md:inline">{active?.label}</span>
         <ChevronIcon />
-      </summary>
-      <div className="absolute right-0 z-20 mt-2 w-44 rounded-md border border-border bg-background p-1 shadow-sm">
-        {languages.map((language) => (
-          <button
-            key={language.code}
-            type="button"
-            onClick={(event) => {
-              setActive(language);
-              event.currentTarget.closest('details')?.removeAttribute('open');
-            }}
-            className={cn(
-              'flex w-full items-center rounded-sm px-3 py-2 text-left text-sm transition-colors',
-              active?.code === language.code
-                ? 'bg-secondary font-medium text-foreground'
-                : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
-            )}
-          >
-            {language.label}
-          </button>
-        ))}
+      </button>
+      <div className="absolute right-0 top-full z-20 hidden pt-2 group-hover:block group-focus-within:block">
+        <div className="w-44 rounded-md border border-border bg-background p-1 shadow-sm">
+          {languages.map((language) => (
+            <button
+              key={language.code}
+              type="button"
+              onClick={() => setActive(language)}
+              className={cn(
+                'flex w-full items-center rounded-sm px-3 py-2 text-left text-sm transition-colors',
+                active?.code === language.code
+                  ? 'bg-secondary font-medium text-foreground'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
+              )}
+            >
+              {language.label}
+            </button>
+          ))}
+        </div>
       </div>
-    </details>
+    </div>
   );
 }
 
