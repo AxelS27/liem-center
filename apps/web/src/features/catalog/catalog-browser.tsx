@@ -17,19 +17,59 @@ const filters: { value: Filter; label: string }[] = [
 ];
 
 /**
- * Client catalog browser: type filter + responsive grid. Receives products as a prop and only
- * filters them in memory (UI renders data, it never creates it).
+ * Client catalog browser: search + type filter + responsive grid. Receives products as a prop and
+ * only filters them in memory (UI renders data, it never creates it).
  */
-export function CatalogBrowser({ products }: { products: Product[] }) {
+export function CatalogBrowser({
+  products,
+  initialQuery = '',
+}: {
+  products: Product[];
+  initialQuery?: string;
+}) {
   const [active, setActive] = useState<Filter>('all');
+  const [query, setQuery] = useState(initialQuery);
 
-  const visible = useMemo(
-    () => (active === 'all' ? products : products.filter((product) => product.type === active)),
-    [active, products],
-  );
+  const visible = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+
+    return products.filter((product) => {
+      const matchesType = active === 'all' || product.type === active;
+      const matchesQuery =
+        normalized === '' ||
+        product.name.toLowerCase().includes(normalized) ||
+        product.tagline.toLowerCase().includes(normalized);
+
+      return matchesType && matchesQuery;
+    });
+  }, [active, products, query]);
 
   return (
     <div>
+      <div className="relative mb-5 max-w-md">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.75}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search products"
+          aria-label="Search products"
+          className="h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        />
+      </div>
+
       <div
         role="tablist"
         aria-label="Filter products by type"
@@ -60,9 +100,9 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
 
       {visible.length === 0 ? (
         <div className="mt-10 rounded-lg border border-dashed border-border px-6 py-16 text-center">
-          <p className="text-base font-medium text-foreground">No products in this category yet</p>
+          <p className="text-base font-medium text-foreground">No products found</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Try another type, or browse everything from the All tab.
+            Try a different search or filter.
           </p>
         </div>
       ) : (

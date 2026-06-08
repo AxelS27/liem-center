@@ -6,7 +6,11 @@ export const metadata: Metadata = {
   title: 'Products',
 };
 
-export default function ProductsPage() {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+export default async function ProductsPage({ searchParams }: { searchParams: SearchParams }) {
+  const params = await searchParams;
+  const query = typeof params.q === 'string' ? params.q : '';
   const products = getProducts();
 
   return (
@@ -23,7 +27,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="mt-10">
-        <CatalogBrowser products={products} />
+        <CatalogBrowser products={products} initialQuery={query} />
       </div>
     </section>
   );

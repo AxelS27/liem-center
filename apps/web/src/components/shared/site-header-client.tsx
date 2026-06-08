@@ -2,8 +2,8 @@
 
 import { buttonVariants, cn } from '@repo/ui';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import type { ReactNode } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState, type FormEvent, type ReactNode } from 'react';
 
 import logo from '@/app/icon.png';
 import { useCart } from '@/hooks/use-cart';
@@ -107,6 +107,46 @@ function NavIcon({ children }: { children: ReactNode }) {
   );
 }
 
+function HeaderSearch() {
+  const router = useRouter();
+  const [query, setQuery] = useState('');
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const trimmed = query.trim();
+    router.push(trimmed ? `/products?q=${encodeURIComponent(trimmed)}` : '/products');
+  }
+
+  return (
+    <form role="search" onSubmit={onSubmit} className="hidden min-w-0 flex-1 justify-center px-4 lg:flex">
+      <div className="relative w-full max-w-md">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.75}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+        <input
+          type="search"
+          name="q"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search products"
+          aria-label="Search products"
+          className="h-9 w-full rounded-md border border-border bg-secondary/60 pl-9 pr-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        />
+      </div>
+    </form>
+  );
+}
+
 export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail: string | null }) {
   const pathname = usePathname();
   const { count: cartCount } = useCart();
@@ -141,6 +181,8 @@ export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail
           ))}
           </nav>
         </div>
+
+        <HeaderSearch />
 
         <div className="hidden items-center gap-2 md:flex">
           <nav aria-label="Utility navigation" className="flex items-center gap-1">
