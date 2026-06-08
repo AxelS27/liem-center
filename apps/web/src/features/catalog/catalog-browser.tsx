@@ -154,7 +154,7 @@ export function CatalogBrowser({
                 onChange={(event) => setFreeOnly(event.target.checked)}
                 className="h-4 w-4 rounded border-input accent-primary"
               />
-              Free only
+              Free
             </label>
 
             <div className="mt-3 grid grid-cols-2 gap-2">
