@@ -118,8 +118,8 @@ function HeaderSearch() {
   }
 
   return (
-    <form role="search" onSubmit={onSubmit} className="hidden min-w-0 flex-1 justify-center px-4 lg:flex">
-      <div className="relative w-full max-w-md">
+    <form role="search" onSubmit={onSubmit} className="flex min-w-0 flex-1">
+      <div className="relative w-full">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -140,116 +140,145 @@ function HeaderSearch() {
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search products"
           aria-label="Search products"
-          className="h-9 w-full rounded-md border border-border bg-secondary/60 pl-9 pr-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:bg-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         />
       </div>
     </form>
   );
 }
 
-export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail: string | null }) {
+export function SiteHeaderClient({ role, userName }: { role: NavRole; userName: string | null }) {
   const pathname = usePathname();
   const { count: cartCount } = useCart();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const primaryNavItems = getPrimaryNavItems(role);
-  const utilityNavItems = getUtilityNavItems(role);
+  // Profile lives in the top utility bar (the account name links there), so keep it out of the
+  // main-row icon cluster to avoid duplication.
+  const utilityNavItems = getUtilityNavItems(role).filter((item) => item.href !== '/profile');
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-6">
-        <div className="flex items-center gap-6 lg:gap-8">
-          <a href="/" className="flex shrink-0 items-center gap-2 font-semibold tracking-tight">
-            <Image src={logo} alt="" width={32} height={32} priority className="h-8 w-8 rounded-md" />
-            <span className="text-base">Liem Center</span>
-          </a>
-
-          <nav aria-label="Primary navigation" className="hidden items-center gap-5 text-sm lg:flex">
-          {primaryNavItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              aria-current={isActive(item.href) ? 'page' : undefined}
-              className={cn(
-                'transition-colors',
-                isActive(item.href)
-                  ? 'font-medium text-foreground'
-                  : 'text-muted-foreground hover:text-foreground',
-              )}
-            >
-              {item.label}
-            </a>
-          ))}
+      {/* Top utility row: primary navigation + account */}
+      <div className="hidden border-b border-border/60 bg-secondary/30 sm:block">
+        <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between gap-4 px-6 text-xs">
+          <nav aria-label="Primary navigation" className="flex items-center gap-4">
+            {primaryNavItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                className={cn(
+                  'transition-colors',
+                  isActive(item.href)
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
+
+          <div className="flex items-center gap-3">
+            {role === 'guest' ? (
+              <>
+                <a
+                  href="/signin"
+                  className="font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Sign in
+                </a>
+                <span className="text-border" aria-hidden="true">
+                  |
+                </span>
+                <a
+                  href="/signup"
+                  className="font-medium text-foreground transition-colors hover:text-foreground/70"
+                >
+                  Create account
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/profile"
+                  aria-current={isActive('/profile') ? 'page' : undefined}
+                  className="flex items-center gap-1.5 font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <NavIcon>{profileIcon}</NavIcon>
+                  <span className="max-w-32 truncate">{userName ?? 'Account'}</span>
+                </a>
+                <span className="text-border" aria-hidden="true">
+                  |
+                </span>
+                <form action="/auth/signout" method="post">
+                  <button
+                    type="submit"
+                    className="font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Sign out
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
         </div>
+      </div>
+
+      {/* Main row: brand + search + utility icons */}
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-6 sm:gap-6">
+        <a href="/" className="flex shrink-0 items-center gap-2 font-semibold tracking-tight">
+          <Image src={logo} alt="" width={32} height={32} priority className="h-8 w-8 rounded-md" />
+          <span className="hidden text-base sm:inline">Liem Center</span>
+        </a>
 
         <HeaderSearch />
 
-        <div className="hidden items-center gap-2 md:flex">
-          <nav aria-label="Utility navigation" className="flex items-center gap-1">
-            {utilityNavItems.map((item) => {
-              const showCart = item.href === '/checkout' && cartCount > 0;
+        <nav aria-label="Utility navigation" className="hidden items-center gap-1 sm:flex">
+          {utilityNavItems.map((item) => {
+            const showCart = item.href === '/checkout' && cartCount > 0;
 
-              return (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  aria-label={showCart ? `${item.label}, ${cartCount} items` : item.label}
-                  title={item.label}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                  className={cn(
-                    'relative flex h-9 w-9 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]',
-                    isActive(item.href)
-                      ? 'bg-secondary text-foreground'
-                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
-                  )}
-                >
-                  <NavIcon>{item.icon}</NavIcon>
-                  {showCart ? (
-                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
-                      {cartCount}
-                    </span>
-                  ) : null}
-                </a>
-              );
-            })}
-          </nav>
-
-          {role === 'guest' ? (
-            <>
+            return (
               <a
-                href="/signin"
-                className="px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                key={item.href}
+                href={item.href}
+                aria-label={showCart ? `${item.label}, ${cartCount} items` : item.label}
+                title={item.label}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                className={cn(
+                  'relative flex h-9 w-9 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]',
+                  isActive(item.href)
+                    ? 'bg-secondary text-foreground'
+                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
+                )}
               >
-                Sign in
+                <NavIcon>{item.icon}</NavIcon>
+                {showCart ? (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+                    {cartCount}
+                  </span>
+                ) : null}
               </a>
-              <a href="/signup" className={cn(buttonVariants({ size: 'sm' }))}>
-                Create account
-              </a>
-            </>
-          ) : (
-            <form action="/auth/signout" method="post" className="flex items-center gap-2">
-              <span className="hidden max-w-40 truncate text-sm text-muted-foreground xl:inline">
-                {userEmail}
-              </span>
-              <button
-                type="submit"
-                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
-              >
-                Sign out
-              </button>
-            </form>
-          )}
-        </div>
+            );
+          })}
+        </nav>
 
-        <details className="group relative md:hidden">
-          <summary className="flex h-10 cursor-pointer list-none items-center rounded-md border border-border px-3 text-sm font-medium marker:hidden [&::-webkit-details-marker]:hidden">
-            Menu
+        <details className="group relative shrink-0 sm:hidden">
+          <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-border marker:hidden [&::-webkit-details-marker]:hidden">
+            <NavIcon>
+              <>
+                <path d="M4 6h16" />
+                <path d="M4 12h16" />
+                <path d="M4 18h16" />
+              </>
+            </NavIcon>
+            <span className="sr-only">Menu</span>
           </summary>
           <nav
             aria-label="Mobile navigation"
             className="absolute right-0 z-10 mt-3 w-60 rounded-md border border-border bg-background p-2 shadow-sm"
           >
-            {[...primaryNavItems, ...utilityNavItems].map((item) => (
+            {[...primaryNavItems, ...getUtilityNavItems(role)].map((item) => (
               <a
                 key={item.href}
                 href={item.href}
@@ -279,14 +308,19 @@ export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail
                   </a>
                 </>
               ) : (
-                <form action="/auth/signout" method="post">
-                  <button
-                    type="submit"
-                    className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-full')}
-                  >
-                    Sign out
-                  </button>
-                </form>
+                <>
+                  <span className="px-3 py-1 text-xs text-muted-foreground">
+                    Signed in as {userName ?? 'your account'}
+                  </span>
+                  <form action="/auth/signout" method="post">
+                    <button
+                      type="submit"
+                      className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'w-full')}
+                    >
+                      Sign out
+                    </button>
+                  </form>
+                </>
               )}
             </div>
           </nav>
