@@ -117,12 +117,13 @@ export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-6">
-        <a href="/" className="flex shrink-0 items-center gap-2 font-semibold tracking-tight">
-          <Image src={logo} alt="" width={32} height={32} priority className="h-8 w-8 rounded-md" />
-          <span className="text-base">Liem Center</span>
-        </a>
+        <div className="flex items-center gap-6 lg:gap-8">
+          <a href="/" className="flex shrink-0 items-center gap-2 font-semibold tracking-tight">
+            <Image src={logo} alt="" width={32} height={32} priority className="h-8 w-8 rounded-md" />
+            <span className="text-base">Liem Center</span>
+          </a>
 
-        <nav aria-label="Primary navigation" className="hidden items-center gap-5 text-sm lg:flex">
+          <nav aria-label="Primary navigation" className="hidden items-center gap-5 text-sm lg:flex">
           {primaryNavItems.map((item) => (
             <a
               key={item.href}
@@ -138,7 +139,8 @@ export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail
               {item.label}
             </a>
           ))}
-        </nav>
+          </nav>
+        </div>
 
         <div className="hidden items-center gap-2 md:flex">
           <nav aria-label="Utility navigation" className="flex items-center gap-1">
