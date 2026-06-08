@@ -2,6 +2,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import type { User } from '@supabase/supabase-js';
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { isAdminEmail } from '@/config/admin';
+
 // Routes that redirect to sign-in on entry when signed out.
 const protectedRoutes = [
   '/admin',
@@ -32,7 +34,11 @@ function isAdmin(user: User) {
   const role = metadata.role;
   const roles = metadata.roles;
 
-  return role === 'admin' || (Array.isArray(roles) && roles.includes('admin'));
+  return (
+    role === 'admin' ||
+    (Array.isArray(roles) && roles.includes('admin')) ||
+    isAdminEmail(user.email)
+  );
 }
 
 export async function middleware(request: NextRequest) {

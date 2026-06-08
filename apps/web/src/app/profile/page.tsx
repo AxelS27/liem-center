@@ -1,14 +1,21 @@
 import { buttonVariants, cn } from '@repo/ui';
 import type { Metadata } from 'next';
 
+import { isAdminEmail } from '@/config/admin';
 import { getProfile, PinnedShowcase } from '@/features/profile';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Profile',
 };
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
   const profile = getProfile();
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isAdmin = isAdminEmail(user?.email);
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">
@@ -27,7 +34,7 @@ export default function ProfilePage() {
             <p className="text-sm text-muted-foreground">@{profile.username}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
               <span className="rounded-md bg-primary px-2 py-0.5 font-medium text-primary-foreground">
-                {profile.tier} Member
+                {isAdmin ? 'Admin' : `${profile.tier} Member`}
               </span>
               {profile.founderNumber ? (
                 <span className="rounded-md bg-secondary px-2 py-0.5 font-medium text-secondary-foreground">

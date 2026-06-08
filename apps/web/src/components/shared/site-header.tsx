@@ -1,5 +1,6 @@
 import type { User } from '@supabase/supabase-js';
 
+import { isAdminEmail } from '@/config/admin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 import { SiteHeaderClient, type NavRole } from './site-header-client';
@@ -13,7 +14,11 @@ function getNavRole(user: User | null): NavRole {
   const role = metadata.role;
   const roles = metadata.roles;
 
-  if (role === 'admin' || (Array.isArray(roles) && roles.includes('admin'))) {
+  if (
+    role === 'admin' ||
+    (Array.isArray(roles) && roles.includes('admin')) ||
+    isAdminEmail(user.email)
+  ) {
     return 'admin';
   }
 
