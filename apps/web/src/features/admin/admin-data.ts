@@ -42,6 +42,7 @@ export type AdminCode = {
   code: string;
   kind: 'gift' | 'promo' | 'admin';
   product: string;
+  uses: number;
   status: 'active' | 'redeemed' | 'expired' | 'revoked';
   redeemedBy?: string;
   createdAt: string;
@@ -49,10 +50,10 @@ export type AdminCode = {
 
 export function getAdminCodes(): AdminCode[] {
   return [
-    { code: 'LIEM-GIFT-7F2A', kind: 'gift', product: 'Liem UI Kit', status: 'redeemed', redeemedBy: 'mayap', createdAt: '2026-05-12' },
-    { code: 'LAUNCH50', kind: 'promo', product: 'All products', status: 'active', createdAt: '2026-05-01' },
-    { code: 'LIEM-GIFT-91BC', kind: 'gift', product: 'Liem Monorepo', status: 'active', createdAt: '2026-05-28' },
-    { code: 'BETA-ACCESS-04', kind: 'admin', product: 'Liem AI Plugin', status: 'expired', createdAt: '2026-04-15' },
+    { code: 'LIEM-GIFT-7F2A', kind: 'gift', product: 'Liem UI Kit', uses: 1, status: 'redeemed', redeemedBy: 'mayap', createdAt: '2026-05-12' },
+    { code: 'LAUNCH50', kind: 'promo', product: 'All products', uses: 100, status: 'active', createdAt: '2026-05-01' },
+    { code: 'LIEM-GIFT-91BC', kind: 'gift', product: 'Liem Monorepo', uses: 1, status: 'active', createdAt: '2026-05-28' },
+    { code: 'BETA-ACCESS-04', kind: 'admin', product: 'Liem AI Plugin', uses: 1, status: 'expired', createdAt: '2026-04-15' },
   ];
 }
 

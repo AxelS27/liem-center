@@ -13,3 +13,4 @@ export {
   type AdminUser,
 } from './admin-data';
 export { AdminNav } from './admin-nav';
+export { CodesManager } from './codes-manager';
