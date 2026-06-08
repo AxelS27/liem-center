@@ -2,7 +2,7 @@
 
 import { buttonVariants, cn } from '@repo/ui';
 
-import { getProduct, productTypeLabels } from '@/features/catalog';
+import { categoryLabels, getProduct } from '@/features/catalog';
 import { usePinnedProducts } from '@/hooks/use-pinned-products';
 
 import { sourceLabels, type Entitlement } from './library-data';
@@ -82,26 +82,27 @@ function EntitlementRow({
 
   return (
     <li className="flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <a
-            href={`/products/${product.slug}`}
-            className="text-sm font-semibold text-foreground transition-colors hover:text-foreground/70"
-          >
-            {product.name}
-          </a>
-          <span className="rounded-md bg-secondary px-1.5 py-0.5 text-xs font-medium text-secondary-foreground">
-            {productTypeLabels[product.type]}
-          </span>
+      <div className="flex min-w-0 items-center gap-3">
+        <PinButton pinned={pinned} disabled={pinDisabled} onToggle={onTogglePin} />
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href={`/products/${product.slug}`}
+              className="text-sm font-semibold text-foreground transition-colors hover:text-foreground/70"
+            >
+              {product.name}
+            </a>
+            <span className="rounded-md bg-secondary px-1.5 py-0.5 text-xs font-medium text-secondary-foreground">
+              {categoryLabels[product.category]}
+            </span>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {sourceLabels[entitlement.source]} · Owned since {entitlement.ownedSince}
+          </p>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">
-          {sourceLabels[entitlement.source]} · Owned since {entitlement.ownedSince}
-        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-        <PinButton pinned={pinned} disabled={pinDisabled} onToggle={onTogglePin} />
-
         {entitlement.access === 'revoked' ? (
           <span className="text-xs text-muted-foreground">Access revoked</span>
         ) : isGithub ? (
