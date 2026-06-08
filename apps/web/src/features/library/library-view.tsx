@@ -7,7 +7,7 @@ import { usePinnedProducts } from '@/hooks/use-pinned-products';
 
 import { sourceLabels, type Entitlement } from './library-data';
 
-function StarIcon({ filled }: { filled: boolean }) {
+function PinIcon({ filled }: { filled: boolean }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -19,7 +19,8 @@ function StarIcon({ filled }: { filled: boolean }) {
       className="h-4 w-4"
       aria-hidden="true"
     >
-      <path d="M12 2 14.9 8.26 22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 7.1-1.01L12 2z" />
+      <path d="M12 17v5" />
+      <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
     </svg>
   );
 }
@@ -53,7 +54,7 @@ function PinButton({
           : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
       )}
     >
-      <StarIcon filled={pinned} />
+      <PinIcon filled={pinned} />
       <span className="sr-only">{pinned ? 'Unpin from profile' : 'Pin to profile'}</span>
     </button>
   );
@@ -154,13 +155,18 @@ export function LibraryView({ entitlements }: { entitlements: Entitlement[] }) {
     );
   }
 
+  // Pinned products float to the top so the showcase order is visible at a glance.
+  const ordered = [...entitlements].sort(
+    (a, b) => Number(isPinned(b.productSlug)) - Number(isPinned(a.productSlug)),
+  );
+
   return (
     <>
       <p className="text-xs text-muted-foreground">
-        Use the star to pin a product to your profile showcase.
+        Use the pin to feature a product on your profile. Pinned products move to the top.
       </p>
       <ul className="mt-3 divide-y divide-border border-y border-border">
-        {entitlements.map((entitlement) => {
+        {ordered.map((entitlement) => {
           const pinned = isPinned(entitlement.productSlug);
 
           return (

@@ -4,16 +4,17 @@ import { buttonVariants, cn } from '@repo/ui';
 import { useMemo, useState } from 'react';
 
 import { formatPrice, getProduct, productTypeLabels } from '@/features/catalog';
+import { useCart } from '@/hooks/use-cart';
 
 const COUPONS: Record<string, number> = { LIEM10: 0.1, LAUNCH50: 0.5 };
 
 /**
- * Client checkout/cart. Seeded from the products passed in (e.g. from a product page Buy action).
- * Coupon and pay are mock interactions for the frontend build; real payment goes through the
- * Midtrans flow in apps/server once the backend lands (docs/engineering/PAYMENTS.md).
+ * Client checkout/cart, backed by the shared cart store. Coupon and pay are mock interactions for
+ * the frontend build; real payment goes through the Midtrans flow in apps/server once the backend
+ * lands (docs/engineering/PAYMENTS.md).
  */
-export function CheckoutView({ initialSlugs, isGift }: { initialSlugs: string[]; isGift: boolean }) {
-  const [slugs, setSlugs] = useState<string[]>(initialSlugs);
+export function CheckoutView({ isGift }: { isGift: boolean }) {
+  const cart = useCart();
   const [coupon, setCoupon] = useState('');
   const [appliedRate, setAppliedRate] = useState(0);
   const [couponError, setCouponError] = useState<string | null>(null);
@@ -22,10 +23,10 @@ export function CheckoutView({ initialSlugs, isGift }: { initialSlugs: string[];
 
   const items = useMemo(
     () =>
-      slugs
+      cart.items
         .map((slug) => getProduct(slug))
         .filter((product): product is NonNullable<typeof product> => Boolean(product)),
-    [slugs],
+    [cart.items],
   );
 
   const subtotal = items.reduce((sum, product) => sum + product.priceIdr, 0);
@@ -49,6 +50,7 @@ export function CheckoutView({ initialSlugs, isGift }: { initialSlugs: string[];
   function pay() {
     setPaying(true);
     window.setTimeout(() => {
+      cart.clear();
       setPaying(false);
       setDone(true);
     }, 700);
@@ -103,7 +105,7 @@ export function CheckoutView({ initialSlugs, isGift }: { initialSlugs: string[];
               </span>
               <button
                 type="button"
-                onClick={() => setSlugs((current) => current.filter((slug) => slug !== product.slug))}
+                onClick={() => cart.remove(product.slug)}
                 className="text-xs font-medium text-muted-foreground transition-colors hover:text-destructive"
               >
                 Remove

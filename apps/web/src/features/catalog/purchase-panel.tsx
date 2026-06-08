@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useAuthGate } from '@/features/auth';
+import { useCart } from '@/hooks/use-cart';
 
 import { formatPrice, productTypeLabels, type Product } from './catalog-data';
 
@@ -16,18 +17,24 @@ import { formatPrice, productTypeLabels, type Product } from './catalog-data';
 export function PurchasePanel({ product }: { product: Product }) {
   const router = useRouter();
   const gate = useAuthGate();
+  const cart = useCart();
   const [pending, setPending] = useState<string | null>(null);
 
   const isFree = product.type === 'free';
   const here = `/products/${product.slug}`;
+  const inCart = cart.has(product.slug);
 
-  async function run(action: string, authedDestination: string) {
+  async function run(action: string, authedDestination: string, addToCart = false) {
     setPending(action);
 
     try {
       const authed = await gate(here);
 
       if (authed) {
+        if (addToCart) {
+          cart.add(product.slug);
+        }
+
         router.push(authedDestination);
       }
     } finally {
@@ -65,30 +72,58 @@ export function PurchasePanel({ product }: { product: Product }) {
           <>
             <button
               type="button"
-              onClick={() => run('buy', `/checkout?product=${product.slug}`)}
+              onClick={() => run('buy', '/checkout', true)}
               disabled={pending !== null}
               className={cn(buttonVariants({ size: 'lg' }), 'w-full')}
             >
               {pending === 'buy' ? 'Checking your account...' : 'Buy now'}
             </button>
-            <button
-              type="button"
-              onClick={() => run('gift', `/checkout?product=${product.slug}&gift=1`)}
-              disabled={pending !== null}
-              className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'w-full')}
-            >
-              Buy as gift
-            </button>
+            {inCart ? (
+              <a
+                href="/checkout"
+                className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'w-full')}
+              >
+                In cart — go to cart
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => cart.add(product.slug)}
+                className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'w-full')}
+              >
+                Add to cart
+              </button>
+            )}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => run('gift', '/checkout?gift=1', true)}
+                disabled={pending !== null}
+                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
+              >
+                Buy as gift
+              </button>
+              <button
+                type="button"
+                onClick={() => run('wishlist', '/wishlist')}
+                disabled={pending !== null}
+                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
+              >
+                Add to wishlist
+              </button>
+            </div>
           </>
         )}
-        <button
-          type="button"
-          onClick={() => run('wishlist', '/wishlist')}
-          disabled={pending !== null}
-          className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
-        >
-          Add to wishlist
-        </button>
+        {isFree ? (
+          <button
+            type="button"
+            onClick={() => run('wishlist', '/wishlist')}
+            disabled={pending !== null}
+            className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
+          >
+            Add to wishlist
+          </button>
+        ) : null}
       </div>
 
       {product.requires && product.requires.length > 0 ? (

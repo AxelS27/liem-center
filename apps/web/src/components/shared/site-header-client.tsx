@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import logo from '@/app/icon.png';
+import { useCart } from '@/hooks/use-cart';
 
 export type NavRole = 'admin' | 'guest' | 'user';
 
@@ -108,6 +109,7 @@ function NavIcon({ children }: { children: ReactNode }) {
 
 export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail: string | null }) {
   const pathname = usePathname();
+  const { count: cartCount } = useCart();
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const primaryNavItems = getPrimaryNavItems(role);
   const utilityNavItems = getUtilityNavItems(role);
@@ -140,23 +142,32 @@ export function SiteHeaderClient({ role, userEmail }: { role: NavRole; userEmail
 
         <div className="hidden items-center gap-2 md:flex">
           <nav aria-label="Utility navigation" className="flex items-center gap-1">
-            {utilityNavItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                aria-label={item.label}
-                title={item.label}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-                className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]',
-                  isActive(item.href)
-                    ? 'bg-secondary text-foreground'
-                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
-                )}
-              >
-                <NavIcon>{item.icon}</NavIcon>
-              </a>
-            ))}
+            {utilityNavItems.map((item) => {
+              const showCart = item.href === '/checkout' && cartCount > 0;
+
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  aria-label={showCart ? `${item.label}, ${cartCount} items` : item.label}
+                  title={item.label}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  className={cn(
+                    'relative flex h-9 w-9 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]',
+                    isActive(item.href)
+                      ? 'bg-secondary text-foreground'
+                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
+                  )}
+                >
+                  <NavIcon>{item.icon}</NavIcon>
+                  {showCart ? (
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+                      {cartCount}
+                    </span>
+                  ) : null}
+                </a>
+              );
+            })}
           </nav>
 
           {role === 'guest' ? (

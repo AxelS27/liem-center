@@ -16,11 +16,7 @@ function readParam(params: Awaited<SearchParams>, key: string) {
 
 export default async function CheckoutPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
-  const product = readParam(params, 'product');
   const isGift = readParam(params, 'gift') === '1';
-
-  // Seed the cart from the product the user came from; fall back to a sample item.
-  const initialSlugs = product ? [product] : ['liem-monorepo'];
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">
@@ -33,7 +29,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Sea
       </p>
 
       <div className="mt-10">
-        <CheckoutView initialSlugs={initialSlugs} isGift={isGift} />
+        <CheckoutView isGift={isGift} />
       </div>
     </section>
   );
