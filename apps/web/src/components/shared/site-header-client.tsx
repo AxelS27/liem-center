@@ -63,10 +63,10 @@ const profileIcon = (
   </>
 );
 
+// Account-specific entries only. Library and Orders already live in the primary nav, so they are
+// intentionally not duplicated here.
 const accountMenuItems: NavItem[] = [
   { label: 'Profile', href: '/profile' },
-  { label: 'Library', href: '/library' },
-  { label: 'Orders', href: '/orders' },
   { label: 'Settings', href: '/settings' },
 ];
 
