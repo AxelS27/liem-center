@@ -14,7 +14,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
   const products = getProducts();
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-20">
+    <section className="mx-auto w-full max-w-7xl px-6 py-16 sm:py-20">
       <div className="max-w-2xl">
         <p className="text-sm font-medium text-muted-foreground">Catalog</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">

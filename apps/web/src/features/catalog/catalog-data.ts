@@ -219,16 +219,17 @@ const products: Product[] = [
   {
     slug: 'liem-agent-skills',
     name: 'Liem Agent Skills',
-    tagline: 'Ready-to-use agent skills as Markdown files for your coding assistant.',
-    type: 'download',
+    tagline: 'Installable agent skills as Markdown files for your coding assistant.',
+    type: 'github',
     category: 'skills',
     priceIdr: 249000,
     version: 'v0.6.0',
     updatedAt: '2026-05-29',
     cover: preview1,
+    githubRepo: 'liem/agent-skills',
     overview: [
-      'A collection of agent skills authored as `.md` files: drop them into your assistant to add focused, repeatable capabilities.',
-      'Downloadable and versioned. New skills appear as product update notifications.',
+      'A collection of agent skills authored as `.md` files: install them into your assistant to add focused, repeatable capabilities.',
+      'Delivered through GitHub: connect once and you get a repository invite, so pulling new skills is just a git pull.',
     ],
     features: [
       'Markdown skill files, no setup required',
