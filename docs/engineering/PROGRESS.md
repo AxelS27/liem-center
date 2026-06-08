@@ -28,6 +28,7 @@
 - `[x]` Blue developer accent set in `globals.css` (`--primary`/`--ring`/`--brand`); white background kept.
 - `[x]` Catalog `/products` + `/products/[slug]`, `/redeem`, `/support`, `/support/new` — frontend on mock catalog data; auth action-gate wired (public pages, gate on confirm). Backend/API still pending.
 - `[x]` App pages on mock data: `/library`, `/orders` + `/orders/[id]`, `/profile`, `/checkout`, `/wishlist`, `/notifications`, `/settings`. Shared `StatusPill` + success/warning tokens added. Production build compiles all routes.
+- `[x]` Admin dashboard on mock data: `/admin` shell (sub-nav tabs under the global header) with Overview (metrics + recent orders), Products, Orders, Users, Codes, GitHub access, Reviews, Support. Tables + action buttons are mock UI; middleware already gates non-admins to `/library`.
 - `[ ]` Replace mock catalog data with typed fetches once `apps/server` + Supabase schema land.
 
 ## Build map
