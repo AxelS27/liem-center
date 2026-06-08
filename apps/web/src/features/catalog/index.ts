@@ -1,10 +1,12 @@
 export {
+  categoryLabels,
   formatPrice,
   getProduct,
   getProducts,
   productTypeLabels,
   type ChangelogEntry,
   type Product,
+  type ProductCategory,
   type ProductType,
   type Review,
   type RoadmapItem,

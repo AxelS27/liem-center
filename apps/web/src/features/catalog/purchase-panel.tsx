@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useAuthGate } from '@/features/auth';
 import { useCart } from '@/hooks/use-cart';
 
-import { formatPrice, productTypeLabels, type Product } from './catalog-data';
+import { categoryLabels, formatPrice, type Product } from './catalog-data';
 
 /**
  * Sticky purchase panel on the product detail page. The page is public; the Buy / Claim / Gift /
@@ -46,7 +46,7 @@ export function PurchasePanel({ product }: { product: Product }) {
     <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
       <div className="flex items-center justify-between gap-4">
         <span className="rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
-          {productTypeLabels[product.type]}
+          {categoryLabels[product.category]}
         </span>
         <span className="text-xs font-medium text-muted-foreground">{product.version}</span>
       </div>

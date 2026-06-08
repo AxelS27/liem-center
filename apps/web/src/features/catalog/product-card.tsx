@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { formatPrice, productTypeLabels, type Product } from './catalog-data';
+import { categoryLabels, formatPrice, type Product } from './catalog-data';
 
 /**
  * Shared catalog card: the one card surface in the product browsing experience. Used by the
@@ -22,7 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center justify-between gap-4">
           <span className="rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
-            {productTypeLabels[product.type]}
+            {categoryLabels[product.category]}
           </span>
           <span className="text-xs font-medium text-muted-foreground">{product.version}</span>
         </div>

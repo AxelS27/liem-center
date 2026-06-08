@@ -3,17 +3,19 @@
 import { cn } from '@repo/ui';
 import { useMemo, useState } from 'react';
 
-import { productTypeLabels, type Product, type ProductType } from './catalog-data';
+import { categoryLabels, type Product, type ProductCategory } from './catalog-data';
 import { ProductCard } from './product-card';
 
-type Filter = ProductType | 'all';
+type Filter = ProductCategory | 'all';
 
 const filters: { value: Filter; label: string }[] = [
   { value: 'all', label: 'All' },
-  { value: 'github', label: productTypeLabels.github },
-  { value: 'download', label: productTypeLabels.download },
-  { value: 'free', label: productTypeLabels.free },
-  { value: 'bundle', label: productTypeLabels.bundle },
+  { value: 'repos', label: categoryLabels.repos },
+  { value: 'apps', label: categoryLabels.apps },
+  { value: 'prompts', label: categoryLabels.prompts },
+  { value: 'skills', label: categoryLabels.skills },
+  { value: 'templates', label: categoryLabels.templates },
+  { value: 'bundle', label: 'Bundles' },
 ];
 
 /**
@@ -34,13 +36,13 @@ export function CatalogBrowser({
     const normalized = query.trim().toLowerCase();
 
     return products.filter((product) => {
-      const matchesType = active === 'all' || product.type === active;
+      const matchesCategory = active === 'all' || product.category === active;
       const matchesQuery =
         normalized === '' ||
         product.name.toLowerCase().includes(normalized) ||
         product.tagline.toLowerCase().includes(normalized);
 
-      return matchesType && matchesQuery;
+      return matchesCategory && matchesQuery;
     });
   }, [active, products, query]);
 

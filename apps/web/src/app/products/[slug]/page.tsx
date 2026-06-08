@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import {
+  categoryLabels,
   getProduct,
   getProducts,
-  productTypeLabels,
   ProductTabs,
   PurchasePanel,
 } from '@/features/catalog';
@@ -50,7 +50,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:items-start">
         <div>
           <span className="rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
-            {productTypeLabels[product.type]}
+            {categoryLabels[product.category]}
           </span>
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             {product.name}

@@ -8,7 +8,11 @@ import preview3 from '@/assets/preview-3.png';
 // it, they never define product data inline (see AGENTS.md Iron Law 2). When the backend lands,
 // this is replaced by typed fetches from apps/server against the contracts in packages/types.
 
+// Delivery mechanism: how the buyer receives the product. Drives purchase + library behaviour.
 export type ProductType = 'free' | 'github' | 'download' | 'bundle';
+
+// Product category: what kind of product it is. Drives the catalog filter.
+export type ProductCategory = 'repos' | 'apps' | 'prompts' | 'skills' | 'templates' | 'bundle';
 
 export type ChangelogEntry = {
   version: string;
@@ -37,6 +41,7 @@ export type Product = {
   name: string;
   tagline: string;
   type: ProductType;
+  category: ProductCategory;
   priceIdr: number;
   version: string;
   updatedAt: string;
@@ -54,6 +59,15 @@ export const productTypeLabels: Record<ProductType, string> = {
   free: 'Free',
   github: 'GitHub',
   download: 'Download',
+  bundle: 'Bundle',
+};
+
+export const categoryLabels: Record<ProductCategory, string> = {
+  repos: 'GitHub',
+  apps: 'Apps',
+  prompts: 'Prompts',
+  skills: 'Skills',
+  templates: 'Templates',
   bundle: 'Bundle',
 };
 
@@ -75,6 +89,7 @@ const products: Product[] = [
     name: 'Liem Monorepo',
     tagline: 'A production-grade TypeScript monorepo foundation for serious product builds.',
     type: 'github',
+    category: 'repos',
     priceIdr: 799000,
     version: 'v2.1.0',
     updatedAt: '2026-05-28',
@@ -122,10 +137,119 @@ const products: Product[] = [
     ],
   },
   {
+    slug: 'liem-ai-plugin',
+    name: 'Liem AI Plugin',
+    tagline: 'Drop-in AI assist for the Liem developer workflow.',
+    type: 'github',
+    category: 'apps',
+    priceIdr: 649000,
+    version: 'v0.4.0',
+    updatedAt: '2026-05-30',
+    cover: preview1,
+    githubRepo: 'liem/ai-plugin',
+    requires: ['liem-monorepo'],
+    overview: [
+      'An AI assist layer that plugs into the Liem Monorepo to scaffold features, write contracts, and keep docs in sync.',
+      'Requires Liem Monorepo. Checkout will let you add it if you do not own it yet.',
+    ],
+    features: [
+      'Contract-first feature scaffolding',
+      'Doc synchronization helpers',
+      'Server-side model calls, never bundled into the app',
+    ],
+    changelog: [
+      { version: 'v0.4.0', date: '2026-05-30', changes: ['Early access release', 'Feature scaffolder preview'] },
+    ],
+    roadmap: [
+      { title: 'Feature scaffolder', status: 'in_progress' },
+      { title: 'Inline review assist', status: 'planned' },
+    ],
+    reviews: [],
+  },
+  {
+    slug: 'liem-code',
+    name: 'Liem Code',
+    tagline: 'A focused desktop companion for managing your Liem projects.',
+    type: 'free',
+    category: 'apps',
+    priceIdr: 0,
+    version: 'v1.0.0',
+    updatedAt: '2026-05-20',
+    cover: preview2,
+    overview: [
+      'A free companion app to open, run, and manage Liem projects from one place.',
+      'Claim it once and it stays in your library at no cost.',
+    ],
+    features: ['Project switcher', 'One-click dev scripts', 'Library sync (coming soon)'],
+    changelog: [{ version: 'v1.0.0', date: '2026-05-20', changes: ['First public release'] }],
+    roadmap: [
+      { title: 'Project switcher', status: 'completed' },
+      { title: 'Library sync', status: 'planned' },
+    ],
+    reviews: [],
+  },
+  {
+    slug: 'liem-prompt-pack',
+    name: 'Liem Prompt Pack',
+    tagline: 'Battle-tested prompts for building, reviewing, and shipping with AI agents.',
+    type: 'download',
+    category: 'prompts',
+    priceIdr: 199000,
+    version: 'v1.3.0',
+    updatedAt: '2026-05-26',
+    cover: preview3,
+    overview: [
+      'A curated set of prompts for scaffolding features, reviewing diffs, writing docs, and planning work with AI agents.',
+      'Delivered as a downloadable pack in your library, updated as new prompts are added.',
+    ],
+    features: [
+      'Feature, review, and planning prompt templates',
+      'Copy-ready and organized by task',
+      'Versioned updates as the pack grows',
+    ],
+    changelog: [
+      { version: 'v1.3.0', date: '2026-05-26', changes: ['Added review and refactor prompts', 'Reorganized by task'] },
+    ],
+    roadmap: [
+      { title: 'Task-organized library', status: 'completed' },
+      { title: 'Per-stack variants', status: 'in_progress' },
+    ],
+    reviews: [],
+  },
+  {
+    slug: 'liem-agent-skills',
+    name: 'Liem Agent Skills',
+    tagline: 'Ready-to-use agent skills as Markdown files for your coding assistant.',
+    type: 'download',
+    category: 'skills',
+    priceIdr: 249000,
+    version: 'v0.6.0',
+    updatedAt: '2026-05-29',
+    cover: preview1,
+    overview: [
+      'A collection of agent skills authored as `.md` files: drop them into your assistant to add focused, repeatable capabilities.',
+      'Downloadable and versioned. New skills appear as product update notifications.',
+    ],
+    features: [
+      'Markdown skill files, no setup required',
+      'Skills for review, docs, testing, and release',
+      'Works with Claude-style skill loading',
+    ],
+    changelog: [
+      { version: 'v0.6.0', date: '2026-05-29', changes: ['Added release and testing skills', 'Tightened skill triggers'] },
+    ],
+    roadmap: [
+      { title: 'Core skill set', status: 'completed' },
+      { title: 'Framework-specific skills', status: 'planned' },
+    ],
+    reviews: [],
+  },
+  {
     slug: 'liem-ui-kit',
     name: 'Liem UI Kit',
     tagline: 'Reusable interface patterns tuned for calm, premium developer products.',
     type: 'download',
+    category: 'templates',
     priceIdr: 499000,
     version: 'v0.9.0',
     updatedAt: '2026-05-10',
@@ -156,8 +280,9 @@ const products: Product[] = [
   {
     slug: 'liem-starter-docs',
     name: 'Liem Starter Docs',
-    tagline: 'The public documentation starter for planning and operating a Liem project.',
+    tagline: 'The documentation starter for planning and operating a Liem project.',
     type: 'free',
+    category: 'templates',
     priceIdr: 0,
     version: 'v1.2.0',
     updatedAt: '2026-04-22',
@@ -186,39 +311,11 @@ const products: Product[] = [
     reviews: [],
   },
   {
-    slug: 'liem-ai-plugin',
-    name: 'Liem AI Plugin',
-    tagline: 'Drop-in AI assist for the Liem developer workflow.',
-    type: 'github',
-    priceIdr: 649000,
-    version: 'v0.4.0',
-    updatedAt: '2026-05-30',
-    cover: preview1,
-    githubRepo: 'liem/ai-plugin',
-    requires: ['liem-monorepo'],
-    overview: [
-      'An AI assist layer that plugs into the Liem Monorepo to scaffold features, write contracts, and keep docs in sync.',
-      'Requires Liem Monorepo. Checkout will let you add it if you do not own it yet.',
-    ],
-    features: [
-      'Contract-first feature scaffolding',
-      'Doc synchronization helpers',
-      'Server-side model calls, never bundled into the app',
-    ],
-    changelog: [
-      { version: 'v0.4.0', date: '2026-05-30', changes: ['Early access release', 'Feature scaffolder preview'] },
-    ],
-    roadmap: [
-      { title: 'Feature scaffolder', status: 'in_progress' },
-      { title: 'Inline review assist', status: 'planned' },
-    ],
-    reviews: [],
-  },
-  {
     slug: 'liem-starter-bundle',
     name: 'Liem Starter Bundle',
     tagline: 'Monorepo, UI Kit, and Starter Docs together at a lower price.',
     type: 'bundle',
+    category: 'bundle',
     priceIdr: 1099000,
     version: 'v1.0',
     updatedAt: '2026-05-28',
