@@ -1,30 +1,111 @@
 'use client';
 
-import { cn } from '@repo/ui';
+import { buttonVariants, cn } from '@repo/ui';
 import { useState } from 'react';
 
-import type { Product, RoadmapStatus } from './catalog-data';
+import type { Product, Review } from './catalog-data';
 
-type TabKey = 'overview' | 'changelog' | 'roadmap' | 'reviews';
+type TabKey = 'overview' | 'changelog' | 'reviews';
 
-const roadmapColumns: { status: RoadmapStatus; label: string }[] = [
-  { status: 'planned', label: 'Planned' },
-  { status: 'in_progress', label: 'In progress' },
-  { status: 'completed', label: 'Completed' },
-];
+function Stars({ rating }: { rating: number }) {
+  return (
+    <span className="text-sm text-primary" aria-label={`${rating} out of 5`}>
+      {'★'.repeat(rating)}
+      <span className="text-muted-foreground">{'★'.repeat(5 - rating)}</span>
+    </span>
+  );
+}
+
+function StarInput({ value, onChange }: { value: number; onChange: (value: number) => void }) {
+  const [hover, setHover] = useState(0);
+  const shown = hover || value;
+
+  return (
+    <div className="flex items-center gap-1" role="radiogroup" aria-label="Rating">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          role="radio"
+          aria-checked={value === star}
+          aria-label={`${star} star${star > 1 ? 's' : ''}`}
+          onMouseEnter={() => setHover(star)}
+          onMouseLeave={() => setHover(0)}
+          onClick={() => onChange(star)}
+          className="text-xl leading-none transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          <span className={star <= shown ? 'text-primary' : 'text-muted-foreground'}>★</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ReviewForm({ onSubmit }: { onSubmit: (review: Review) => void }) {
+  const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (rating === 0 || title.trim().length < 3 || body.trim().length < 10) {
+      setError('Pick a star rating, a short title, and a comment of at least 10 characters.');
+      return;
+    }
+
+    onSubmit({ author: 'You', tier: 'Member', rating, title: title.trim(), body: body.trim() });
+    setRating(0);
+    setTitle('');
+    setBody('');
+    setError(null);
+  }
+
+  return (
+    <form onSubmit={submit} className="rounded-lg border border-border bg-card p-5">
+      <p className="text-sm font-semibold text-foreground">Write a review</p>
+      <div className="mt-3">
+        <StarInput value={rating} onChange={setRating} />
+      </div>
+      <input
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        placeholder="Summarize your experience"
+        className="mt-4 h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      />
+      <textarea
+        value={body}
+        onChange={(event) => setBody(event.target.value)}
+        rows={4}
+        placeholder="What did you like or want improved?"
+        className="mt-3 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      />
+      {error ? (
+        <p className="mt-3 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+      <button type="submit" className={cn(buttonVariants(), 'mt-4')}>
+        Submit review
+      </button>
+    </form>
+  );
+}
 
 /**
- * Product detail tabs: Overview, Changelog, Roadmap, Reviews. An underline strip, not boxed tab
- * containers (docs/product/UI_UX.md). Content is rendered from the product prop only.
+ * Product detail tabs: Overview, Changelog, Reviews. An underline strip, not boxed tab containers
+ * (docs/product/UI_UX.md). Reviews can only be written by owners (`owned`), matching the
+ * verified-owner rule in docs/product/FEATURES.md.
  */
-export function ProductTabs({ product }: { product: Product }) {
+export function ProductTabs({ product, owned }: { product: Product; owned: boolean }) {
   const [tab, setTab] = useState<TabKey>('overview');
+  const [reviews, setReviews] = useState<Review[]>(product.reviews);
 
   const tabs: { key: TabKey; label: string; count?: number }[] = [
     { key: 'overview', label: 'Overview' },
     { key: 'changelog', label: 'Changelog', count: product.changelog.length },
-    { key: 'roadmap', label: 'Roadmap', count: product.roadmap.length },
-    { key: 'reviews', label: 'Reviews', count: product.reviews.length },
+    { key: 'reviews', label: 'Reviews', count: reviews.length },
   ];
 
   return (
@@ -105,67 +186,48 @@ export function ProductTabs({ product }: { product: Product }) {
           </ol>
         ) : null}
 
-        {tab === 'roadmap' ? (
-          <div className="grid gap-6 sm:grid-cols-3">
-            {roadmapColumns.map((column) => {
-              const items = product.roadmap.filter((item) => item.status === column.status);
-
-              return (
-                <div key={column.status}>
-                  <h3 className="text-sm font-semibold text-foreground">{column.label}</h3>
-                  <ul className="mt-4 space-y-3">
-                    {items.length === 0 ? (
-                      <li className="text-sm text-muted-foreground">Nothing here yet.</li>
-                    ) : (
-                      items.map((item) => (
-                        <li
-                          key={item.title}
-                          className="rounded-md border border-border bg-card p-3 text-sm"
-                        >
-                          <p className="font-medium text-foreground">{item.title}</p>
-                          {item.detail ? (
-                            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                              {item.detail}
-                            </p>
-                          ) : null}
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
-
         {tab === 'reviews' ? (
-          product.reviews.length === 0 ? (
-            <div className="max-w-2xl rounded-lg border border-dashed border-border px-6 py-12 text-center">
-              <p className="text-base font-medium text-foreground">No reviews yet</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Only verified owners can review. Be the first once you own this product.
-              </p>
+          <div className="max-w-2xl">
+            {owned ? (
+              <ReviewForm onSubmit={(review) => setReviews((current) => [review, ...current])} />
+            ) : (
+              <div className="rounded-md border border-border bg-secondary/50 px-4 py-3 text-sm text-muted-foreground">
+                Only owners can review. Get this product to share your rating and feedback.
+              </div>
+            )}
+
+            <div className="mt-8">
+              {reviews.length === 0 ? (
+                <div className="rounded-lg border border-dashed border-border px-6 py-12 text-center">
+                  <p className="text-base font-medium text-foreground">No reviews yet</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Be the first owner to review this product.
+                  </p>
+                </div>
+              ) : (
+                <ul className="space-y-6">
+                  {reviews.map((review, index) => (
+                    <li
+                      key={`${review.title}-${index}`}
+                      className="border-b border-border pb-6 last:border-0"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-foreground">
+                          {review.author}
+                        </span>
+                        <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
+                          {review.tier}
+                        </span>
+                        <Stars rating={review.rating} />
+                      </div>
+                      <h3 className="mt-2 text-sm font-semibold text-foreground">{review.title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-muted-foreground">{review.body}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-          ) : (
-            <ul className="max-w-2xl space-y-6">
-              {product.reviews.map((review) => (
-                <li key={review.title} className="border-b border-border pb-6 last:border-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-foreground">{review.author}</span>
-                    <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
-                      {review.tier}
-                    </span>
-                    <span className="text-xs font-medium text-primary" aria-label={`${review.rating} out of 5`}>
-                      {'★'.repeat(review.rating)}
-                      <span className="text-muted-foreground">{'★'.repeat(5 - review.rating)}</span>
-                    </span>
-                  </div>
-                  <h3 className="mt-2 text-sm font-semibold text-foreground">{review.title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{review.body}</p>
-                </li>
-              ))}
-            </ul>
-          )
+          </div>
         ) : null}
       </div>
     </div>

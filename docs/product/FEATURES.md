@@ -43,7 +43,6 @@ Browse and discover Liem products.
 - Product index (`/products`) with type filter (free / GitHub / download) `P0`
 - Product detail page (`/products/[slug]`) with screenshots, description, features, pricing `P0`
 - Changelog tab on product page `P1`
-- Roadmap tab on product page (Planned / In Progress / Completed) `P1`
 - Reviews tab on product page (verified owners only) `P1`
 - Buttons: Claim / Buy Now / Buy as Gift / Add to Wishlist (rendered by product type + ownership) `P0`
 - Guest preview mode (browse + view, no claim/buy buttons active) `P0`
@@ -128,13 +127,13 @@ Verified-owner reviews on product pages.
 - Public read on product page `P1`
 - Admin moderation (hide/restore) `P1`
 
-## 12. Changelog & Roadmap
+## 12. Changelog
 
-Demonstrate active maintenance per product.
+Demonstrate active maintenance per product. (Roadmap was dropped from the product page; the
+public product page shows Overview, Changelog, and Reviews only.)
 
 - Changelog entries (version, date, bullets) shown on product page `P1`
-- Roadmap items grouped by status (Planned / In Progress / Completed) `P1`
-- Admin CRUD for both `P1`
+- Admin CRUD for changelog entries `P1`
 - Significant version releases publish an in-app notification to owners; optional email when the user has opted in to product updates `P1`
 
 ## 13. Profile & Showcase
