@@ -6,7 +6,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, type FormEvent, type ReactNode } from 'react';
 
 import logo from '@/app/icon.png';
+import { getProducts } from '@/features/catalog';
 import { useCart } from '@/hooks/use-cart';
+
+const popularProducts = getProducts().slice(0, 3);
 
 export type NavRole = 'admin' | 'guest' | 'user';
 
@@ -161,8 +164,8 @@ export function SiteHeaderClient({ role, userName }: { role: NavRole; userName: 
       {/* Top utility row: primary navigation + account. No divider/background so the two rows
           read as one header. */}
       <div className="hidden pt-2 sm:block">
-        <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between gap-4 px-6 text-sm">
-          <nav aria-label="Primary navigation" className="flex items-center gap-4">
+        <div className="mx-auto flex h-9 w-full max-w-7xl items-center justify-between gap-6 px-6 text-sm">
+          <nav aria-label="Primary navigation" className="flex shrink-0 items-center gap-4">
             {primaryNavItems.map((item) => (
               <a
                 key={item.href}
@@ -180,7 +183,23 @@ export function SiteHeaderClient({ role, userName }: { role: NavRole; userName: 
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <nav
+            aria-label="Popular products"
+            className="hidden min-w-0 flex-1 items-center justify-center gap-4 lg:flex"
+          >
+            <span className="shrink-0 font-medium text-foreground/50">Popular</span>
+            {popularProducts.map((product) => (
+              <a
+                key={product.slug}
+                href={`/products/${product.slug}`}
+                className="truncate text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {product.name}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-3">
             {role === 'guest' ? (
               <>
                 <a
