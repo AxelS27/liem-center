@@ -1,17 +1,8 @@
 import { buttonVariants, cn } from '@repo/ui';
 
-import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
 import { getProduct, productTypeLabels } from '@/features/catalog';
 
-import { inviteLabels, sourceLabels, type Entitlement, type InviteStatus } from './library-data';
-
-const inviteTone: Record<InviteStatus, StatusTone> = {
-  pending: 'warning',
-  invited: 'info',
-  accepted: 'success',
-  failed: 'danger',
-  revoked: 'danger',
-};
+import { sourceLabels, type Entitlement } from './library-data';
 
 function EntitlementRow({ entitlement }: { entitlement: Entitlement }) {
   const product = getProduct(entitlement.productSlug);
@@ -44,16 +35,8 @@ function EntitlementRow({ entitlement }: { entitlement: Entitlement }) {
 
       <div className="flex flex-wrap items-center gap-2 sm:justify-end">
         {entitlement.access === 'revoked' ? (
-          <StatusPill tone="danger">Access revoked</StatusPill>
-        ) : (
-          <StatusPill tone="success">Active</StatusPill>
-        )}
-
-        {isGithub && invite ? (
-          <StatusPill tone={inviteTone[invite]}>{inviteLabels[invite]}</StatusPill>
-        ) : null}
-
-        {isGithub ? (
+          <span className="text-xs text-muted-foreground">Access revoked</span>
+        ) : isGithub ? (
           invite === 'accepted' ? (
             <a
               href={`https://github.com/${product.githubRepo}`}
