@@ -52,6 +52,10 @@
     /* Feedback */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
+    --success: 142 60% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 92% 42%;
+    --warning-foreground: 0 0% 100%;
 
     /* Lines and inputs */
     --border: 240 6% 90%;
