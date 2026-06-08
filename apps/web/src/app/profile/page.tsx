@@ -1,8 +1,7 @@
 import { buttonVariants, cn } from '@repo/ui';
 import type { Metadata } from 'next';
 
-import { ProductCard, getProduct } from '@/features/catalog';
-import { getProfile } from '@/features/profile';
+import { getProfile, PinnedShowcase } from '@/features/profile';
 
 export const metadata: Metadata = {
   title: 'Profile',
@@ -10,9 +9,6 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   const profile = getProfile();
-  const pinned = profile.pinnedSlugs
-    .map((slug) => getProduct(slug))
-    .filter((product): product is NonNullable<typeof product> => Boolean(product));
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">
@@ -97,10 +93,8 @@ export default function ProfilePage() {
             View library
           </a>
         </div>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {pinned.map((product) => (
-            <ProductCard key={product.slug} product={product} />
-          ))}
+        <div className="mt-4">
+          <PinnedShowcase />
         </div>
       </div>
 
