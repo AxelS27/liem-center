@@ -3,11 +3,13 @@
 import { cn } from '@repo/ui';
 import { useState } from 'react';
 
+import { authedRequest } from '@/services/client-api';
+
 import { getNotificationCategory, type AppNotification } from './notifications-data';
 
 /**
  * Client notification center. The in-app feed is the durable record (it is never muted by
- * preferences). Mark-as-read is optimistic here; the backend exposes durable read endpoints.
+ * preferences). Mark-as-read is optimistic and persisted via the read endpoints.
  */
 export function NotificationsView({ initial }: { initial: AppNotification[] }) {
   const [items, setItems] = useState(initial);
@@ -15,12 +17,14 @@ export function NotificationsView({ initial }: { initial: AppNotification[] }) {
 
   function markAll() {
     setItems((current) => current.map((item) => ({ ...item, isRead: true })));
+    void authedRequest('/notifications/read-all', { method: 'POST' }).catch(() => undefined);
   }
 
   function markOne(id: string) {
     setItems((current) =>
       current.map((item) => (item.id === id ? { ...item, isRead: true } : item)),
     );
+    void authedRequest(`/notifications/${id}/read`, { method: 'POST' }).catch(() => undefined);
   }
 
   return (

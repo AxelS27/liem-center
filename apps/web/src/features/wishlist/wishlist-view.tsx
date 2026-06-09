@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import { formatPrice, getProductCover, productTypeLabels } from '@/features/catalog';
+import { authedRequest } from '@/services/client-api';
 
 /**
  * Client wishlist grid. Cards are not full-card links here because each needs its own Remove and
@@ -13,6 +14,17 @@ import { formatPrice, getProductCover, productTypeLabels } from '@/features/cata
  */
 export function WishlistView({ initialProducts }: { initialProducts: Product[] }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
+
+  async function remove(slug: string) {
+    const previous = products;
+    setProducts((current) => current.filter((item) => item.slug !== slug));
+
+    try {
+      await authedRequest(`/wishlist/${slug}`, { method: 'DELETE' });
+    } catch {
+      setProducts(previous);
+    }
+  }
 
   if (products.length === 0) {
     return (
@@ -71,9 +83,7 @@ export function WishlistView({ initialProducts }: { initialProducts: Product[] }
               </a>
               <button
                 type="button"
-                onClick={() =>
-                  setProducts((current) => current.filter((item) => item.slug !== product.slug))
-                }
+                onClick={() => remove(product.slug)}
                 className="text-xs font-medium text-muted-foreground transition-colors hover:text-destructive"
               >
                 Remove
