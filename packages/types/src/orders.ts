@@ -54,7 +54,22 @@ export const orderResponseSchema = z.object({
   data: orderSchema,
 });
 
+// Midtrans HTTP notification (webhook) body. Extra fields are allowed and ignored.
+export const paymentNotificationSchema = z
+  .object({
+    order_id: z.string(),
+    status_code: z.string(),
+    gross_amount: z.string(),
+    signature_key: z.string(),
+    transaction_status: z.string(),
+    fraud_status: z.string().optional(),
+    transaction_id: z.string().optional(),
+    payment_type: z.string().optional(),
+  })
+  .passthrough();
+
 export type OrderStatus = z.infer<typeof orderStatusSchema>;
+export type PaymentNotification = z.infer<typeof paymentNotificationSchema>;
 export type Order = z.infer<typeof orderSchema>;
 export type CheckoutRequest = z.infer<typeof checkoutRequestSchema>;
 export type CheckoutResponse = z.infer<typeof checkoutResponseSchema>;
