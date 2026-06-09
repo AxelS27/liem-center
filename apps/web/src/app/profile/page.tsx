@@ -2,20 +2,40 @@ import { buttonVariants, cn } from '@repo/ui';
 import type { Metadata } from 'next';
 
 import { isAdminEmail } from '@/config/admin';
-import { getProfile, PinnedShowcase } from '@/features/profile';
+import { getProfileInitial, PinnedShowcase } from '@/features/profile';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { getLibrary, getMyProfile } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Profile',
 };
 
+function getTierProgress(lifetimeSpendIdr: number) {
+  const next = 10_000_000;
+
+  return Math.min(100, Math.round((lifetimeSpendIdr / next) * 100));
+}
+
 export default async function ProfilePage() {
-  const profile = getProfile();
+  const [profile, entitlements] = await Promise.all([getMyProfile(), getLibrary()]);
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   const isAdmin = isAdminEmail(user?.email);
+  const tierProgress = getTierProgress(profile.lifetimeSpendIdr);
+  const ownedProducts = entitlements.map((entitlement) => ({
+    ...entitlement.product,
+    dependencies: [],
+    requires: [],
+    updatedAt: profile.createdAt,
+    overview: [],
+    features: [],
+    howToUse: [],
+    changelog: [],
+    roadmap: [],
+    reviews: [],
+  }));
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">
@@ -25,7 +45,7 @@ export default async function ProfilePage() {
             className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground"
             aria-hidden="true"
           >
-            {profile.initial}
+            {getProfileInitial(profile)}
           </div>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -36,12 +56,7 @@ export default async function ProfilePage() {
               <span className="rounded-md bg-primary px-2 py-0.5 font-medium text-primary-foreground">
                 {isAdmin ? 'Admin' : `${profile.tier} Member`}
               </span>
-              {profile.founderNumber ? (
-                <span className="rounded-md bg-secondary px-2 py-0.5 font-medium text-secondary-foreground">
-                  Founder #{String(profile.founderNumber).padStart(4, '0')}
-                </span>
-              ) : null}
-              <span className="text-muted-foreground">Joined {profile.joined}</span>
+              <span className="text-muted-foreground">Joined {profile.createdAt}</span>
             </div>
           </div>
         </div>
@@ -50,8 +65,18 @@ export default async function ProfilePage() {
         </a>
       </div>
 
-      <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
-        {profile.stats.map((stat) => (
+      <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
+        {[
+          { label: 'Owned', value: entitlements.length },
+          {
+            label: 'Purchased',
+            value: entitlements.filter((item) => item.source === 'purchase').length,
+          },
+          {
+            label: 'Claimed',
+            value: entitlements.filter((item) => item.source === 'free_claim').length,
+          },
+        ].map((stat) => (
           <div key={stat.label} className="bg-card px-4 py-5 text-center">
             <dt className="text-xs font-medium text-muted-foreground">{stat.label}</dt>
             <dd className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
@@ -61,33 +86,14 @@ export default async function ProfilePage() {
         ))}
       </dl>
 
-      {profile.nextTier ? (
-        <div className="mt-10">
-          <div className="flex items-center justify-between text-sm">
-            <span className="font-medium text-foreground">{profile.tier}</span>
-            <span className="text-muted-foreground">{profile.tierProgressPercent}% to {profile.nextTier}</span>
-          </div>
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-secondary">
-            <div
-              className="h-full rounded-full bg-primary"
-              style={{ width: `${profile.tierProgressPercent}%` }}
-            />
-          </div>
+      <div className="mt-10">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium capitalize text-foreground">{profile.tier}</span>
+          <span className="text-muted-foreground">{tierProgress}% to Legendary</span>
         </div>
-      ) : null}
-
-      <div className="mt-12">
-        <h2 className="text-sm font-semibold text-foreground">Badges</h2>
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {profile.badges.map((badge) => (
-            <li
-              key={badge.code}
-              className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
-            >
-              {badge.label}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-secondary">
+          <div className="h-full rounded-full bg-primary" style={{ width: `${tierProgress}%` }} />
+        </div>
       </div>
 
       <div className="mt-12">
@@ -101,24 +107,8 @@ export default async function ProfilePage() {
           </a>
         </div>
         <div className="mt-4">
-          <PinnedShowcase />
+          <PinnedShowcase ownedProducts={ownedProducts} />
         </div>
-      </div>
-
-      <div className="mt-12">
-        <h2 className="text-sm font-semibold text-foreground">Activity</h2>
-        <ol className="mt-4 space-y-4 border-l border-border pl-5">
-          {profile.activity.map((event) => (
-            <li key={event.id} className="relative">
-              <span
-                className="absolute -left-[1.4rem] top-1.5 h-2 w-2 rounded-full bg-border"
-                aria-hidden="true"
-              />
-              <p className="text-sm text-foreground">{event.text}</p>
-              <p className="text-xs text-muted-foreground">{event.date}</p>
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
   );

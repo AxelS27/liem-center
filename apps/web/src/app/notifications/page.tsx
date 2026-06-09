@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 
-import { getNotifications, NotificationsView } from '@/features/notifications';
+import { NotificationsView } from '@/features/notifications';
+import { getNotifications } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Notifications',
 };
 
-export default function NotificationsPage() {
-  const notifications = getNotifications();
+export default async function NotificationsPage() {
+  const notifications = await getNotifications();
 
   return (
     <section className="mx-auto w-full max-w-3xl px-6 py-16 sm:py-20">

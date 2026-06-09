@@ -54,7 +54,7 @@ function ReviewForm({ onSubmit }: { onSubmit: (review: Review) => void }) {
       return;
     }
 
-    onSubmit({ author: 'You', tier: 'Member', rating, title: '', body: body.trim() });
+    onSubmit({ id: crypto.randomUUID(), author: 'You', tier: 'Member', rating, title: '', body: body.trim() });
     setRating(0);
     setBody('');
     setError(null);

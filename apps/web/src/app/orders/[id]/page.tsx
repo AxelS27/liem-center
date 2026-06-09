@@ -2,21 +2,19 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
-import { formatPrice, getProduct, productTypeLabels } from '@/features/catalog';
-import { getOrder, getOrders, orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { formatPrice, productTypeLabels } from '@/features/catalog';
+import { orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { getOrder } from '@/services/api';
 
 type Params = Promise<{ id: string }>;
 
 const statusTone: Record<OrderStatus, StatusTone> = {
-  paid: 'success',
   awaiting_payment: 'warning',
-  refunded: 'danger',
   cancelled: 'neutral',
+  draft: 'neutral',
+  paid: 'success',
+  refunded: 'danger',
 };
-
-export function generateStaticParams() {
-  return getOrders().map((order) => ({ id: order.id }));
-}
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { id } = await params;
@@ -26,7 +24,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function OrderDetailPage({ params }: { params: Params }) {
   const { id } = await params;
-  const order = getOrder(id);
+  const order = await getOrder(id).catch(() => null);
 
   if (!order) {
     notFound();
@@ -50,37 +48,32 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
             {order.id}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Placed {order.placedAt} · {order.recipientType === 'gift' ? 'Gift purchase' : 'For your account'}
+            Placed {order.createdAt} ·{' '}
+            {order.recipientType === 'gift' ? 'Gift purchase' : 'For your account'}
           </p>
         </div>
         <StatusPill tone={statusTone[order.status]}>{orderStatusLabels[order.status]}</StatusPill>
       </div>
 
       <ul className="mt-8 divide-y divide-border border-y border-border">
-        {order.items.map((item) => {
-          const product = getProduct(item.productSlug);
-
-          return (
-            <li key={item.productSlug} className="flex items-center justify-between gap-4 py-4">
-              <div>
-                <a
-                  href={`/products/${item.productSlug}`}
-                  className="text-sm font-semibold text-foreground transition-colors hover:text-foreground/70"
-                >
-                  {product?.name ?? item.productSlug}
-                </a>
-                {product ? (
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    {productTypeLabels[product.type]}
-                  </p>
-                ) : null}
-              </div>
-              <span className="text-sm font-medium text-foreground">
-                {formatPrice(item.priceIdr)}
-              </span>
-            </li>
-          );
-        })}
+        {order.items.map((item) => (
+          <li key={item.id} className="flex items-center justify-between gap-4 py-4">
+            <div>
+              <a
+                href={`/products/${item.product.slug}`}
+                className="text-sm font-semibold text-foreground transition-colors hover:text-foreground/70"
+              >
+                {item.product.name}
+              </a>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {productTypeLabels[item.product.type]}
+              </p>
+            </div>
+            <span className="text-sm font-medium text-foreground">
+              {formatPrice(item.unitPriceIdr)}
+            </span>
+          </li>
+        ))}
       </ul>
 
       <dl className="mt-6 space-y-2 text-sm">
@@ -100,9 +93,9 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
         </div>
       </dl>
 
-      {order.paymentMethod ? (
-        <p className="mt-6 text-xs text-muted-foreground">Paid via {order.paymentMethod}.</p>
-      ) : null}
+      <p className="mt-6 text-xs text-muted-foreground">
+        Payment is confirmed by the server-side payment webhook.
+      </p>
     </section>
   );
 }

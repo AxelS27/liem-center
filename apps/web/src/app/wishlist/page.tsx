@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 
 import { WishlistView } from '@/features/wishlist';
+import { getWishlist } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Wishlist',
 };
 
-export default function WishlistPage() {
+export default async function WishlistPage() {
+  const products = await getWishlist();
+
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-20">
       <p className="text-sm font-medium text-muted-foreground">Saved</p>
@@ -18,7 +21,7 @@ export default function WishlistPage() {
       </p>
 
       <div className="mt-10">
-        <WishlistView initialSlugs={['liem-starter-bundle', 'liem-ui-kit', 'liem-ai-plugin']} />
+        <WishlistView initialProducts={products} />
       </div>
     </section>
   );

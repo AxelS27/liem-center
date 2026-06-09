@@ -260,6 +260,7 @@ Tabs: Profile / Connected Accounts / Notifications / Security.
 
 ## Done log
 
+- 2026-06-08 - Added backend foundation migration, shared Zod contracts, and Hono routes for catalog, library/free-claim, checkout order creation, orders, wishlist, notifications, profile, and support ticket list/create/get. Removed frontend dummy catalog/library/order/profile/notification/wishlist/admin sample data in favor of API-backed data or empty DB states. Midtrans Snap, GitHub invite execution, email fan-out, admin CRUD, and regenerated Supabase DB types remain pending.
 - 2026-06-07 — Productized the public web shell for Liem Center: landing hero, featured products strip, ecosystem band, header/footer links, title metadata, accent token, scaffolded route targets, and 404/error states. Signed-in notification badge remains pending until auth/session state exists.
 - 2026-06-07 — Revised public shell per product-owner feedback: removed the post-hero stat strip, switched accent back to the premium near-black CTA color, expanded navbar to preview key hub routes/utilities, and aligned landing copy with PRD/FEATURES ownership, GitHub activation, notifications, support, and profile goals.
 - 2026-06-07 — Wired Supabase foundation: local `.env`, web anon clients, server service-role client, server `.env` loader, verified service-role connectivity against Supabase Auth Admin, configured pooler `DATABASE_URL`, and regenerated remote Supabase database types.

@@ -1,6 +1,5 @@
 export {
-  getEntitlements,
-  type AccessStatus,
+  getPinnedSlug,
   type Entitlement,
   type EntitlementSource,
   type InviteStatus,

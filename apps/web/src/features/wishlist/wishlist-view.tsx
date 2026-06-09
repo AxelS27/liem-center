@@ -1,21 +1,18 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
+import type { Product } from '@repo/types';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { formatPrice, getProduct, productTypeLabels } from '@/features/catalog';
+import { formatPrice, getProductCover, productTypeLabels } from '@/features/catalog';
 
 /**
  * Client wishlist grid. Cards are not full-card links here because each needs its own Remove and
  * View actions, so the name links to the product and the actions sit in the footer.
  */
-export function WishlistView({ initialSlugs }: { initialSlugs: string[] }) {
-  const [slugs, setSlugs] = useState<string[]>(initialSlugs);
-
-  const products = slugs
-    .map((slug) => getProduct(slug))
-    .filter((product): product is NonNullable<typeof product> => Boolean(product));
+export function WishlistView({ initialProducts }: { initialProducts: Product[] }) {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
 
   if (products.length === 0) {
     return (
@@ -40,7 +37,7 @@ export function WishlistView({ initialSlugs }: { initialSlugs: string[] }) {
         >
           <div className="relative aspect-[16/10] bg-secondary">
             <Image
-              src={product.cover}
+              src={getProductCover(product)}
               alt=""
               fill
               sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
@@ -74,7 +71,9 @@ export function WishlistView({ initialSlugs }: { initialSlugs: string[] }) {
               </a>
               <button
                 type="button"
-                onClick={() => setSlugs((current) => current.filter((slug) => slug !== product.slug))}
+                onClick={() =>
+                  setProducts((current) => current.filter((item) => item.slug !== product.slug))
+                }
                 className="text-xs font-medium text-muted-foreground transition-colors hover:text-destructive"
               >
                 Remove

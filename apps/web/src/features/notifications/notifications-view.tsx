@@ -3,23 +3,23 @@
 import { cn } from '@repo/ui';
 import { useState } from 'react';
 
-import { categoryLabels, type AppNotification } from './notifications-data';
+import { getNotificationCategory, type AppNotification } from './notifications-data';
 
 /**
  * Client notification center. The in-app feed is the durable record (it is never muted by
- * preferences). Mark-as-read is local here; the real feed reads/writes the notifications API.
+ * preferences). Mark-as-read is optimistic here; the backend exposes durable read endpoints.
  */
 export function NotificationsView({ initial }: { initial: AppNotification[] }) {
   const [items, setItems] = useState(initial);
-  const unread = items.filter((item) => !item.read).length;
+  const unread = items.filter((item) => !item.isRead).length;
 
   function markAll() {
-    setItems((current) => current.map((item) => ({ ...item, read: true })));
+    setItems((current) => current.map((item) => ({ ...item, isRead: true })));
   }
 
   function markOne(id: string) {
     setItems((current) =>
-      current.map((item) => (item.id === id ? { ...item, read: true } : item)),
+      current.map((item) => (item.id === id ? { ...item, isRead: true } : item)),
     );
   }
 
@@ -41,41 +41,41 @@ export function NotificationsView({ initial }: { initial: AppNotification[] }) {
 
       <ul className="mt-4 divide-y divide-border border-y border-border">
         {items.map((item) => {
-          const Tag = item.href ? 'a' : 'div';
+          const Tag = item.linkUrl ? 'a' : 'div';
 
           return (
             <li key={item.id}>
               <Tag
-                {...(item.href ? { href: item.href } : {})}
+                {...(item.linkUrl ? { href: item.linkUrl } : {})}
                 onClick={() => markOne(item.id)}
                 className={cn(
                   'flex gap-3 py-4 transition-colors sm:px-2',
-                  item.href ? 'hover:bg-secondary/40' : '',
+                  item.linkUrl ? 'hover:bg-secondary/40' : '',
                 )}
               >
                 <span
                   className={cn(
                     'mt-1.5 h-2 w-2 shrink-0 rounded-full',
-                    item.read ? 'bg-transparent' : 'bg-primary',
+                    item.isRead ? 'bg-transparent' : 'bg-primary',
                   )}
                   aria-hidden="true"
                 />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-md bg-secondary px-1.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                      {categoryLabels[item.category]}
+                      {getNotificationCategory(item.type)}
                     </span>
                     <span
                       className={cn(
                         'text-sm',
-                        item.read ? 'font-medium text-foreground' : 'font-semibold text-foreground',
+                        item.isRead ? 'font-medium text-foreground' : 'font-semibold text-foreground',
                       )}
                     >
                       {item.title}
                     </span>
                   </div>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">{item.message}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{item.date}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{item.createdAt}</p>
                 </div>
               </Tag>
             </li>

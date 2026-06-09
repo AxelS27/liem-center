@@ -2,6 +2,7 @@ import { buttonVariants, cn } from '@repo/ui';
 import type { Metadata } from 'next';
 
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { getSupportTickets } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Support',
@@ -37,6 +38,7 @@ async function getUser() {
 
 export default async function SupportPage() {
   const user = await getUser();
+  const tickets = user ? await getSupportTickets().catch(() => []) : [];
 
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-20">
@@ -70,14 +72,27 @@ export default async function SupportPage() {
 
         <aside className="rounded-lg border border-border bg-card p-6">
           <h2 className="text-sm font-semibold text-foreground">Your tickets</h2>
-          {user ? (
+          {user && tickets.length === 0 ? (
             <div className="mt-4 rounded-md border border-dashed border-border px-4 py-8 text-center">
               <p className="text-sm font-medium text-foreground">No tickets yet</p>
               <p className="mt-2 text-sm text-muted-foreground">
                 When you file a ticket it shows here with its status.
               </p>
             </div>
-          ) : (
+          ) : null}
+          {user && tickets.length > 0 ? (
+            <ul className="mt-4 divide-y divide-border border-y border-border">
+              {tickets.map((ticket) => (
+                <li key={ticket.id} className="py-3">
+                  <p className="text-sm font-medium text-foreground">{ticket.subject}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {ticket.status} · {ticket.updatedAt}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {!user ? (
             <div className="mt-4">
               <p className="text-sm leading-6 text-muted-foreground">
                 Sign in to see tickets you have filed and their replies.
@@ -89,7 +104,7 @@ export default async function SupportPage() {
                 Sign in
               </a>
             </div>
-          )}
+          ) : null}
         </aside>
       </div>
     </section>

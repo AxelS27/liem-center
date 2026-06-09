@@ -2,7 +2,7 @@
 
 import { buttonVariants, cn } from '@repo/ui';
 
-import { categoryLabels, getProduct } from '@/features/catalog';
+import { categoryLabels } from '@/features/catalog';
 import { usePinnedProducts } from '@/hooks/use-pinned-products';
 
 import { sourceLabels, type Entitlement } from './library-data';
@@ -71,11 +71,7 @@ function EntitlementRow({
   pinDisabled: boolean;
   onTogglePin: () => void;
 }) {
-  const product = getProduct(entitlement.productSlug);
-
-  if (!product) {
-    return null;
-  }
+  const product = entitlement.product;
 
   const isGithub = product.type === 'github';
   const invite = entitlement.invite;
@@ -158,7 +154,7 @@ export function LibraryView({ entitlements }: { entitlements: Entitlement[] }) {
 
   // Pinned products float to the top so the showcase order is visible at a glance.
   const ordered = [...entitlements].sort(
-    (a, b) => Number(isPinned(b.productSlug)) - Number(isPinned(a.productSlug)),
+    (a, b) => Number(isPinned(b.product.slug)) - Number(isPinned(a.product.slug)),
   );
 
   return (
@@ -168,7 +164,7 @@ export function LibraryView({ entitlements }: { entitlements: Entitlement[] }) {
       </p>
       <ul className="mt-3 divide-y divide-border border-y border-border">
         {ordered.map((entitlement) => {
-          const pinned = isPinned(entitlement.productSlug);
+          const pinned = isPinned(entitlement.product.slug);
 
           return (
             <EntitlementRow
@@ -176,7 +172,7 @@ export function LibraryView({ entitlements }: { entitlements: Entitlement[] }) {
               entitlement={entitlement}
               pinned={pinned}
               pinDisabled={!pinned && isFull}
-              onTogglePin={() => toggle(entitlement.productSlug)}
+              onTogglePin={() => toggle(entitlement.product.slug)}
             />
           );
         })}

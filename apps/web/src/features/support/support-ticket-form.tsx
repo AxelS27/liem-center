@@ -1,9 +1,11 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
+import { supportTicketResponseSchema } from '@repo/types';
 import { useEffect, useState } from 'react';
 
 import { useAuthGate } from '@/features/auth';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 const DRAFT_KEY = 'liem.support.draft';
 
@@ -21,6 +23,7 @@ const emptyDraft: Draft = { category: 'payment', subject: '', message: '', order
 
 const inputClass =
   'h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
 
 /**
  * Public new-ticket form. Guests can fill it in; only Submit is auth-gated. The draft is kept
@@ -69,8 +72,38 @@ export function SupportTicketForm() {
         return;
       }
 
+      const supabase = createSupabaseBrowserClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        setError('Sign in again before submitting this ticket.');
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/support/tickets`, {
+        body: JSON.stringify({
+          category: draft.category,
+          message: draft.message,
+          subject: draft.subject,
+        }),
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Support ticket failed.');
+      }
+
+      supportTicketResponseSchema.parse(await response.json());
       window.sessionStorage.removeItem(DRAFT_KEY);
       setSubmitted(true);
+    } catch {
+      setError('Unable to submit this ticket.');
     } finally {
       setPending(false);
     }

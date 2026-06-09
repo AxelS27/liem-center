@@ -58,7 +58,11 @@ Purpose: Catalog of Liem products.
 | `name`                      | `text`           | yes      | none                |                                           |
 | `tagline`                   | `text`           | no       | none                | One-line.                                 |
 | `description_md`            | `text`           | no       | none                | Markdown for product overview.            |
+| `overview`                   | `text[]`         | yes      | `{}`                | API-ready overview paragraphs.            |
+| `features`                   | `text[]`         | yes      | `{}`                | Included feature bullets.                 |
+| `how_to_use`                 | `text[]`         | yes      | `{}`                | Product usage steps.                      |
 | `type`                      | `product_type`   | yes      | none                | `free` / `github` / `download` / `bundle` |
+| `category`                  | `product_category` | yes    | none                | Catalog category for filters.             |
 | `price_idr`                 | `bigint`         | yes      | `0`                 | 0 for free; rupiah whole.                 |
 | `version`                   | `text`           | no       | none                | Latest published version.                 |
 | `github_repo`               | `text`           | no       | none                | `owner/repo` for `github` products.       |
@@ -407,6 +411,7 @@ Active sessions are read from `auth.sessions` via a server endpoint (no app-owne
 | Name                 | Values                                                                                                                                                                                                            | Used by                    |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `product_type`       | `free`, `github`, `download`, `bundle`                                                                                                                                                                            | `products.type`            |
+| `product_category`   | `repos`, `apps`, `prompts`, `skills`, `templates`, `bundle`                                                                                                                                                       | `products.category`        |
 | `product_status`     | `draft`, `published`, `archived`                                                                                                                                                                                  | `products.status`          |
 | `roadmap_status`     | `planned`, `in_progress`, `completed`                                                                                                                                                                             | `roadmap_items.status`     |
 | `order_status`       | `draft`, `awaiting_payment`, `paid`, `cancelled`, `refunded`                                                                                                                                                      | `orders.status`            |

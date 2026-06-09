@@ -1,17 +1,20 @@
 import type { Metadata } from 'next';
 
-import { CatalogBrowser, getProducts } from '@/features/catalog';
+import { CatalogBrowser } from '@/features/catalog';
+import { getProducts } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Products',
 };
+
+export const dynamic = 'force-dynamic';
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function ProductsPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q : '';
-  const products = getProducts();
+  const products = await getProducts(query);
 
   return (
     <section className="mx-auto w-full max-w-7xl px-6 py-16 sm:py-20">

@@ -1,18 +1,20 @@
 import { buttonVariants, cn } from '@repo/ui';
 
 import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
-import { formatPrice, getProduct } from '@/features/catalog';
-import { getOrders, orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { formatPrice } from '@/features/catalog';
+import { orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { getOrders } from '@/services/api';
 
 const statusTone: Record<OrderStatus, StatusTone> = {
-  paid: 'success',
   awaiting_payment: 'warning',
-  refunded: 'danger',
   cancelled: 'neutral',
+  draft: 'neutral',
+  paid: 'success',
+  refunded: 'danger',
 };
 
-export default function AdminOrdersPage() {
-  const orders = getOrders();
+export default async function AdminOrdersPage() {
+  const orders = await getOrders();
 
   return (
     <div>
@@ -38,13 +40,13 @@ export default function AdminOrdersPage() {
                   {order.id}
                 </td>
                 <td className="px-4 py-3 text-foreground">
-                  {getProduct(order.items[0]?.productSlug ?? '')?.name ?? '—'}
+                  {order.items[0]?.product.name ?? 'No items'}
                 </td>
                 <td className="px-4 py-3 text-muted-foreground">
                   {order.recipientType === 'gift' ? 'Gift' : 'Self'}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                  {order.placedAt}
+                  {order.createdAt}
                 </td>
                 <td className="px-4 py-3">
                   <StatusPill tone={statusTone[order.status]}>

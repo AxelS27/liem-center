@@ -1,9 +1,10 @@
 import { buttonVariants, cn } from '@repo/ui';
 
-import { categoryLabels, formatPrice, getProducts } from '@/features/catalog';
+import { categoryLabels, formatPrice } from '@/features/catalog';
+import { getProducts } from '@/services/api';
 
-export default function AdminProductsPage() {
-  const products = getProducts();
+export default async function AdminProductsPage() {
+  const products = await getProducts();
 
   return (
     <div>
@@ -33,7 +34,7 @@ export default function AdminProductsPage() {
                   {categoryLabels[product.category]}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                  {product.version}
+                  {product.version ?? 'Unversioned'}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-right text-foreground">
                   {formatPrice(product.priceIdr)}

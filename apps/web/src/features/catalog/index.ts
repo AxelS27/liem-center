@@ -1,16 +1,13 @@
 export {
   categoryLabels,
   formatPrice,
-  getProduct,
-  getProducts,
+  getProductCover,
   productTypeLabels,
   type ChangelogEntry,
   type Product,
   type ProductCategory,
   type ProductType,
   type Review,
-  type RoadmapItem,
-  type RoadmapStatus,
 } from './catalog-data';
 export { CatalogBrowser } from './catalog-browser';
 export { ProductCard } from './product-card';

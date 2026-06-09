@@ -1,77 +1,140 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
-import { useMemo, useState } from 'react';
+import { checkoutResponseSchema, productResponseSchema, type Product } from '@repo/types';
+import { useEffect, useState } from 'react';
 
-import { formatPrice, getProduct, productTypeLabels } from '@/features/catalog';
+import { formatPrice, productTypeLabels } from '@/features/catalog';
 import { useCart } from '@/hooks/use-cart';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
-const COUPONS: Record<string, number> = { LIEM10: 0.1, LAUNCH50: 0.5 };
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
 
 /**
- * Client checkout/cart, backed by the shared cart store. Coupon and pay are mock interactions for
- * the frontend build; real payment goes through the Midtrans flow in apps/server once the backend
- * lands (docs/engineering/PAYMENTS.md).
+ * Client checkout/cart, backed by the shared cart store. Product and order data comes from the
+ * backend; Midtrans Snap remains disabled until server keys are configured.
  */
 export function CheckoutView({ isGift }: { isGift: boolean }) {
   const cart = useCart();
-  const [coupon, setCoupon] = useState('');
-  const [appliedRate, setAppliedRate] = useState(0);
-  const [couponError, setCouponError] = useState<string | null>(null);
+  const [items, setItems] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
-  const [done, setDone] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
 
-  const items = useMemo(
-    () =>
-      cart.items
-        .map((slug) => getProduct(slug))
-        .filter((product): product is NonNullable<typeof product> => Boolean(product)),
-    [cart.items],
-  );
+  useEffect(() => {
+    let cancelled = false;
 
-  const subtotal = items.reduce((sum, product) => sum + product.priceIdr, 0);
-  const discount = Math.round(subtotal * appliedRate);
-  const total = subtotal - discount;
+    async function loadItems() {
+      setLoading(true);
+      setError(null);
 
-  function applyCoupon() {
-    const code = coupon.trim().toUpperCase();
-    const rate = COUPONS[code];
+      try {
+        const products = await Promise.all(
+          cart.items.map(async (slug) => {
+            const response = await fetch(`${API_URL}/products/${slug}`);
 
-    if (!rate) {
-      setAppliedRate(0);
-      setCouponError('That code is not valid.');
-      return;
+            if (!response.ok) {
+              return null;
+            }
+
+            return productResponseSchema.parse(await response.json()).data;
+          }),
+        );
+
+        if (!cancelled) {
+          setItems(products.filter((product): product is Product => Boolean(product)));
+        }
+      } catch {
+        if (!cancelled) {
+          setError('Unable to load your cart items.');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
     }
 
-    setCouponError(null);
-    setAppliedRate(rate);
-  }
+    void loadItems();
 
-  function pay() {
+    return () => {
+      cancelled = true;
+    };
+  }, [cart.items]);
+
+  const subtotal = items.reduce((sum, product) => sum + product.priceIdr, 0);
+  const total = subtotal;
+
+  async function pay() {
     setPaying(true);
-    window.setTimeout(() => {
+    setError(null);
+
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        setError('Sign in again before checkout.');
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/checkout`, {
+        body: JSON.stringify({
+          items: items.map((product) => product.slug),
+          recipient: { type: isGift ? 'gift' : 'self' },
+        }),
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Checkout failed.');
+      }
+
+      const result = checkoutResponseSchema.parse(await response.json()).data;
       cart.clear();
+      setOrderId(result.order.id);
+    } catch {
+      setError('Unable to start checkout.');
+    } finally {
       setPaying(false);
-      setDone(true);
-    }, 700);
+    }
   }
 
-  if (done) {
+  if (orderId) {
     return (
       <div className="rounded-lg border border-border bg-card p-8 text-center shadow-sm">
-        <h2 className="text-xl font-semibold text-foreground">Payment started</h2>
+        <h2 className="text-xl font-semibold text-foreground">Order created</h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-          In the live product this opens Midtrans and, once paid, adds the product to your library
-          with permanent ownership.
+          Your order is saved as awaiting payment. Midtrans Snap will open here once the server
+          keys are configured.
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <a href="/library" className={cn(buttonVariants())}>
             Go to library
           </a>
+          <a href={`/orders/${orderId}`} className={cn(buttonVariants({ variant: 'outline' }))}>
+            View order
+          </a>
           <a href="/products" className={cn(buttonVariants({ variant: 'outline' }))}>
             Keep browsing
           </a>
         </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="rounded-lg border border-border px-6 py-16 text-center">
+        <p className="text-base font-medium text-foreground">Loading cart</p>
+        <p className="mt-2 text-sm text-muted-foreground">Checking current product data.</p>
       </div>
     );
   }
@@ -122,42 +185,21 @@ export function CheckoutView({ isGift }: { isGift: boolean }) {
           </p>
         ) : null}
 
-        <div className="flex gap-2">
-          <input
-            value={coupon}
-            onChange={(event) => setCoupon(event.target.value)}
-            placeholder="Coupon code"
-            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm uppercase text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          />
-          <button
-            type="button"
-            onClick={applyCoupon}
-            className={cn(buttonVariants({ variant: 'outline' }))}
-          >
-            Apply
-          </button>
-        </div>
-        {couponError ? <p className="mt-2 text-xs text-destructive">{couponError}</p> : null}
-        {appliedRate > 0 ? (
-          <p className="mt-2 text-xs text-success">Coupon applied.</p>
-        ) : null}
-
-        <dl className="mt-6 space-y-2 text-sm">
+        <dl className="space-y-2 text-sm">
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Subtotal</dt>
             <dd className="text-foreground">{formatPrice(subtotal)}</dd>
           </div>
-          {discount > 0 ? (
-            <div className="flex justify-between">
-              <dt className="text-muted-foreground">Discount</dt>
-              <dd className="text-foreground">-{formatPrice(discount)}</dd>
-            </div>
-          ) : null}
           <div className="flex justify-between border-t border-border pt-2 text-base font-semibold">
             <dt>Total</dt>
             <dd>{formatPrice(total)}</dd>
           </div>
         </dl>
+        {error ? (
+          <p className="mt-4 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {error}
+          </p>
+        ) : null}
 
         <button
           type="button"

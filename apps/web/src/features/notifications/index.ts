@@ -1,7 +1,5 @@
 export {
-  categoryLabels,
-  getNotifications,
+  getNotificationCategory,
   type AppNotification,
-  type NotificationCategory,
 } from './notifications-data';
 export { NotificationsView } from './notifications-view';

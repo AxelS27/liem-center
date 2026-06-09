@@ -1,17 +1,19 @@
 'use client';
 
-import { ProductCard, getProduct } from '@/features/catalog';
+import type { Product } from '@repo/types';
+
+import { ProductCard } from '@/features/catalog';
 import { usePinnedProducts } from '@/hooks/use-pinned-products';
 
 /**
  * Profile showcase, driven by the same pinned-products store the library writes to. Pinning a
  * product in the library makes it appear here.
  */
-export function PinnedShowcase() {
+export function PinnedShowcase({ ownedProducts }: { ownedProducts: Product[] }) {
   const { pinned } = usePinnedProducts();
 
   const products = pinned
-    .map((slug) => getProduct(slug))
+    .map((slug) => ownedProducts.find((product) => product.slug === slug))
     .filter((product): product is NonNullable<typeof product> => Boolean(product));
 
   if (products.length === 0) {

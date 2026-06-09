@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 
-import { getEntitlements, LibraryView } from '@/features/library';
+import { LibraryView } from '@/features/library';
+import { getLibrary } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Library',
 };
 
-export default function LibraryPage() {
-  const entitlements = getEntitlements();
+export default async function LibraryPage() {
+  const entitlements = await getLibrary();
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">

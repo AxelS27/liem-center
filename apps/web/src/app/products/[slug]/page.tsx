@@ -5,22 +5,17 @@ import { notFound } from 'next/navigation';
 
 import {
   categoryLabels,
-  getProduct,
-  getProducts,
+  getProductCover,
   ProductTabs,
   PurchasePanel,
 } from '@/features/catalog';
-import { getEntitlements } from '@/features/library';
+import { getLibrary, getProduct } from '@/services/api';
 
 type Params = Promise<{ slug: string }>;
 
-export function generateStaticParams() {
-  return getProducts().map((product) => ({ slug: product.slug }));
-}
-
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProduct(slug).catch(() => null);
 
   if (!product) {
     return { title: 'Product not found' };
@@ -31,13 +26,17 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 
 export default async function ProductDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getProduct(slug).catch(() => null);
 
   if (!product) {
     notFound();
   }
 
-  const owned = getEntitlements().some((entitlement) => entitlement.productSlug === product.slug);
+  const owned = await getLibrary()
+    .then((entitlements) =>
+      entitlements.some((entitlement) => entitlement.product.slug === product.slug),
+    )
+    .catch(() => false);
 
   return (
     <section className="mx-auto w-full max-w-6xl px-6 py-12 sm:py-16">
@@ -72,12 +71,12 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             {product.tagline}
           </p>
           <p className="mt-3 text-sm text-muted-foreground">
-            Version {product.version} · Updated {product.updatedAt}
+            Version {product.version ?? 'Unversioned'} · Updated {product.updatedAt}
           </p>
 
           <div className="mt-8 overflow-hidden rounded-lg border border-border bg-secondary">
             <Image
-              src={product.cover}
+              src={getProductCover(product)}
               alt={`${product.name} preview`}
               className="aspect-[16/9] w-full object-cover"
               priority

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { categoryLabels, formatPrice, type Product } from './catalog-data';
+import { categoryLabels, formatPrice, getProductCover, type Product } from './catalog-data';
 
 /**
  * Shared catalog card: the one card surface in the product browsing experience. Used by the
@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: Product }) {
     <article className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-transform duration-150 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background">
       <div className="relative aspect-[16/10] overflow-hidden bg-secondary">
         <Image
-          src={product.cover}
+          src={getProductCover(product)}
           alt=""
           fill
           sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"

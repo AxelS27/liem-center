@@ -1,22 +1,36 @@
 import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
 import { getAdminMetrics } from '@/features/admin';
-import { formatPrice, getProduct } from '@/features/catalog';
-import { getOrders, orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { formatPrice } from '@/features/catalog';
+import { orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { getOrders, getProducts, getSupportTickets } from '@/services/api';
 
 const statusTone: Record<OrderStatus, StatusTone> = {
-  paid: 'success',
   awaiting_payment: 'warning',
-  refunded: 'danger',
   cancelled: 'neutral',
+  draft: 'neutral',
+  paid: 'success',
+  refunded: 'danger',
 };
 
-export default function AdminOverviewPage() {
-  const metrics = getAdminMetrics();
-  const recentOrders = getOrders().slice(0, 5);
+export default async function AdminOverviewPage() {
+  const [orders, products, tickets] = await Promise.all([
+    getOrders().catch(() => []),
+    getProducts().catch(() => []),
+    getSupportTickets().catch(() => []),
+  ]);
+  const recentOrders = orders.slice(0, 5);
+  const metrics = getAdminMetrics({
+    openTickets: tickets.filter((ticket) => ticket.status === 'open').length,
+    orders: orders.length,
+    products: products.length,
+    revenue: orders
+      .filter((order) => order.status === 'paid')
+      .reduce((sum, order) => sum + order.totalIdr, 0),
+  });
 
   return (
     <div>
-      <dl className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <dl className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {metrics.map((metric) => (
           <div key={metric.label} className="rounded-lg border border-border bg-card p-5">
             <dt className="text-sm text-muted-foreground">{metric.label}</dt>
@@ -57,10 +71,10 @@ export default function AdminOverviewPage() {
                     {order.id}
                   </td>
                   <td className="px-4 py-3 text-foreground">
-                    {getProduct(order.items[0]?.productSlug ?? '')?.name ?? '—'}
+                    {order.items[0]?.product.name ?? 'No items'}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                    {order.placedAt}
+                    {order.createdAt}
                   </td>
                   <td className="px-4 py-3">
                     <StatusPill tone={statusTone[order.status]}>

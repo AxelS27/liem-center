@@ -6,8 +6,11 @@ import { useState } from 'react';
 
 import { useAuthGate } from '@/features/auth';
 import { useCart } from '@/hooks/use-cart';
+import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 import { categoryLabels, formatPrice, type Product } from './catalog-data';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api/v1';
 
 /**
  * Sticky purchase panel on the product detail page. The page is public; the Buy / Claim / Gift /
@@ -24,6 +27,34 @@ export function PurchasePanel({ product }: { product: Product }) {
   const here = `/products/${product.slug}`;
   const inCart = cart.has(product.slug);
 
+  async function getToken() {
+    const supabase = createSupabaseBrowserClient();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    return session?.access_token ?? null;
+  }
+
+  async function postAuthed(path: string, body?: unknown) {
+    const token = await getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    const response = await fetch(`${API_URL}${path}`, {
+      body: body ? JSON.stringify(body) : undefined,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+      },
+      method: 'POST',
+    });
+
+    return response.ok;
+  }
+
   async function run(action: string, authedDestination: string, addToCart = false) {
     setPending(action);
 
@@ -33,6 +64,14 @@ export function PurchasePanel({ product }: { product: Product }) {
       if (authed) {
         if (addToCart) {
           cart.add(product.slug);
+        }
+
+        if (action === 'claim') {
+          await postAuthed(`/products/${product.slug}/claim`);
+        }
+
+        if (action === 'wishlist') {
+          await postAuthed('/wishlist', { productSlug: product.slug });
         }
 
         router.push(authedDestination);
@@ -126,7 +165,7 @@ export function PurchasePanel({ product }: { product: Product }) {
         ) : null}
       </div>
 
-      {product.requires && product.requires.length > 0 ? (
+      {product.requires.length > 0 ? (
         <p className="mt-5 rounded-md border border-border bg-secondary/50 px-3 py-2 text-xs leading-5 text-muted-foreground">
           Requires {product.requires.join(', ')}. Checkout will let you add it if you do not own it
           yet.

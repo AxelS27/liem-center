@@ -1,8 +1,5 @@
 export {
-  getProfile,
-  type ActivityEvent,
-  type Badge,
-  type Profile,
-  type ProfileStat,
+  getProfileInitial,
+  type UserProfile,
 } from './profile-data';
 export { PinnedShowcase } from './pinned-showcase';

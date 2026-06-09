@@ -1,22 +1,24 @@
 import type { Metadata } from 'next';
 
 import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
-import { formatPrice, getProduct } from '@/features/catalog';
-import { getOrders, orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { formatPrice } from '@/features/catalog';
+import { orderStatusLabels, type OrderStatus } from '@/features/orders';
+import { getOrders } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Order history',
 };
 
 const statusTone: Record<OrderStatus, StatusTone> = {
-  paid: 'success',
   awaiting_payment: 'warning',
-  refunded: 'danger',
   cancelled: 'neutral',
+  draft: 'neutral',
+  paid: 'success',
+  refunded: 'danger',
 };
 
-function summarizeItems(slugs: string[]): string {
-  const [first, ...rest] = slugs.map((slug) => getProduct(slug)?.name ?? slug);
+function summarizeItems(names: string[]): string {
+  const [first, ...rest] = names;
 
   if (!first) {
     return 'No items';
@@ -25,8 +27,8 @@ function summarizeItems(slugs: string[]): string {
   return rest.length > 0 ? `${first} +${rest.length} more` : first;
 }
 
-export default function OrdersPage() {
-  const orders = getOrders();
+export default async function OrdersPage() {
+  const orders = await getOrders();
 
   return (
     <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">
@@ -54,7 +56,9 @@ export default function OrdersPage() {
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-mono text-sm font-medium text-foreground">{order.id}</span>
+                    <span className="font-mono text-sm font-medium text-foreground">
+                      {order.id}
+                    </span>
                     {order.recipientType === 'gift' ? (
                       <span className="rounded-md bg-secondary px-1.5 py-0.5 text-xs font-medium text-secondary-foreground">
                         Gift
@@ -62,7 +66,8 @@ export default function OrdersPage() {
                     ) : null}
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {summarizeItems(order.items.map((item) => item.productSlug))} · {order.placedAt}
+                    {summarizeItems(order.items.map((item) => item.product.name))} ·{' '}
+                    {order.createdAt}
                   </p>
                 </div>
                 <div className="flex items-center justify-between gap-6 sm:justify-end">
