@@ -1,9 +1,11 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
+import { adminGenerateCodeResponseSchema } from '@repo/types';
 import { useEffect, useState } from 'react';
 
 import { StatusPill, type StatusTone } from '@/components/shared/status-pill';
+import { authedRequest } from '@/services/client-api';
 
 import type { AdminCode } from './admin-data';
 
@@ -21,23 +23,6 @@ const kindLabels: Record<AdminCode['kind'], string> = {
 };
 
 type ProductOption = { slug: string; name: string };
-
-const RANDOM_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
-function randomSegment(length = 4): string {
-  let out = '';
-  for (let index = 0; index < length; index += 1) {
-    out += RANDOM_CHARS[Math.floor(Math.random() * RANDOM_CHARS.length)];
-  }
-  return out;
-}
-
-function productLabel(names: string[]): string {
-  if (names.length <= 2) {
-    return names.join(', ');
-  }
-  return `${names[0]} +${names.length - 1} more`;
-}
 
 const fieldClass =
   'h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-50';
@@ -57,6 +42,7 @@ function GenerateDialog({
   const [customCode, setCustomCode] = useState('');
   const [uses, setUses] = useState('1');
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -74,8 +60,9 @@ function GenerateDialog({
     );
   }
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError(null);
 
     if (selected.length === 0) {
       setError('Select at least one product to grant.');
@@ -84,30 +71,39 @@ function GenerateDialog({
 
     const usesNumber = Math.max(1, Math.floor(Number(uses) || 1));
 
-    let code: string;
-    if (mode === 'custom') {
-      code = customCode.trim().toUpperCase();
-      if (code.length < 4) {
-        setError('Custom code must be at least 4 characters.');
-        return;
-      }
-    } else {
-      const safePrefix = (prefix.trim() || 'LIEM').toUpperCase().replace(/[^A-Z0-9]/g, '');
-      code = `${safePrefix}-${randomSegment()}-${randomSegment()}`;
+    if (mode === 'custom' && customCode.trim().length < 4) {
+      setError('Custom code must be at least 4 characters.');
+      return;
     }
 
-    const names = selected
-      .map((slug) => products.find((product) => product.slug === slug)?.name ?? slug)
-      .filter(Boolean);
+    setPending(true);
 
-    onGenerate({
-      code,
-      kind: usesNumber > 1 ? 'promo' : 'gift',
-      product: productLabel(names),
-      uses: usesNumber,
-      status: 'active',
-      createdAt: new Date().toISOString().slice(0, 10),
-    });
+    try {
+      const response = await authedRequest('/admin/codes', {
+        body: JSON.stringify({
+          code: mode === 'custom' ? customCode.trim() : undefined,
+          mode,
+          prefix: mode === 'random' ? prefix.trim() : undefined,
+          productSlugs: selected,
+          uses: usesNumber,
+        }),
+        method: 'POST',
+      });
+      const { data } = adminGenerateCodeResponseSchema.parse(await response.json());
+
+      onGenerate({
+        code: data.code,
+        createdAt: new Date().toISOString().slice(0, 10),
+        kind: data.kind,
+        product: data.product,
+        status: 'active',
+        uses: data.uses,
+      });
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Could not generate the code.');
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -231,8 +227,8 @@ function GenerateDialog({
             >
               Cancel
             </button>
-            <button type="submit" className={cn(buttonVariants())}>
-              Generate
+            <button type="submit" disabled={pending} className={cn(buttonVariants())}>
+              {pending ? 'Generating...' : 'Generate'}
             </button>
           </div>
         </form>

@@ -26,7 +26,14 @@ export async function authedRequest(path: string, init: RequestInit = {}): Promi
   const response = await fetch(`${API_URL}${path}`, { ...init, headers });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    let message = `Request failed (${response.status}).`;
+    try {
+      const payload = await response.json();
+      message = payload?.error?.message ?? message;
+    } catch {
+      // Non-JSON error body; keep the status message.
+    }
+    throw new Error(message);
   }
 
   return response;

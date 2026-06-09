@@ -2,6 +2,7 @@ import { healthResponseSchema } from '@repo/types';
 import { Hono } from 'hono';
 
 import { catalogRoutes } from './features/catalog/catalog.routes';
+import { codesRoutes } from './features/codes/codes.routes';
 import { libraryRoutes } from './features/library/library.routes';
 import { notificationsRoutes } from './features/notifications/notifications.routes';
 import { ordersRoutes } from './features/orders/orders.routes';
@@ -20,3 +21,4 @@ app.route('/', wishlistRoutes);
 app.route('/', notificationsRoutes);
 app.route('/', profileRoutes);
 app.route('/', supportRoutes);
+app.route('/', codesRoutes);

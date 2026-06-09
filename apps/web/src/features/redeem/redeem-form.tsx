@@ -1,11 +1,15 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
+import { redeemResponseSchema } from '@repo/types';
 import { useEffect, useState } from 'react';
 
 import { useAuthGate } from '@/features/auth';
+import { authedRequest } from '@/services/client-api';
 
 const DRAFT_KEY = 'liem.redeem.code';
+
+type Granted = { slug: string; name: string };
 
 /**
  * Public redeem form. Guests can type a code; only Confirm is auth-gated. The typed code is kept
@@ -17,7 +21,7 @@ export function RedeemForm() {
   const [code, setCode] = useState('');
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [accepted, setAccepted] = useState(false);
+  const [granted, setGranted] = useState<Granted[] | null>(null);
 
   useEffect(() => {
     const draft = window.sessionStorage.getItem(DRAFT_KEY);
@@ -33,8 +37,8 @@ export function RedeemForm() {
 
     const trimmed = code.trim();
 
-    if (trimmed.length < 6) {
-      setError('Enter a valid code. Codes are at least 6 characters.');
+    if (trimmed.length < 4) {
+      setError('Enter a valid code.');
       return;
     }
 
@@ -50,23 +54,35 @@ export function RedeemForm() {
         return;
       }
 
-      // Signed in: the codes service is not wired yet, so confirm the input is accepted and
-      // point the user to their library. No entitlement is fabricated here.
+      const response = await authedRequest('/codes/redeem', {
+        body: JSON.stringify({ code: trimmed }),
+        method: 'POST',
+      });
+      const { data } = redeemResponseSchema.parse(await response.json());
+
       window.sessionStorage.removeItem(DRAFT_KEY);
-      setAccepted(true);
+      setGranted(data.products);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Could not redeem this code.');
     } finally {
       setPending(false);
     }
   }
 
-  if (accepted) {
+  if (granted) {
     return (
       <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-foreground">Code received</h2>
+        <h2 className="text-lg font-semibold text-foreground">Redeemed</h2>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Your code <span className="font-medium text-foreground">{code.trim()}</span> is queued.
-          Once it is processed, the product appears in your library with permanent ownership.
+          These products are now in your library with permanent ownership:
         </p>
+        <ul className="mt-3 space-y-1">
+          {granted.map((product) => (
+            <li key={product.slug} className="text-sm font-medium text-foreground">
+              {product.name}
+            </li>
+          ))}
+        </ul>
         <div className="mt-6 flex flex-wrap gap-3">
           <a href="/library" className={cn(buttonVariants())}>
             Go to library
@@ -74,7 +90,7 @@ export function RedeemForm() {
           <button
             type="button"
             onClick={() => {
-              setAccepted(false);
+              setGranted(null);
               setCode('');
             }}
             className={cn(buttonVariants({ variant: 'outline' }))}
