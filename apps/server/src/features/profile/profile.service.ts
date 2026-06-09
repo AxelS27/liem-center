@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ProfileUpdateRequest } from '@repo/types';
+
 import { ApiError, assertFound } from '../../lib/errors';
 import { createSupabaseServiceClient } from '../../lib/supabase';
 
@@ -43,4 +45,32 @@ export async function getProfileByUsername(username: string) {
   }
 
   return mapProfile(assertFound(data, 'No profile was found for this username.'));
+}
+
+export async function updateProfile(userId: string, input: ProfileUpdateRequest) {
+  const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+
+  if (input.displayName !== undefined) patch.display_name = input.displayName;
+  if (input.username !== undefined) patch.username = input.username;
+  if (input.country !== undefined) patch.country = input.country;
+  if (input.countryPublic !== undefined) patch.country_public = input.countryPublic;
+  if (input.bio !== undefined) patch.bio = input.bio;
+  if (input.timelinePublic !== undefined) patch.timeline_public = input.timelinePublic;
+
+  const supabase = createSupabaseServiceClient();
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(patch)
+    .eq('id', userId)
+    .select('*')
+    .single();
+
+  if (error) {
+    if ((error as any).code === '23505') {
+      throw new ApiError('CONFLICT', 'That username is already taken.');
+    }
+    throw new ApiError('SERVER_ERROR', 'Unable to update your profile.');
+  }
+
+  return mapProfile(data);
 }

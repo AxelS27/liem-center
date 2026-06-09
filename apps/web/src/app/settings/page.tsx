@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 
 import { SettingsView } from '@/features/settings';
+import { getMyProfile } from '@/services/api';
 
 export const metadata: Metadata = {
   title: 'Settings',
 };
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const profile = await getMyProfile();
+
   return (
     <section className="mx-auto w-full max-w-3xl px-6 py-16 sm:py-20">
       <p className="text-sm font-medium text-muted-foreground">Account</p>
@@ -18,7 +21,7 @@ export default function SettingsPage() {
       </p>
 
       <div className="mt-10">
-        <SettingsView />
+        <SettingsView profile={profile} />
       </div>
     </section>
   );

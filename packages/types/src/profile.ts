@@ -19,4 +19,19 @@ export const userProfileResponseSchema = z.object({
   data: userProfileSchema,
 });
 
+export const profileUpdateRequestSchema = z.object({
+  displayName: z.string().min(1).max(80).optional(),
+  username: z
+    .string()
+    .min(3)
+    .max(30)
+    .regex(/^[a-z0-9_]+$/, 'Use lowercase letters, numbers, or underscores.')
+    .optional(),
+  country: z.string().max(60).nullable().optional(),
+  countryPublic: z.boolean().optional(),
+  bio: z.string().max(500).nullable().optional(),
+  timelinePublic: z.boolean().optional(),
+});
+
 export type UserProfile = z.infer<typeof userProfileSchema>;
+export type ProfileUpdateRequest = z.infer<typeof profileUpdateRequestSchema>;

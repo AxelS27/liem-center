@@ -1,9 +1,12 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
+import type { UserProfile } from '@repo/types';
 import { useState } from 'react';
 
 import { GitHubIcon, GoogleIcon } from '@/components/shared/provider-icons';
+
+import { ProfileSettingsForm } from './profile-settings-form';
 
 type TabKey = 'profile' | 'accounts' | 'notifications' | 'security';
 
@@ -16,27 +19,6 @@ const tabs: { key: TabKey; label: string }[] = [
 
 const fieldClass =
   'h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
-
-const countries = [
-  'Indonesia',
-  'Singapore',
-  'Malaysia',
-  'Thailand',
-  'Vietnam',
-  'Philippines',
-  'Australia',
-  'Japan',
-  'South Korea',
-  'India',
-  'United States',
-  'United Kingdom',
-  'Canada',
-  'Germany',
-  'France',
-  'Netherlands',
-  'Brazil',
-  'Other',
-];
 
 function Field({ label, hint, ...props }: { label: string; hint?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
@@ -111,7 +93,7 @@ function AccountRow({
   );
 }
 
-export function SettingsView() {
+export function SettingsView({ profile }: { profile: UserProfile }) {
   const [tab, setTab] = useState<TabKey>('profile');
 
   return (
@@ -141,41 +123,7 @@ export function SettingsView() {
       </div>
 
       <div className="pt-8">
-        {tab === 'profile' ? (
-          <div className="grid max-w-xl gap-5">
-            <Field label="Display name" defaultValue="Farrell Axel" />
-            <Field label="Username" defaultValue="farrellaxel" hint="Your public profile is /u/farrellaxel" />
-            <label className="grid gap-2 text-sm font-medium text-foreground">
-              Country <span className="font-normal text-muted-foreground">(optional)</span>
-              <select defaultValue="" className={fieldClass}>
-                <option value="" disabled>
-                  Select your country
-                </option>
-                {countries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
-              <span className="text-xs font-normal text-muted-foreground">
-                Hidden on your public profile unless you choose to show it.
-              </span>
-            </label>
-            <label className="grid gap-2 text-sm font-medium text-foreground">
-              Bio
-              <textarea
-                rows={4}
-                placeholder="A short line about you"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              />
-            </label>
-            <div>
-              <button type="button" className={cn(buttonVariants())}>
-                Save changes
-              </button>
-            </div>
-          </div>
-        ) : null}
+        {tab === 'profile' ? <ProfileSettingsForm profile={profile} /> : null}
 
         {tab === 'accounts' ? (
           <div className="max-w-xl divide-y divide-border border-y border-border">
