@@ -70,7 +70,7 @@ const productSelect = `
   changelog_entries(id, version, released_at, changes),
   roadmap_items(id, title, body_md, status, position),
   reviews(id, rating, title, body_md, hidden, created_at),
-  product_dependencies(required_product:required_product_id(slug, name))
+  product_dependencies!product_dependencies_product_id_fkey(required_product:required_product_id(slug, name))
 `;
 
 export async function listProducts({
