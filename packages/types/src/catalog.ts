@@ -55,6 +55,16 @@ export const productSchema = z.object({
   reviews: z.array(reviewSchema),
 });
 
+export const reviewRequestSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+  title: z.string().max(120).optional().default(''),
+  body: z.string().min(10).max(4000),
+});
+
+export const reviewResponseSchema = z.object({
+  data: reviewSchema,
+});
+
 export const productsQuerySchema = z.object({
   search: z.string().optional(),
   type: productTypeSchema.optional(),
@@ -82,3 +92,5 @@ export type Review = z.infer<typeof reviewSchema>;
 export type Product = z.infer<typeof productSchema>;
 export type ProductsResponse = z.infer<typeof productsResponseSchema>;
 export type ProductResponse = z.infer<typeof productResponseSchema>;
+export type ReviewRequest = z.infer<typeof reviewRequestSchema>;
+export type ReviewResponse = z.infer<typeof reviewResponseSchema>;

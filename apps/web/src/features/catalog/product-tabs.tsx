@@ -1,7 +1,10 @@
 'use client';
 
 import { buttonVariants, cn } from '@repo/ui';
+import { reviewResponseSchema } from '@repo/types';
 import { useState } from 'react';
+
+import { authedRequest } from '@/services/client-api';
 
 import type { Product, Review } from './catalog-data';
 
@@ -41,12 +44,13 @@ function StarInput({ value, onChange }: { value: number; onChange: (value: numbe
   );
 }
 
-function ReviewForm({ onSubmit }: { onSubmit: (review: Review) => void }) {
+function ReviewForm({ slug, onSubmit }: { slug: string; onSubmit: (review: Review) => void }) {
   const [rating, setRating] = useState(0);
   const [body, setBody] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (rating === 0 || body.trim().length < 10) {
@@ -54,10 +58,24 @@ function ReviewForm({ onSubmit }: { onSubmit: (review: Review) => void }) {
       return;
     }
 
-    onSubmit({ id: crypto.randomUUID(), author: 'You', tier: 'Member', rating, title: '', body: body.trim() });
-    setRating(0);
-    setBody('');
+    setPending(true);
     setError(null);
+
+    try {
+      const response = await authedRequest(`/products/${slug}/reviews`, {
+        body: JSON.stringify({ body: body.trim(), rating }),
+        method: 'POST',
+      });
+      const { data } = reviewResponseSchema.parse(await response.json());
+
+      onSubmit(data);
+      setRating(0);
+      setBody('');
+    } catch {
+      setError('Unable to submit your review. Make sure you own this product.');
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -78,8 +96,8 @@ function ReviewForm({ onSubmit }: { onSubmit: (review: Review) => void }) {
           {error}
         </p>
       ) : null}
-      <button type="submit" className={cn(buttonVariants(), 'mt-4')}>
-        Submit review
+      <button type="submit" disabled={pending} className={cn(buttonVariants(), 'mt-4')}>
+        {pending ? 'Submitting...' : 'Submit review'}
       </button>
     </form>
   );
@@ -193,7 +211,12 @@ export function ProductTabs({ product, owned }: { product: Product; owned: boole
         {tab === 'reviews' ? (
           <div className="max-w-2xl">
             {owned ? (
-              <ReviewForm onSubmit={(review) => setReviews((current) => [review, ...current])} />
+              <ReviewForm
+                slug={product.slug}
+                onSubmit={(review) =>
+                  setReviews((current) => [review, ...current.filter((r) => r.id !== review.id)])
+                }
+              />
             ) : null}
 
             <div className={owned ? 'mt-8' : ''}>

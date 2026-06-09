@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Product } from '@repo/types';
+import type { Product, Review, ReviewRequest } from '@repo/types';
 
 import { ApiError, assertFound } from '../../lib/errors';
 import { createSupabaseServiceClient } from '../../lib/supabase';
@@ -142,4 +142,54 @@ export async function getPublishedProductsBySlugs(slugs: string[]) {
   }
 
   return (data ?? []).map(mapProduct);
+}
+
+// Only owners (a live entitlement) may review. Upserts so a user has one review per product.
+export async function createReview(
+  userId: string,
+  slug: string,
+  input: ReviewRequest,
+): Promise<Review> {
+  const product = await getProductBySlug(slug);
+  const supabase = createSupabaseServiceClient();
+
+  const { data: entitlement } = await supabase
+    .from('entitlements')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('product_id', product.id)
+    .is('revoked_at', null)
+    .maybeSingle();
+
+  if (!entitlement) {
+    throw new ApiError('UNAUTHORIZED', 'Only owners can review this product.');
+  }
+
+  const { data, error } = await supabase
+    .from('reviews')
+    .upsert(
+      {
+        body_md: input.body,
+        product_id: product.id,
+        rating: input.rating,
+        title: input.title ?? '',
+        user_id: userId,
+      },
+      { onConflict: 'product_id,user_id' },
+    )
+    .select('id, rating, title, body_md')
+    .single();
+
+  if (error || !data) {
+    throw new ApiError('SERVER_ERROR', 'Unable to submit your review.');
+  }
+
+  return {
+    author: 'You',
+    body: (data as any).body_md ?? '',
+    id: (data as any).id,
+    rating: Number((data as any).rating),
+    tier: 'Member',
+    title: (data as any).title ?? '',
+  };
 }
